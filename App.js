@@ -17,11 +17,9 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === "Home") {
-              iconName = focused
-                ? "ios-information-circle"
-                : "ios-information-circle-outline";
+              iconName = focused ? "ios-home" : "ios-home-outline";
             } else if (route.name === "Login") {
-              iconName = focused ? "ios-list" : "ios-list-outline";
+              iconName = focused ? "ios-person" : "ios-person-outline";
             } else if (route.name === "Register") {
               iconName = focused ? "ios-list" : "ios-list-outline";
             }
