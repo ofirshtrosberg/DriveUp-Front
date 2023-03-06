@@ -1,16 +1,16 @@
 import React from "react";
 import { Text, View, Button } from "react-native";
 import { useEffect } from "react";
-const ip = "10.100.102.101"; // wifi IPv4: fid by using ipconfig on cmd (windows)
+const ip = "10.100.102.101"; // wifi IPv4: find by using ipconfig on cmd (windows)
 const getUsers = () => {
-  fetch("http://" + ip + ":8000/users/")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  // fetch("http://" + ip + ":8000/users/")
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     console.log(data);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
 };
 
 export default function HomePage() {
