@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput } from "@react-native-material/core";
 export default function LoginPage() {
   return (
@@ -20,5 +20,6 @@ export default function LoginPage() {
         }}
       />
     </View>
+  
   );
 }
