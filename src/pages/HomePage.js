@@ -33,7 +33,13 @@ export default function HomePage() {
     <View style={styles.pageContainer}>
       <Image style={styles.img} source={require("../assets/img1.png")}></Image>
       <View style={styles.bottomContainer}>
-        <Button title="Click" color={colors.primary} style={styles.btn}></Button>
+        <Text style={styles.title}>DriveUP</Text>
+        <View style={styles.aboutContainer}>
+          <Text numberOfLines={10}>
+            About Us:{"\n\n"}DriveUp is a mobile app for ride sharing.{"\n"}
+            On our app you can......
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -49,9 +55,21 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.blue2,
   },
-  btn: {
-    width: 40,
+  title: {
+    textAlign: "center",
+    color: colors.blue3,
+    fontSize: 30,
+    backgroundColor: colors.blue1,
+    width: "100%",
+  },
+  aboutContainer: {
+    backgroundColor: colors.blue4,
+    width: "80%",
+    height: "80%",
+    alignSelf: "center",
+    top: 25,
+    padding: 20,
   },
 });

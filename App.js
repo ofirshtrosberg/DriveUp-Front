@@ -8,11 +8,14 @@ import LoginPage from "./src/pages/LoginPage";
 import RegisterPage from "./src/pages/RegisterPage";
 import OrderTaxiPage from "./src/pages/OrderTaxiPage";
 import ProfilePage from "./src/pages/ProfilePage";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
+var isLoggedIn = false;
 export default function App() {
-  return (
+  return isLoggedIn ? (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -31,10 +34,17 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Profile" component={ProfilePage} />
-        <Tab.Screen name="OrderTaxi" component={OrderTaxiPage} />
         <Tab.Screen name="Home" component={HomePage} />
+        <Tab.Screen name="OrderTaxi" component={OrderTaxiPage} />
+        <Tab.Screen name="Profile" component={ProfilePage} />
       </Tab.Navigator>
+    </NavigationContainer>
+  ) : (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginPage} />
+        <Stack.Screen name="Register" component={RegisterPage} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
