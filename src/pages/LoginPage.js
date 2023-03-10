@@ -1,7 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput } from "@react-native-material/core";
-export default function LoginPage() {
+import { Button } from "react-native-paper";
+export default function LoginPage({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Login</Text>
@@ -19,6 +20,7 @@ export default function LoginPage() {
           width: 300,
         }}
       />
+      <Text onPress={() => navigation.navigate("Register")}>Sign up</Text>
     </View>
   );
 }
