@@ -4,9 +4,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainPages from "./src/pages/MainPages";
 import LoginPage from "./src/pages/LoginPage";
-import RegisterPage from "./src/pages/RegisterPage";
 import theme from "./src/config/theme";
 import { Provider as PaperProvider } from "react-native-paper";
+import RegisterAsDriverPage from "./src/pages/RegisterAsDriverPage";
+import RegisterAsPassengerPage from "./src/pages/RegisterAsPassengerPage";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -17,7 +18,14 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Login" component={LoginPage} />
-          <Stack.Screen name="Register" component={RegisterPage} />
+          <Stack.Screen
+            name="RegisterAsDriver"
+            component={RegisterAsDriverPage}
+          />
+          <Stack.Screen
+            name="RegisterPassenger"
+            component={RegisterAsPassengerPage}
+          />
           <Stack.Screen
             name="Main"
             component={MainPages}
