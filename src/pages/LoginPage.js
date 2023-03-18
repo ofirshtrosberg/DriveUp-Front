@@ -29,14 +29,18 @@ export default function LoginPage({ navigation }) {
           secureTextEntry
           style={{ marginBottom: 7, marginHorizontal: 20 }}
         />
-        <Text style={{ display: "flex", alignSelf: "center", fontSize: 18 }}>
-          Don't have an account?
-          <Text
-            onPress={() => navigation.navigate("Register")}
-            style={styles.register}
-          >
-            &nbsp;Register now
-          </Text>
+        <Text style={styles.text}>Don't have an account? Register as:</Text>
+        <Text
+          onPress={() => navigation.navigate("RegisterAsDriver")}
+          style={styles.register}
+        >
+          Driver
+        </Text>
+        <Text
+          onPress={() => navigation.navigate("RegisterPassenger")}
+          style={styles.register}
+        >
+          Passenger
         </Text>
         <Button
           mode="contained"
@@ -55,5 +59,14 @@ const styles = StyleSheet.create({
   register: {
     color: colors.blue2,
     fontWeight: "bold",
+    marginTop: 3,
+    display: "flex",
+    alignSelf: "center",
+    fontSize: 18,
+  },
+  text: {
+    display: "flex",
+    alignSelf: "center",
+    fontSize: 18,
   },
 });
