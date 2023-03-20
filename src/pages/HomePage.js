@@ -17,15 +17,14 @@ import {
   useDeviceOrientation,
 } from "@react-native-community/hooks";
 const getUsers = () => {
-  // fetch("http://" + ip + ":8000/users/")
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log(data);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
-  console.log("1");
+  fetch("http://" + ip + ":8000/users/")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 export default function HomePage() {
