@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ImageBackground, Image } from "react-native";
+import { Text, View, ImageBackground, Image, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 const ip = "10.100.102.101";
 const addUser = () => {
@@ -94,49 +94,25 @@ export default function RegisterAsDriverPage({ navigation }) {
         </View> */}
       </View>
       <View style={{ flex: 3 }}>
-        <TextInput
-          mode="outlined"
-          label="Email"
-          style={{ marginBottom: 3, marginHorizontal: 20 }}
-        />
+        <TextInput mode="outlined" label="Email" style={styles.input} />
         <TextInput
           mode="outlined"
           label="Password"
           secureTextEntry
-          style={{ marginBottom: 3, marginHorizontal: 20 }}
+          style={styles.input}
         />
-        <TextInput
-          mode="outlined"
-          label="Phone Number"
-          style={{ marginBottom: 3, marginHorizontal: 20 }}
-        />
-        <TextInput
-          mode="outlined"
-          label="Full Name"
-          style={{ marginBottom: 3, marginHorizontal: 20 }}
-        />
-        <TextInput
-          mode="outlined"
-          label="Car Model"
-          style={{ marginBottom: 3, marginHorizontal: 20 }}
-        />
-        <TextInput
-          mode="outlined"
-          label="Car Color"
-          style={{ marginBottom: 3, marginHorizontal: 20 }}
-        />
-        <TextInput
-          mode="outlined"
-          label="Plate Number"
-          style={{ marginBottom: 3, marginHorizontal: 20 }}
-        />
+        <TextInput mode="outlined" label="Phone Number" style={styles.input} />
+        <TextInput mode="outlined" label="Full Name" style={styles.input} />
+        <TextInput mode="outlined" label="Car Model" style={styles.input} />
+        <TextInput mode="outlined" label="Car Color" style={styles.input} />
+        <TextInput mode="outlined" label="Plate Number" style={styles.input} />
         <Button
           mode="contained"
           buttonColor="#111"
           onPress={() => {
             navigation.navigate("Login");
           }}
-          style={{ width: 150, alignSelf: "center", marginTop: 20 }}
+          style={styles.register_button}
         >
           Register
         </Button>
@@ -144,3 +120,14 @@ export default function RegisterAsDriverPage({ navigation }) {
     </ImageBackground>
   );
 }
+const styles = StyleSheet.create({
+  input: {
+    marginBottom: 3,
+    marginHorizontal: 20,
+  },
+  register_button: {
+    width: 150,
+    alignSelf: "center",
+    marginTop: 20,
+  },
+});

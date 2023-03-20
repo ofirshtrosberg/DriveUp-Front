@@ -5,8 +5,6 @@ import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 
 export default function LoginPage({ navigation }) {
-  const [focus, setFocus] = useState(false);
-  const inputStyle = focus ? styles.inputFocus : styles.input;
   return (
     <ImageBackground
       source={require("../assets/backgroundLogin.jpg")}
@@ -18,16 +16,12 @@ export default function LoginPage({ navigation }) {
           flex: 1,
         }}
       >
-        <TextInput
-          mode="outlined"
-          label="Email"
-          style={{ marginBottom: 7, marginHorizontal: 20 }}
-        />
+        <TextInput mode="outlined" label="Email" style={styles.input} />
         <TextInput
           mode="outlined"
           label="Password"
           secureTextEntry
-          style={{ marginBottom: 7, marginHorizontal: 20 }}
+          style={styles.input}
         />
         <Text style={styles.text}>Don't have an account? Register as:</Text>
         <Text
@@ -46,7 +40,7 @@ export default function LoginPage({ navigation }) {
           mode="contained"
           buttonColor="#111"
           onPress={() => navigation.navigate("Main")}
-          style={{ width: 100, alignSelf: "center", marginTop: 25 }}
+          style={styles.login_button}
         >
           Login
         </Button>
@@ -68,5 +62,14 @@ const styles = StyleSheet.create({
     display: "flex",
     alignSelf: "center",
     fontSize: 18,
+  },
+  login_button: {
+    width: 100,
+    alignSelf: "center",
+    marginTop: 25,
+  },
+  input: {
+    marginBottom: 7,
+    marginHorizontal: 20,
   },
 });
