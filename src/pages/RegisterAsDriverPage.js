@@ -1,9 +1,24 @@
 import React, { useState } from "react";
-import { View, ImageBackground, StyleSheet } from "react-native";
+import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { addUser } from "../helperFunctions/accessToBackFunctions.js";
-
+import {
+  addUser,
+  getUsers,
+  deleteUser,
+} from "../helperFunctions/accessToBackFunctions.js";
+import colors from "../config/colors.js";
+import {
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateFullName,
+  validateCarModel,
+  validateCarColor,
+  validatePlateNumber,
+} from "../helperFunctions/validationFunctions.js";
 export default function RegisterAsDriverPage({ navigation }) {
+  deleteUser("Gggg@fff.vfffff        ");
+  getUsers();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -11,6 +26,8 @@ export default function RegisterAsDriverPage({ navigation }) {
   const [carModel, setCarModel] = useState("");
   const [carColor, setCarColor] = useState("");
   const [plateNumber, setPlateNumber] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleEmailChange = (text) => {
     setEmail(text);
   };
@@ -112,21 +129,39 @@ export default function RegisterAsDriverPage({ navigation }) {
           mode="contained"
           buttonColor="#111"
           onPress={() => {
-            addUser(
-              email,
-              password,
-              phone,
-              fullName,
-              carModel,
-              carColor,
-              plateNumber
-            );
-            navigation.navigate("Login");
+            if (!validateEmail(email)) {
+              setErrorMessage("Invalid email");
+            } else if (!validatePassword(password)) {
+              setErrorMessage("Invalid password");
+            } else if (!validatePhoneNumber(phone)) {
+              setErrorMessage("Invalid phone number");
+            } else if (!validateFullName(fullName)) {
+              setErrorMessage("Invalid full name");
+            } else if (!validateCarModel(carModel)) {
+              setErrorMessage("Invalid car model");
+            } else if (!validateCarColor(carColor)) {
+              setErrorMessage("Invalid car color");
+            } else if (!validatePlateNumber(plateNumber)) {
+              setErrorMessage("Invalid plate number");
+            } else {
+              setErrorMessage("");
+              addUser(
+                email.trim(),
+                password.trim(),
+                phone.trim(),
+                fullName.trim(),
+                carModel.trim(),
+                carColor.trim(),
+                plateNumber.trim()
+              );
+              navigation.navigate("Login");
+            }
           }}
           style={styles.register_button}
         >
           Register
         </Button>
+        <Text style={styles.error}>{errorMessage}</Text>
       </View>
     </ImageBackground>
   );
@@ -140,5 +175,12 @@ const styles = StyleSheet.create({
     width: 150,
     alignSelf: "center",
     marginTop: 20,
+  },
+  error: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+    alignSelf: "center",
+    color: colors.blue1,
   },
 });

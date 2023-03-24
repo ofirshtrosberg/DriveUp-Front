@@ -2,20 +2,10 @@ import React from "react";
 import {
   Text,
   View,
-  Button,
   Image,
-  Dimensions,
-  ImageBackground,
   StyleSheet,
 } from "react-native";
 import colors from "../config/colors";
-import { useEffect } from "react";
-import { Header } from "@react-navigation/stack";
-import {
-  useDimensions,
-  useDeviceOrientation,
-} from "@react-native-community/hooks";
-
 
 export default function HomePage() {
   return (

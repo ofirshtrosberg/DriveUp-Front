@@ -1,13 +1,20 @@
 import React, { useState } from "react";
-import { View, ImageBackground, StyleSheet } from "react-native";
+import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { addUser } from "../helperFunctions/accessToBackFunctions.js";
-
+import colors from "../config/colors.js";
+import {
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateFullName,
+} from "../helperFunctions/validationFunctions.js";
 export default function RegisterAsDriverPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [fullName, setFullName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const handleEmailChange = (text) => {
     setEmail(text);
   };
@@ -81,13 +88,33 @@ export default function RegisterAsDriverPage({ navigation }) {
           mode="contained"
           buttonColor="#111"
           onPress={() => {
-            addUser(email, password, phone, fullName, "", "", "");
-            navigation.navigate("Login");
+            if (!validateEmail(email)) {
+              setErrorMessage("Invalid email");
+            } else if (!validatePassword(password)) {
+              setErrorMessage("Invalid password");
+            } else if (!validatePhoneNumber(phone)) {
+              setErrorMessage("Invalid phone number");
+            } else if (!validateFullName(fullName)) {
+              setErrorMessage("Invalid full name");
+            } else {
+              setErrorMessage("");
+              addUser(
+                email.trim(),
+                password.trim(),
+                phone.trim(),
+                fullName.trim(),
+                "",
+                "",
+                ""
+              );
+              navigation.navigate("Login");
+            }
           }}
           style={styles.register_button}
         >
           Register
         </Button>
+        <Text style={styles.error}>{errorMessage}</Text>
       </View>
     </ImageBackground>
   );
@@ -101,5 +128,12 @@ const styles = StyleSheet.create({
     width: 150,
     alignSelf: "center",
     marginTop: 20,
+  },
+  error: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+    alignSelf: "center",
+    color: colors.blue1,
   },
 });

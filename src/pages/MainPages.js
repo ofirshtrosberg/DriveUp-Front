@@ -1,11 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomePage from "./HomePage";
 import OrderTaxiPage from "./OrderTaxiPage";
 import ProfilePage from "./ProfilePage";
-import { View } from "react-native";
 
 export default function MainPages() {
   const Tab = createBottomTabNavigator();
