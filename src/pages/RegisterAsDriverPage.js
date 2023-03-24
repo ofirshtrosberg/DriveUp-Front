@@ -1,73 +1,54 @@
-import React from "react";
-import { Text, View, ImageBackground, Image, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-const ip = "10.100.102.101";
-const addUser = () => {
-  fetch("http://" + ip + ":8000/users/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      parameter: {
-        email: "ofir@gmail.com",
-        password: "11",
-        phone_number: "05487877",
-        full_name: "ofi",
-        car_model: "mazdaa",
-        car_color: "blueqq",
-        plate_number: "00000000000",
-      },
-    }),
-  });
-};
-
-const deleteUser = () => {
-  const email = "";
-
-  fetch("http://" + ip + ":8000/users/" + email, {
-    method: "DELETE",
-  }).catch((error) => {
-    console.error(error);
-  });
-};
-
-const getUserByEmail = () => {
-  const email = "ofir@gmail.com";
-  fetch("http://" + ip + ":8000/users/" + email)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
-const updateUser = () => {
-  const email = "ofir@gmail.com";
-
-  fetch("http://" + ip + ":8000/users/" + email, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      parameter: {
-        // password not working, phone also
-        full_name: "ggg",
-        plate_number: "ggg",
-      },
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Data updated:", data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+import {
+  addUser,
+  getUsers,
+  deleteUser,
+} from "../helperFunctions/accessToBackFunctions.js";
+import colors from "../config/colors.js";
+import {
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateFullName,
+  validateCarModel,
+  validateCarColor,
+  validatePlateNumber,
+} from "../helperFunctions/validationFunctions.js";
 export default function RegisterAsDriverPage({ navigation }) {
+  deleteUser("Gggg@fff.vfffff        ");
+  getUsers();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [carModel, setCarModel] = useState("");
+  const [carColor, setCarColor] = useState("");
+  const [plateNumber, setPlateNumber] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleEmailChange = (text) => {
+    setEmail(text);
+  };
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+  };
+  const handlePhoneChange = (text) => {
+    setPhone(text);
+  };
+  const handleFullNameChange = (text) => {
+    setFullName(text);
+  };
+  const handleCarModelChange = (text) => {
+    setCarModel(text);
+  };
+  const handleCarColorChange = (text) => {
+    setCarColor(text);
+  };
+  const handlePlateNumberChange = (text) => {
+    setPlateNumber(text);
+  };
   return (
     <ImageBackground
       source={require("../assets/register.jpg")}
@@ -94,28 +75,93 @@ export default function RegisterAsDriverPage({ navigation }) {
         </View> */}
       </View>
       <View style={{ flex: 3 }}>
-        <TextInput mode="outlined" label="Email" style={styles.input} />
+        <TextInput
+          mode="outlined"
+          label="Email"
+          style={styles.input}
+          value={email}
+          onChangeText={handleEmailChange}
+        />
         <TextInput
           mode="outlined"
           label="Password"
           secureTextEntry
           style={styles.input}
+          value={password}
+          onChangeText={handlePasswordChange}
         />
-        <TextInput mode="outlined" label="Phone Number" style={styles.input} />
-        <TextInput mode="outlined" label="Full Name" style={styles.input} />
-        <TextInput mode="outlined" label="Car Model" style={styles.input} />
-        <TextInput mode="outlined" label="Car Color" style={styles.input} />
-        <TextInput mode="outlined" label="Plate Number" style={styles.input} />
+        <TextInput
+          mode="outlined"
+          label="Phone Number"
+          style={styles.input}
+          value={phone}
+          onChangeText={handlePhoneChange}
+        />
+        <TextInput
+          mode="outlined"
+          label="Full Name"
+          style={styles.input}
+          value={fullName}
+          onChangeText={handleFullNameChange}
+        />
+        <TextInput
+          mode="outlined"
+          label="Car Model"
+          style={styles.input}
+          value={carModel}
+          onChangeText={handleCarModelChange}
+        />
+        <TextInput
+          mode="outlined"
+          label="Car Color"
+          style={styles.input}
+          value={carColor}
+          onChangeText={handleCarColorChange}
+        />
+        <TextInput
+          mode="outlined"
+          label="Plate Number"
+          style={styles.input}
+          value={plateNumber}
+          onChangeText={handlePlateNumberChange}
+        />
         <Button
           mode="contained"
           buttonColor="#111"
           onPress={() => {
-            navigation.navigate("Login");
+            if (!validateEmail(email)) {
+              setErrorMessage("Invalid email");
+            } else if (!validatePassword(password)) {
+              setErrorMessage("Invalid password");
+            } else if (!validatePhoneNumber(phone)) {
+              setErrorMessage("Invalid phone number");
+            } else if (!validateFullName(fullName)) {
+              setErrorMessage("Invalid full name");
+            } else if (!validateCarModel(carModel)) {
+              setErrorMessage("Invalid car model");
+            } else if (!validateCarColor(carColor)) {
+              setErrorMessage("Invalid car color");
+            } else if (!validatePlateNumber(plateNumber)) {
+              setErrorMessage("Invalid plate number");
+            } else {
+              setErrorMessage("");
+              addUser(
+                email.trim(),
+                password.trim(),
+                phone.trim(),
+                fullName.trim(),
+                carModel.trim(),
+                carColor.trim(),
+                plateNumber.trim()
+              );
+              navigation.navigate("Login");
+            }
           }}
           style={styles.register_button}
         >
           Register
         </Button>
+        <Text style={styles.error}>{errorMessage}</Text>
       </View>
     </ImageBackground>
   );
@@ -129,5 +175,12 @@ const styles = StyleSheet.create({
     width: 150,
     alignSelf: "center",
     marginTop: 20,
+  },
+  error: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+    alignSelf: "center",
+    color: colors.blue1,
   },
 });

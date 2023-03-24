@@ -1,10 +1,44 @@
 import React, { useState } from "react";
 import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-
 import colors from "../config/colors";
 
 export default function LoginPage({ navigation }) {
+  const ip = "10.100.102.101";
+  const [loginResponse, setLoginResponse] = useState("");
+  const [navigateNow, setNavigateNow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function login() {
+    fetch("http://" + ip + ":8000/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        parameter: {
+          email: email,
+          password: password,
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setLoginResponse(data.detail);
+        if (data.message === "User logged in successfully")
+          navigation.navigate("Main");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+  const handleEmailChange = (text) => {
+    setEmail(text);
+  };
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+  };
   return (
     <ImageBackground
       source={require("../assets/backgroundLogin.jpg")}
@@ -16,12 +50,20 @@ export default function LoginPage({ navigation }) {
           flex: 1,
         }}
       >
-        <TextInput mode="outlined" label="Email" style={styles.input} />
+        <TextInput
+          mode="outlined"
+          label="Email"
+          style={styles.input}
+          value={email}
+          onChangeText={handleEmailChange}
+        />
         <TextInput
           mode="outlined"
           label="Password"
           secureTextEntry
           style={styles.input}
+          value={password}
+          onChangeText={handlePasswordChange}
         />
         <Text style={styles.text}>Don't have an account? Register as:</Text>
         <Text
@@ -39,11 +81,14 @@ export default function LoginPage({ navigation }) {
         <Button
           mode="contained"
           buttonColor="#111"
-          onPress={() => navigation.navigate("Main")}
+          onPress={() => {
+            login();
+          }}
           style={styles.login_button}
         >
           Login
         </Button>
+        {!navigateNow && <Text style={styles.errorText}>{loginResponse}</Text>}
       </View>
     </ImageBackground>
   );
@@ -71,5 +116,12 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
+  },
+  errorText: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+    alignSelf: "center",
+    color: colors.blue1,
   },
 });
