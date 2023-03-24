@@ -17,8 +17,6 @@ import {
   validatePlateNumber,
 } from "../helperFunctions/validationFunctions.js";
 export default function RegisterAsDriverPage({ navigation }) {
-  deleteUser("Gggg@fff.vfffff        ");
-  getUsers();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
