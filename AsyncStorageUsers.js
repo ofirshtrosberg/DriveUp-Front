@@ -26,7 +26,11 @@ export const getUsersLocal = async () => {
 export const printUsersLocal = async () => {
   try {
     const users = await getUsersLocal();
-    users.forEach((user) => console.log(user));
+    if (users === null) {
+      console.log("emp");
+    } else {
+      users.forEach((user) => console.log(user));
+    }
   } catch (error) {
     console.log(error);
   }
