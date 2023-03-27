@@ -16,8 +16,33 @@ import {
   validateCarColor,
   validatePlateNumber,
 } from "../helperFunctions/validationFunctions.js";
+import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 
 export default function RegisterAsDriverPage({ navigation }) {
+  const handleRegisterLocal = async (
+    email,
+    password,
+    phone,
+    fullName,
+    carModel,
+    carColor,
+    plateNumber
+  ) => {
+    addUser(email, password, phone, fullName, carModel, carColor, plateNumber);
+    const user = {
+      email: email,
+      password: password,
+      phone_number: phone,
+      full_name: fullName,
+      car_model: carModel,
+      car_color: carColor,
+      plate_number: plateNumber,
+    };
+    await addUserLocal(user);
+    await printUsersLocal();
+    navigation.navigate("Login");
+    console.log("User added successfully!");
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -144,7 +169,7 @@ export default function RegisterAsDriverPage({ navigation }) {
               setErrorMessage("Invalid plate number");
             } else {
               setErrorMessage("");
-              addUser(
+              handleRegisterLocal(
                 email.trim(),
                 password.trim(),
                 phone.trim(),
@@ -153,7 +178,6 @@ export default function RegisterAsDriverPage({ navigation }) {
                 carColor.trim(),
                 plateNumber.trim()
               );
-              navigation.navigate("Login");
             }
           }}
           style={styles.register_button}

@@ -9,13 +9,7 @@ import {
   validatePhoneNumber,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
-import {
-  addUserLocal,
-  getUsersLocal,
-  printUsersLocal,
-  updateUserLocal,
-  deleteUserLocal,
-} from "../../AsyncStorageUsers";
+import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 export default function RegisterAsDriverPage({ navigation }) {
   const handleRegisterLocal = async (
     email,
@@ -27,10 +21,10 @@ export default function RegisterAsDriverPage({ navigation }) {
     plateNumber
   ) => {
     addUser(
-      email.trim(),
-      password.trim(),
-      phone.trim(),
-      fullName.trim(),
+      email,
+      password,
+      phone,
+      fullName,
       carModel,
       carColor,
       plateNumber
