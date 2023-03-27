@@ -5,6 +5,7 @@ import {
   ip,
   addUser,
   getUsers,
+  deleteUser,
 } from "../helperFunctions/accessToBackFunctions.js";
 import colors from "../config/colors.js";
 import {
@@ -16,9 +17,14 @@ import {
   validateCarColor,
   validatePlateNumber,
 } from "../helperFunctions/validationFunctions.js";
-import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
+import {
+  addUserLocal,
+  printUsersLocal,
+  deleteUserLocal,
+} from "../../AsyncStorageUsers";
 
 export default function RegisterAsDriverPage({ navigation }) {
+  printUsersLocal();
   const [errorMessage, setErrorMessage] = useState("");
   const handleRegister = (
     email,
