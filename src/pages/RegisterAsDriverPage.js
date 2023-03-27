@@ -16,6 +16,7 @@ import {
   validateCarColor,
   validatePlateNumber,
 } from "../helperFunctions/validationFunctions.js";
+
 export default function RegisterAsDriverPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

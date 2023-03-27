@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { addUser } from "../helperFunctions/accessToBackFunctions.js";
@@ -9,7 +9,40 @@ import {
   validatePhoneNumber,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
+import {
+  addUserLocal,
+  getUsersLocal,
+  printUsersLocal,
+  updateUserLocal,
+  deleteUserLocal,
+} from "../../AsyncStorageUsers";
 export default function RegisterAsDriverPage({ navigation }) {
+  const handleRegisterLocal = async (
+    email,
+    password,
+    phone,
+    fullName,
+    carModel,
+    carColor,
+    plateNumber
+  ) => {
+    const user = {
+      email: email,
+      password: password,
+      phone_number: phone,
+      full_name: fullName,
+      car_model: carModel,
+      car_color: carColor,
+      plate_number: plateNumber,
+    };
+    await addUserLocal(user);
+    await printUsersLocal();
+    navigation.navigate("Login");
+    console.log("User added successfully!");
+  };
+  // const handlePrintUsersLocal = async () => {
+  //   await printUsersLocal();
+  // };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -107,7 +140,15 @@ export default function RegisterAsDriverPage({ navigation }) {
                 "",
                 ""
               );
-              navigation.navigate("Login");
+              handleRegisterLocal(
+                email.trim(),
+                password.trim(),
+                phone.trim(),
+                fullName.trim(),
+                "",
+                "",
+                ""
+              );
             }
           }}
           style={styles.register_button}
