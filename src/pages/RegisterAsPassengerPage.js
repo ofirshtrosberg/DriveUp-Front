@@ -26,6 +26,15 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
+    addUser(
+      email.trim(),
+      password.trim(),
+      phone.trim(),
+      fullName.trim(),
+      carModel,
+      carColor,
+      plateNumber
+    );
     const user = {
       email: email,
       password: password,
@@ -131,15 +140,6 @@ export default function RegisterAsDriverPage({ navigation }) {
               setErrorMessage("Invalid full name");
             } else {
               setErrorMessage("");
-              addUser(
-                email.trim(),
-                password.trim(),
-                phone.trim(),
-                fullName.trim(),
-                "",
-                "",
-                ""
-              );
               handleRegisterLocal(
                 email.trim(),
                 password.trim(),
