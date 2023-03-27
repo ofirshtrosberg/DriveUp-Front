@@ -1,4 +1,4 @@
-const ip = "10.100.102.101";
+export const ip = "10.100.102.101";
 
 export const getUsers = () => {
   fetch(`http://${ip}:8000/users/`)
@@ -85,7 +85,14 @@ export const addUser = (
         plate_number: plateNumber,
       },
     }),
-  });
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("User added:", data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 export const login = (email, password) => {
   fetch(`http://${ip}:8000/users/login`, {
@@ -99,5 +106,5 @@ export const login = (email, password) => {
         password: password,
       },
     }),
-  })
+  });
 };

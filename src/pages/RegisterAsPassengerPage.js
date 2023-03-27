@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { addUser } from "../helperFunctions/accessToBackFunctions.js";
 import colors from "../config/colors.js";
 import {
   validateEmail,
@@ -9,12 +8,83 @@ import {
   validatePhoneNumber,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
+import { ip } from "../helperFunctions/accessToBackFunctions.js";
+import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 export default function RegisterAsDriverPage({ navigation }) {
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleRegister = (
+    email,
+    password,
+    phone,
+    fullName,
+    carModel,
+    carColor,
+    plateNumber
+  ) => {
+    fetch("http://" + ip + ":8000/users/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        parameter: {
+          email: email,
+          password: password,
+          phone_number: phone,
+          full_name: fullName,
+          car_model: carModel,
+          car_color: carColor,
+          plate_number: plateNumber,
+        },
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Registration failed");
+        }
+        response.json();
+      })
+      .then((data) => {
+        handleRegisterLocal(
+          email,
+          password,
+          phone,
+          fullName,
+          carModel,
+          carColor,
+          plateNumber
+        );
+      })
+      .catch((error) => {
+        setErrorMessage("Registration failed!");
+      });
+  };
+  const handleRegisterLocal = async (
+    email,
+    password,
+    phone,
+    fullName,
+    carModel,
+    carColor,
+    plateNumber
+  ) => {
+    const user = {
+      email: email,
+      password: password,
+      phone_number: phone,
+      full_name: fullName,
+      car_model: carModel,
+      car_color: carColor,
+      plate_number: plateNumber,
+    };
+    await addUserLocal(user);
+    await printUsersLocal();
+    navigation.navigate("Login");
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [fullName, setFullName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const handleEmailChange = (text) => {
     setEmail(text);
   };
@@ -98,7 +168,7 @@ export default function RegisterAsDriverPage({ navigation }) {
               setErrorMessage("Invalid full name");
             } else {
               setErrorMessage("");
-              addUser(
+              handleRegister(
                 email.trim(),
                 password.trim(),
                 phone.trim(),
@@ -107,7 +177,6 @@ export default function RegisterAsDriverPage({ navigation }) {
                 "",
                 ""
               );
-              navigation.navigate("Login");
             }
           }}
           style={styles.register_button}
