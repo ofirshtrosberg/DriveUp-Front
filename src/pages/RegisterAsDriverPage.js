@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import {
+  ip,
   addUser,
   getUsers,
-  deleteUser,
 } from "../helperFunctions/accessToBackFunctions.js";
 import colors from "../config/colors.js";
 import {
@@ -19,6 +19,54 @@ import {
 import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 
 export default function RegisterAsDriverPage({ navigation }) {
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleRegister = (
+    email,
+    password,
+    phone,
+    fullName,
+    carModel,
+    carColor,
+    plateNumber
+  ) => {
+    fetch("http://" + ip + ":8000/users/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        parameter: {
+          email: email,
+          password: password,
+          phone_number: phone,
+          full_name: fullName,
+          car_model: carModel,
+          car_color: carColor,
+          plate_number: plateNumber,
+        },
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Registration failed");
+        }
+        response.json();
+      })
+      .then((data) => {
+        handleRegisterLocal(
+          email,
+          password,
+          phone,
+          fullName,
+          carModel,
+          carColor,
+          plateNumber
+        );
+      })
+      .catch((error) => {
+        setErrorMessage("Registration failed!");
+      });
+  };
   const handleRegisterLocal = async (
     email,
     password,
@@ -28,7 +76,6 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
-    addUser(email, password, phone, fullName, carModel, carColor, plateNumber);
     const user = {
       email: email,
       password: password,
@@ -50,7 +97,6 @@ export default function RegisterAsDriverPage({ navigation }) {
   const [carModel, setCarModel] = useState("");
   const [carColor, setCarColor] = useState("");
   const [plateNumber, setPlateNumber] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEmailChange = (text) => {
     setEmail(text);
@@ -169,7 +215,7 @@ export default function RegisterAsDriverPage({ navigation }) {
               setErrorMessage("Invalid plate number");
             } else {
               setErrorMessage("");
-              handleRegisterLocal(
+              handleRegister(
                 email.trim(),
                 password.trim(),
                 phone.trim(),
