@@ -150,7 +150,7 @@ export default function RegisterAsDriverPage({ navigation }) {
           </Button>
         </View> */}
       </View>
-      <View style={{ flex: 3 }}>
+      <View style={{ flex: 4.3 }}>
         <TextInput
           mode="outlined"
           label="Email"
@@ -249,10 +249,10 @@ const styles = StyleSheet.create({
   register_button: {
     width: 150,
     alignSelf: "center",
-    marginTop: 20,
+    marginTop: 3,
   },
   error: {
-    marginTop: 20,
+    marginTop: 3,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
