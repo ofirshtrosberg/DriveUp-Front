@@ -111,14 +111,14 @@ const styles = StyleSheet.create({
   login_button: {
     width: 100,
     alignSelf: "center",
-    marginTop: 25,
+    marginTop: 14,
   },
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
   },
   errorText: {
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",

@@ -196,10 +196,10 @@ const styles = StyleSheet.create({
   register_button: {
     width: 150,
     alignSelf: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
   error: {
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
