@@ -1,16 +1,10 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
 
-export default function ProfilePage({ navigation }) {
+export default function SubscriptionDriver() {
   return (
     <View style={styles.container}>
-      <Text>ProfilePage</Text>
-      <Button
-        onPress={() => {
-          navigation.navigate("Subscription");
-        }}
-      >Subscription</Button>
+      <Text>SubscriptionDriver</Text>
     </View>
   );
 }

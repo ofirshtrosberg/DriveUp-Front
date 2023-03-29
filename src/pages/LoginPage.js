@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
-
+import { ip } from "../helperFunctions/accessToBackFunctions";
 export default function LoginPage({ navigation }) {
-  const ip = "10.100.102.101";
   const [loginResponse, setLoginResponse] = useState("");
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
