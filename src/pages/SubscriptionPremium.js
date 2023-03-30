@@ -1,10 +1,12 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-
-export default function SubscriptionPassenger() {
+import { TextInput } from "react-native-paper";
+export default function SubscriptionPremium() {
   return (
     <View style={styles.container}>
-      <Text>SubscriptionPassenger</Text>
+      <Text>Subscription</Text>
+      <Text>Your current Subscription:</Text>
+      <Text>Premium</Text>
     </View>
   );
 }

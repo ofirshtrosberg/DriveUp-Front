@@ -7,10 +7,14 @@ export default function ProfilePage({ navigation }) {
     <View style={styles.container}>
       <Text>ProfilePage</Text>
       <Button
+        mode="contained"
+        buttonColor="#111"
         onPress={() => {
           navigation.navigate("Subscription");
         }}
-      >Subscription</Button>
+      >
+        Subscription
+      </Button>
     </View>
   );
 }

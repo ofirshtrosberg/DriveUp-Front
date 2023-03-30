@@ -5,9 +5,11 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import { getUsers } from "../helperFunctions/accessToBackFunctions";
 import colors from "../config/colors";
 
 export default function HomePage() {
+getUsers();
   return (
     <View style={styles.pageContainer}>
       <Image style={styles.img} source={require("../assets/img1.png")}></Image>

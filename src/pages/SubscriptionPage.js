@@ -1,13 +1,13 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import SubscriptionDriver from "./SubscriptionDriver";
-import SubscriptionPassenger from "./SubscriptionPassenger";
-const isDriver = false;
+import SubscriptionBasic from "./SubscriptionBasic";
+import SubscriptionPremium from "./SubscriptionPremium";
+const isBasic = true;
 export default function SubscriptionPage() {
   return (
     <View style={styles.container}>
-      {isDriver && <SubscriptionDriver></SubscriptionDriver>}
-      {!isDriver && <SubscriptionPassenger></SubscriptionPassenger>}
+      {isBasic && <SubscriptionBasic></SubscriptionBasic>}
+      {!isBasic && <SubscriptionPremium></SubscriptionPremium>}
     </View>
   );
 }
