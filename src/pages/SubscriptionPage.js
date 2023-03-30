@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import SubscriptionBasic from "./SubscriptionBasic";
 import SubscriptionPremium from "./SubscriptionPremium";
-const isBasic = true;
+const isBasic = false;
 export default function SubscriptionPage() {
   return (
     <View style={styles.container}>
