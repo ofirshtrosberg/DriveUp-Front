@@ -1,5 +1,5 @@
 export const ip = "10.100.102.101";
-
+// export const ip = "10.160.7.65";
 export const getUsers = () => {
   fetch(`http://${ip}:8000/users/`)
     .then((response) => response.json())

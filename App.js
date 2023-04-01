@@ -7,9 +7,8 @@ import theme from "./src/config/theme";
 import { Provider as PaperProvider } from "react-native-paper";
 import RegisterAsDriverPage from "./src/pages/RegisterAsDriverPage";
 import RegisterAsPassengerPage from "./src/pages/RegisterAsPassengerPage";
-import {
- printUsersLocal
-} from "./AsyncStorageUsers";
+import { printUsersLocal } from "./AsyncStorageUsers";
+import SubscriptionPage from "./src/pages/SubscriptionPage";
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
@@ -30,6 +29,7 @@ export default function App() {
             component={MainPages}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="Subscription" component={SubscriptionPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
