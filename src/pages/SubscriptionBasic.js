@@ -16,8 +16,8 @@ export default function SubscriptionBasic() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Subscription</Text>
-      <Text>Your current Subscription:</Text>
-      <Text>Basic</Text>
+      <Text style={styles.text}>Your current Subscription:</Text>
+      <Text style={styles.subscription}>Basic</Text>
       <TextInput mode="outlined" label="Card owner id" style={styles.input} />
       <TextInput mode="outlined" label="Card number" style={styles.input} />
       <TextInput mode="outlined" label="CVV" style={styles.input} />
@@ -38,6 +38,15 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Lobster_400Regular",
     fontSize: 50,
+    fontWeight: "normal",
+  },
+  text:{
+    fontSize: 19,
+  },
+  subscription: {
+    marginTop:4,
+    fontFamily: "Lobster_400Regular",
+    fontSize: 30,
     fontWeight: "normal",
   },
   input: {
