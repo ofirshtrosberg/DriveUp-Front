@@ -1,14 +1,21 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import { useFonts } from "expo-font";
+import { Lobster_400Regular } from "@expo-google-fonts/lobster";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 export default function SubscriptionBasic() {
   const [error, estError] = useState("");
+  const [fontsLoaded] = useFonts({
+    Lobster_400Regular,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <View style={styles.container}>
-      <Text>Subscription</Text>
+      <Text style={styles.title}>Subscription</Text>
       <Text>Your current Subscription:</Text>
       <Text>Basic</Text>
       <TextInput mode="outlined" label="Card owner id" style={styles.input} />
@@ -27,6 +34,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    fontFamily: "Lobster_400Regular",
+    fontSize: 50,
+    fontWeight: "normal",
   },
   input: {
     marginBottom: 7,
