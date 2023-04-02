@@ -1,13 +1,20 @@
 import React from "react";
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Image, StyleSheet } from "react-native";
 import colors from "../config/colors";
+import HeaderLogout from "../components/HeaderLogout";
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function HomePage() {
+  const navigation = useNavigation();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Home',
+      headerRight: () => <HeaderLogout />
+
+    });
+  }, [navigation]);
   return (
     <View style={styles.pageContainer}>
       <Image style={styles.img} source={require("../assets/img1.png")}></Image>

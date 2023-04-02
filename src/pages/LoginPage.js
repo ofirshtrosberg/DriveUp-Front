@@ -4,7 +4,7 @@ import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 
 export default function LoginPage({ navigation }) {
-  const ip = "10.100.102.101";
+  const ip = "10.0.0.43";
   const [loginResponse, setLoginResponse] = useState("");
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
