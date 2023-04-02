@@ -24,7 +24,7 @@ import {
 } from "../../AsyncStorageUsers";
 
 export default function RegisterAsDriverPage({ navigation }) {
-  printUsersLocal();
+  // printUsersLocal();
   const [errorMessage, setErrorMessage] = useState("");
   const handleRegister = (
     email,

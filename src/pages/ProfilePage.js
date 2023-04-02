@@ -2,24 +2,20 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
-// import Icon from "react-native-vector-icons/FontAwesome";
-import HeaderLogout from "../components/HeaderLogout";
-import { useNavigation } from '@react-navigation/native';
 
-
-export default function ProfilePage() {
-  const navigation = useNavigation();
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: 'Profile',
-      headerRight: () => <HeaderLogout />
-
-    });
-  }, [navigation]);
+export default function ProfilePage({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>ProfilePage</Text>
+      <Button
+        mode="contained"
+        buttonColor="#111"
+        onPress={() => {
+          navigation.navigate("Subscription");
+        }}
+      >
+        Subscription
+      </Button>
     </View>
   );
 }
@@ -28,8 +24,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  logout_button: {
-    alignSelf: "center",
   },
 });

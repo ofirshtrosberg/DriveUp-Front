@@ -2,10 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const addUserLocal = async (user) => {
   try {
-    const existingUsers = await getUsersLocal();
-    const updatedUsers = [...existingUsers, user];
+    const usersAlreadyInDB = await getUsersLocal();
+    const usersAfterAdding = [...usersAlreadyInDB, user];
 
-    await AsyncStorage.setItem("users", JSON.stringify(updatedUsers));
+    await AsyncStorage.setItem("users", JSON.stringify(usersAfterAdding));
   } catch (error) {
     console.log(error);
   }
@@ -13,11 +13,11 @@ export const addUserLocal = async (user) => {
 
 export const getUsersLocal = async () => {
   try {
-    const usersJSON = await AsyncStorage.getItem("users");
-    if (usersJSON === null) {
+    const usersInDB = await AsyncStorage.getItem("users");
+    if (usersInDB === null) {
       return [];
     }
-    const users = JSON.parse(usersJSON);
+    const users = JSON.parse(usersInDB);
     return users;
   } catch (error) {
     console.log(error);
@@ -27,7 +27,7 @@ export const printUsersLocal = async () => {
   try {
     const users = await getUsersLocal();
     if (users === null) {
-      console.log("emp");
+      console.log("empty");
     } else {
       users.forEach((user) => console.log(user));
     }
@@ -37,21 +37,21 @@ export const printUsersLocal = async () => {
 };
 export const updateUserLocal = async (user) => {
   try {
-    const existingUsers = await getUsersLocal();
+    const usersAlreadyInDB = await getUsersLocal();
 
-    const existingUserIndex = existingUsers.findIndex(
+    const foundUserIndex = usersAlreadyInDB.findIndex(
       (currUser) => currUser.email === user.email
     );
 
-    if (existingUserIndex === -1) {
-      const updatedUsers = [...existingUsers, user];
-      await AsyncStorage.setItem("users", JSON.stringify(updatedUsers));
+    if (foundUserIndex === -1) {
+      const usersAfterUpdate = [...usersAlreadyInDB, user];
+      await AsyncStorage.setItem("users", JSON.stringify(usersAfterUpdate));
     } else {
-      existingUsers[existingUserIndex] = {
-        ...existingUsers[existingUserIndex],
+      usersAlreadyInDB[foundUserIndex] = {
+        ...usersAlreadyInDB[foundUserIndex],
         ...user,
       };
-      await AsyncStorage.setItem("users", JSON.stringify(existingUsers));
+      await AsyncStorage.setItem("users", JSON.stringify(usersAlreadyInDB));
     }
   } catch (error) {
     console.log(error);
@@ -59,9 +59,11 @@ export const updateUserLocal = async (user) => {
 };
 export const deleteUserLocal = async (email) => {
   try {
-    const existingUsers = await getUsersLocal();
-    const updatedUsers = existingUsers.filter((u) => u.email !== email);
-    await AsyncStorage.setItem("users", JSON.stringify(updatedUsers));
+    const usersAlreadyInDB = await getUsersLocal();
+    const filteredUsers = usersAlreadyInDB.filter(
+      (user) => user.email !== email
+    );
+    await AsyncStorage.setItem("users", JSON.stringify(filteredUsers));
   } catch (error) {
     console.log(error);
   }
