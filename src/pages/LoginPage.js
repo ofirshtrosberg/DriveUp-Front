@@ -3,6 +3,7 @@ import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 import { ip } from "../helperFunctions/accessToBackFunctions";
+// import { setCurrentEmail } from "../../CurrentConnectedUserDetails";
 export default function LoginPage({ navigation }) {
   const ip = "10.0.0.43";
   const [loginResponse, setLoginResponse] = useState("");
@@ -27,6 +28,7 @@ export default function LoginPage({ navigation }) {
       .then((data) => {
         setLoginResponse(data.detail);
         if (data.message === "User logged in successfully")
+          // setCurrentEmail(email);
           navigation.navigate("Main");
       })
       .catch((error) => {

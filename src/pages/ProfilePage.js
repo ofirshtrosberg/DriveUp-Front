@@ -6,6 +6,7 @@ import { Button } from "react-native-paper";
 import HeaderLogout from "../components/HeaderLogout";
 // import { useNavigation } from '@react-navigation/native';
 
+// import { currentEmail } from "../../CurrentConnectedUserDetails";
 export default function ProfilePage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -17,6 +18,7 @@ export default function ProfilePage({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>ProfilePage</Text>
+      <Text>{currentEmail}</Text>
       <Button
         mode="contained"
         buttonColor="#111"
