@@ -9,29 +9,36 @@ import RegisterAsDriverPage from "./src/pages/RegisterAsDriverPage";
 import RegisterAsPassengerPage from "./src/pages/RegisterAsPassengerPage";
 import { printUsersLocal } from "./AsyncStorageUsers";
 import SubscriptionPage from "./src/pages/SubscriptionPage";
+import CurrentUserContext from "./CurrentUserContext";
+import { useState } from "react";
 const Stack = createNativeStackNavigator();
 export default function App() {
+  const [currentUserEmail, setCurrentUserEmail] = useState(null);
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={LoginPage} />
-          <Stack.Screen
-            name="RegisterAsDriver"
-            component={RegisterAsDriverPage}
-          />
-          <Stack.Screen
-            name="RegisterPassenger"
-            component={RegisterAsPassengerPage}
-          />
-          <Stack.Screen
-            name="Main"
-            component={MainPages}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Subscription" component={SubscriptionPage} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <CurrentUserContext.Provider
+      value={{ currentUserEmail, setCurrentUserEmail }}
+    >
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Login" component={LoginPage} />
+            <Stack.Screen
+              name="RegisterAsDriver"
+              component={RegisterAsDriverPage}
+            />
+            <Stack.Screen
+              name="RegisterPassenger"
+              component={RegisterAsPassengerPage}
+            />
+            <Stack.Screen
+              name="Main"
+              component={MainPages}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Subscription" component={SubscriptionPage} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </CurrentUserContext.Provider>
   );
 }
