@@ -3,15 +3,15 @@ import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 import { ip } from "../helperFunctions/accessToBackFunctions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CurrentUserContext from "../../CurrentUserContext";
 // import { setCurrentEmail } from "../../CurrentConnectedUserDetails";
 export default function LoginPage({ navigation }) {
-  const ip = "10.0.0.43";
   const [loginResponse, setLoginResponse] = useState("");
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  function login() {
+  function login(setCurrentUserEmail) {
     fetch("http://" + ip + ":8000/users/login", {
       method: "POST",
       headers: {
@@ -27,9 +27,10 @@ export default function LoginPage({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         setLoginResponse(data.detail);
-        if (data.message === "User logged in successfully")
-          // setCurrentEmail(email);
+        if (data.message === "User logged in successfully") {
+          setCurrentUserEmail(email);
           navigation.navigate("Main");
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -42,57 +43,63 @@ export default function LoginPage({ navigation }) {
     setPassword(text);
   };
   return (
-    <ImageBackground
-      source={require("../assets/backgroundLogin.jpg")}
-      style={{ flex: 1 }}
-    >
-      <View style={{ flex: 1 }}></View>
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <TextInput
-          mode="outlined"
-          label="Email"
-          style={styles.input}
-          value={email}
-          onChangeText={handleEmailChange}
-        />
-        <TextInput
-          mode="outlined"
-          label="Password"
-          secureTextEntry
-          style={styles.input}
-          value={password}
-          onChangeText={handlePasswordChange}
-        />
-        <Text style={styles.text}>Don't have an account? Register as:</Text>
-        <Text
-          onPress={() => navigation.navigate("RegisterAsDriver")}
-          style={styles.register}
+    <CurrentUserContext.Consumer>
+      {({ currentUserEmail, setCurrentUserEmail }) => (
+        <ImageBackground
+          source={require("../assets/backgroundLogin.jpg")}
+          style={{ flex: 1 }}
         >
-          Driver
-        </Text>
-        <Text
-          onPress={() => navigation.navigate("RegisterPassenger")}
-          style={styles.register}
-        >
-          Passenger
-        </Text>
-        <Button
-          mode="contained"
-          buttonColor="#111"
-          onPress={() => {
-            login();
-          }}
-          style={styles.login_button}
-        >
-          Login
-        </Button>
-        {!navigateNow && <Text style={styles.errorText}>{loginResponse}</Text>}
-      </View>
-    </ImageBackground>
+          <View style={{ flex: 1 }}></View>
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
+            <TextInput
+              mode="outlined"
+              label="Email"
+              style={styles.input}
+              value={email}
+              onChangeText={handleEmailChange}
+            />
+            <TextInput
+              mode="outlined"
+              label="Password"
+              secureTextEntry
+              style={styles.input}
+              value={password}
+              onChangeText={handlePasswordChange}
+            />
+            <Text style={styles.text}>Don't have an account? Register as:</Text>
+            <Text
+              onPress={() => navigation.navigate("RegisterAsDriver")}
+              style={styles.register}
+            >
+              Driver
+            </Text>
+            <Text
+              onPress={() => navigation.navigate("RegisterPassenger")}
+              style={styles.register}
+            >
+              Passenger
+            </Text>
+            <Button
+              mode="contained"
+              buttonColor="#111"
+              onPress={() => {
+                login(setCurrentUserEmail);
+              }}
+              style={styles.login_button}
+            >
+              Login
+            </Button>
+            {!navigateNow && (
+              <Text style={styles.errorText}>{loginResponse}</Text>
+            )}
+          </View>
+        </ImageBackground>
+      )}
+    </CurrentUserContext.Consumer>
   );
 }
 

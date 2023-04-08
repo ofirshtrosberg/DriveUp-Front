@@ -1,7 +1,24 @@
-import React, { useState } from "react";
-export const [currentEmail, setCurrentEmail] = useState("");
-export const [currentName, setCurrentName] = useState("");
-export const [currentPhone, setCurrentPhone] = useState("");
-export const [currentCarModel, setCurrentCarModel] = useState("");
-export const [currentCarColor, setCurrentCarColor] = useState("");
-export const [currentPlateNumber, setCurrentPlateNumber] = useState("");
+// import React, { useState } from "react";
+// const CurrentConnectedUserDetails = () => {
+//   const [currentEmail, setCurrentEmail] = useState("");
+//   const [currentName, setCurrentName] = useState("");
+//   const [currentPhone, setCurrentPhone] = useState("");
+//   const [currentCarModel, setCurrentCarModel] = useState("");
+//   const [currentCarColor, setCurrentCarColor] = useState("");
+//   const [currentPlateNumber, setCurrentPlateNumber] = useState("");
+//   return {
+//     currentEmail,
+//     setCurrentEmail,
+//     currentName,
+//     setCurrentName,
+//     currentPhone,
+//     setCurrentPhone,
+//     currentCarModel,
+//     setCurrentCarModel,
+//     currentCarColor,
+//     setCurrentCarColor,
+//     currentPlateNumber,
+//     setCurrentPlateNumber,
+//   };
+// };
+// export default CurrentConnectedUserDetails;
