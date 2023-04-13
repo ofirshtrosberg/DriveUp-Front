@@ -5,11 +5,18 @@ import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
 import DriverProfile from "./DriverProfilePage";
 import PassengerProfile from "./PassengerProfilePage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CurrentUserContext from "../../CurrentUserContext";
 const isDriver = true;
+
 export default function ProfilePage({ navigation }) {
+  const { currentUserEmail, setCurrentUserEmail } =
+    useContext(CurrentUserContext);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Profile",
+
       headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);
@@ -30,6 +37,7 @@ export default function ProfilePage({ navigation }) {
           Subscription
         </Button>
       </View>
+
     </View>
   );
 }
