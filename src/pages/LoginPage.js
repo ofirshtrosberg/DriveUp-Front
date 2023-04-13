@@ -27,7 +27,12 @@ export default function LoginPage({ navigation }) {
       .then((data) => {
         setLoginResponse(data.detail);
         if (data.message === "User logged in successfully")
-          navigation.navigate("Main");
+        navigation.navigate('Profile', { email: email });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
+        
       })
       .catch((error) => {
         console.error(error);
