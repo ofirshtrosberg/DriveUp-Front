@@ -27,6 +27,7 @@ export default function LoginPage({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         setLoginResponse(data.detail);
+
         if (data.message === "User logged in successfully") {
           setCurrentUserEmail(email);
           navigation.navigate("Main");
