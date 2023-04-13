@@ -5,8 +5,10 @@ import colors from "../config/colors";
 import { ip } from "../helperFunctions/accessToBackFunctions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CurrentUserContext from "../../CurrentUserContext";
-// import { setCurrentEmail } from "../../CurrentConnectedUserDetails";
+import { printUsersLocal } from "../../AsyncStorageUsers";
+
 export default function LoginPage({ navigation }) {
+  // printUsersLocal();
   const [loginResponse, setLoginResponse] = useState("");
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
