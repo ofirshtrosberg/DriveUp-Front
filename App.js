@@ -14,9 +14,9 @@ import EditPassengerPage from "./src/pages/EditPassengerPage";
 import EditDriverPage from "./src/pages/EditDriverPage";
 import CurrentUserContext from "./CurrentUserContext";
 import { useState } from "react";
-
 const Stack = createNativeStackNavigator();
 export default function App() {
+  const [currentUserEmail, setCurrentUserEmail] = useState(null);
   return (
     <CurrentUserContext.Provider
       value={{ currentUserEmail, setCurrentUserEmail }}
@@ -39,9 +39,9 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen name="Subscription" component={SubscriptionPage} />
-             <Stack.Screen name="Profile" component={ProfilePage} />
-          <Stack.Screen name="EditPassenger" component={EditPassengerPage} />
-          <Stack.Screen name="EditDriver" component={EditDriverPage} />
+            <Stack.Screen name="Profile" component={ProfilePage} />
+            <Stack.Screen name="EditPassenger" component={EditPassengerPage} />
+            <Stack.Screen name="EditDriver" component={EditDriverPage} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
