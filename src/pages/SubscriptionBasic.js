@@ -56,7 +56,7 @@ export default function SubscriptionBasic() {
       <Text style={styles.title}>Subscription</Text>
       <Text style={styles.text}>Your current Subscription:</Text>
       <Text style={styles.subscription}>Basic</Text>
-      <View style={{ backgroundColor: "#4343", borderRadius: 10 }}>
+      <View style={{ backgroundColor: "#fff", borderRadius: 10 }}>
         <Picker
           selectedValue={cardType}
           onValueChange={(value, index) => setCardType(value)}
@@ -96,7 +96,7 @@ export default function SubscriptionBasic() {
         }}
       >
         <View
-          style={{ backgroundColor: "#4343", borderRadius: 10, marginRight: 3 }}
+          style={{ backgroundColor: "#fff", borderRadius: 10, marginRight: 3 }}
         >
           <Picker
             selectedValue={expMonth}
@@ -117,7 +117,7 @@ export default function SubscriptionBasic() {
             <Picker.Item label="12" value="12" />
           </Picker>
         </View>
-        <View style={{ backgroundColor: "#4343", borderRadius: 10 }}>
+        <View style={{ backgroundColor: "#fff", borderRadius: 10, borderColor:colors.blue1, borderWidth:3 }}>
           <Picker
             selectedValue={expYear}
             onValueChange={(value, index) => setExpYear(value)}

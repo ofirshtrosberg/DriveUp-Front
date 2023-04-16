@@ -12,39 +12,41 @@ import { printUsersLocal } from "./AsyncStorageUsers";
 import SubscriptionPage from "./src/pages/SubscriptionPage";
 import EditPassengerPage from "./src/pages/EditPassengerPage";
 import EditDriverPage from "./src/pages/EditDriverPage";
-import CurrentUserContext from "./CurrentUserContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createNativeStackNavigator();
 export default function App() {
-  const [currentUserEmail, setCurrentUserEmail] = useState(null);
+  useEffect(() => {
+    AsyncStorage.getItem("currentUserEmail").then((value) => {
+      if (value == null) {
+        AsyncStorage.setItem("currentUserEmail", "");
+      }
+    });
+  }, []);
   return (
-    <CurrentUserContext.Provider
-      value={{ currentUserEmail, setCurrentUserEmail }}
-    >
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginPage} />
-            <Stack.Screen
-              name="RegisterAsDriver"
-              component={RegisterAsDriverPage}
-            />
-            <Stack.Screen
-              name="RegisterPassenger"
-              component={RegisterAsPassengerPage}
-            />
-            <Stack.Screen
-              name="Main"
-              component={MainPages}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="Subscription" component={SubscriptionPage} />
-            <Stack.Screen name="Profile" component={ProfilePage} />
-            <Stack.Screen name="EditPassenger" component={EditPassengerPage} />
-            <Stack.Screen name="EditDriver" component={EditDriverPage} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </CurrentUserContext.Provider>
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={LoginPage} />
+          <Stack.Screen
+            name="RegisterAsDriver"
+            component={RegisterAsDriverPage}
+          />
+          <Stack.Screen
+            name="RegisterPassenger"
+            component={RegisterAsPassengerPage}
+          />
+          <Stack.Screen
+            name="Main"
+            component={MainPages}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Subscription" component={SubscriptionPage} />
+          <Stack.Screen name="Profile" component={ProfilePage} />
+          <Stack.Screen name="EditPassenger" component={EditPassengerPage} />
+          <Stack.Screen name="EditDriver" component={EditDriverPage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }

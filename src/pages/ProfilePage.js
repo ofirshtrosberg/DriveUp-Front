@@ -10,13 +10,9 @@ import CurrentUserContext from "../../CurrentUserContext";
 const isDriver = true;
 
 export default function ProfilePage({ navigation }) {
-  // const { currentUserEmail, setCurrentUserEmail } =
-  //   useContext(CurrentUserContext);
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Profile",
-
       headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);
