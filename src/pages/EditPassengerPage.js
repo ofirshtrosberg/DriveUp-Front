@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TextInput, Button } from "react-native-paper";
-
+import CurrentUserContext from "../../CurrentUserContext";
 export default function EditProfilePage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({

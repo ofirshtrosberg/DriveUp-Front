@@ -1,17 +1,23 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 import { ip } from "../helperFunctions/accessToBackFunctions";
 import CurrentUserContext from "../../CurrentUserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginPage({ navigation }) {
-  const { currentUserEmail, setCurrentUserEmail } =
-    useContext(CurrentUserContext);
+  useEffect(() => {
+    AsyncStorage.getItem("currentUserEmail").then((value) => {
+      if (value !== null && value !== "") {
+        navigation.navigate("Main");
+      }
+    });
+  }, []);
   const [loginResponse, setLoginResponse] = useState("");
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function login(setCurrentUserEmail) {
+  function login() {
     fetch("http://" + ip + ":8000/users/login", {
       method: "POST",
       headers: {
@@ -29,8 +35,9 @@ export default function LoginPage({ navigation }) {
         setLoginResponse(data.detail);
 
         if (data.message === "User logged in successfully") {
-          setCurrentUserEmail(email);
-          ////!!!!! clear the inputs
+          AsyncStorage.setItem("currentUserEmail", email);
+          setEmail("");
+          setPassword("");
           navigation.navigate("Main");
         }
       })
@@ -87,7 +94,7 @@ export default function LoginPage({ navigation }) {
           mode="contained"
           buttonColor="#111"
           onPress={() => {
-            login(setCurrentUserEmail);
+            login();
           }}
           style={styles.login_button}
         >
