@@ -17,7 +17,6 @@ import { useState } from "react";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-  const [currentUserEmail, setCurrentUserEmail] = useState(null);
   return (
     <CurrentUserContext.Provider
       value={{ currentUserEmail, setCurrentUserEmail }}
