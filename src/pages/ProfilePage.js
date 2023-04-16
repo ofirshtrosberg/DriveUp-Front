@@ -1,4 +1,4 @@
-import React, { useState ,useContext} from "react";
+import React, { useState, useContext } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import HeaderLogout from "../components/HeaderLogout";
 import { useNavigation } from "@react-navigation/native";
@@ -10,8 +10,8 @@ import CurrentUserContext from "../../CurrentUserContext";
 const isDriver = true;
 
 export default function ProfilePage({ navigation }) {
-  const { currentUserEmail, setCurrentUserEmail } =
-    useContext(CurrentUserContext);
+  // const { currentUserEmail, setCurrentUserEmail } =
+  //   useContext(CurrentUserContext);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,7 +37,6 @@ export default function ProfilePage({ navigation }) {
           Subscription
         </Button>
       </View>
-
     </View>
   );
 }

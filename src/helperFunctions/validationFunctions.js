@@ -33,6 +33,28 @@ export const validatePlateNumber = (text) => {
   text = removeWhiteSpaces(text);
   return validateNumbersOnly(text) && text.length == 10;
 };
+export const validateCardNumber = (cardType, cardNumber) => {
+  cardNumber = removeWhiteSpaces(cardNumber);
+  if (validateNumbersOnly(cardNumber)) {
+    return (
+      (cardType == "visa" && cardNumber.length == 16) ||
+      (cardType == "masterCard" && cardNumber.length == 16) ||
+      (cardType == "discover" && cardNumber.length == 16) ||
+      (cardType == "diners" && cardNumber.length == 14) ||
+      (cardType == "americanExpress" && cardNumber.length == 15)
+    );
+  }
+  return false;
+};
+export const validateCVV = (text) => {
+  text = removeWhiteSpaces(text);
+  return validateNumbersOnly(text) && text.length == 3;
+};
+export const validateId = (text) => {
+  text = removeWhiteSpaces(text);
+  return validateNumbersOnly(text) && text.length == 9;
+};
+
 export const removeWhiteSpaces = (text) => {
   return text.replace(/\s+/g, "");
 };

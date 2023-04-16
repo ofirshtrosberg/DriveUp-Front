@@ -6,7 +6,7 @@ import UserAvatar from "react-native-user-avatar";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-const ip = "10.0.0.43";
+const ip = "10.100.102.101";
 
 export default function PassengerProfilePage() {
   const navigation = useNavigation();
