@@ -26,54 +26,54 @@ export default function ProfilePage({ navigation }) {
   const [carModel, setCarModel] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [user, setUser] = useState("");
+
+  const fetchUser = async () => {
+    try {
+      const value = await AsyncStorage.getItem('currentUserEmail');
+      if (value !== null && value !== '') {
+        const fetchedUser = await getUserByEmail(value);
+        setEmail(value);
+        setUser(fetchedUser);
+        setFullName(fetchedUser.full_name);
+        setPlateNumber(fetchedUser.plate_number);
+        setCarModel(fetchedUser.car_model);
+        setPhoneNumber(fetchedUser.phone_number);
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
-      AsyncStorage.getItem("currentUserEmail").then((value) => {
-        if (value != "") {
-          const fetchUser = async () => {
-            try {
-              const fetchedUser = await getUserByEmail(value);
-              setEmail(value);
-              setUser(fetchedUser);
-              setFullName(user.full_name);
-              setPlateNumber(user.plate_number);
-              setCarModel(user.car_model);
-              setPhoneNumber(user.phone_number);
-            } catch (error) {
-              console.error("Error fetching user:", error);
-            }
-          };
-          fetchUser();
-        }
-      });
+      fetchUser();
       return () => {};
     }, [])
   );
-  // const [email, setEmail] = useState("");
-  // const [user, setUser] = useState("");
 
-  // useEffect(() => {
-  //   AsyncStorage.getItem("currentUserEmail").then((value) => {
-  //     setEmail(value);
-  //     console.log(email);
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   if (email != "") {
-  //     const fetchUser = async () => {
-  //       try {
-  //         const fetchedUser = await getUserByEmail(email);
-  //         setUser(fetchedUser);
-  //       } catch (error) {
-  //         console.error("Error fetching user:", error);
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     AsyncStorage.getItem("currentUserEmail").then((value) => {
+  //       if (value != "") {
+  //         const fetchUser = async () => {
+  //           try {
+  //             const fetchedUser = await getUserByEmail(value);
+  //             setEmail(value);
+  //             setUser(fetchedUser);
+  //             setFullName(user.full_name);
+  //             setPlateNumber(user.plate_number);
+  //             setCarModel(user.car_model);
+  //             setPhoneNumber(user.phone_number);
+  //           } catch (error) {
+  //             console.error("Error fetching user:", error);
+  //           }
+  //         };
+  //         fetchUser();
   //       }
-  //     };
-  //     fetchUser();
-  //   }
-  // }, [email]);
-  // const carNumber = user.plateNumber;
-
+  //     });
+  //     return () => {};
+  //   }, [])
+  // );
   return (
     <View style={styles.container}>
       {/* {carNumber === "" ? <PassengerProfile /> : <DriverProfile />} */}
