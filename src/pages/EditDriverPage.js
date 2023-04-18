@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
-import { updateUserLocal } from "../../AsyncStorageUsers";
+import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -15,20 +15,25 @@ export default function EditDriverPage({ navigation, route }) {
     });
   }, [navigation]);
 
-  const { fullName, phoneNumber, carModel, plateNumber } = route.params;
+  const { fullName, phoneNumber, email, carModel, plateNumber } = route.params;
 
   // edited params
   const [editedName, setEditedName] = useState(fullName);
   const [editedPhone, setEditedPhone] = useState(phoneNumber);
   const [editedCarModel, setEditedCarModel] = useState(carModel);
   const [editedPlateNumber, setEditedPlateNumber] = useState(plateNumber);
+  const [editedEmail, setEditedEmail] = useState(email);
 
+  console.log(editedName);
   const handleNameChange = (text) => {
     setEditedName(text);
   };
 
   const handlePhoneChange = (text) => {
     setEditedPhone(text);
+  };
+  const handleEmailChange = (text) => {
+    setEditedEmail(text);
   };
 
   const handleCarModelChange = (text) => {
@@ -39,22 +44,24 @@ export default function EditDriverPage({ navigation, route }) {
     setEditedPlateNumber(text);
   };
 
-  // const handleUpdate = () => {
-  //   const updatedUser = {
-  //     editedName,
-  //     editedPhone,
-  //     editedCarModel,
-  //     editedPlateNumber,
-  //   };
-  //   updateUserLocal(updatedUser);
-  // };
-
+  const handleUpdate = async () => {
+    const updatedUser = {
+      email: email,
+      phone_number: editedPhone,
+      full_name: editedName,
+      car_model: editedCarModel,
+      // car_color: carColor,
+      plate_number: editedPlateNumber,
+    };
+    await updateUserLocal(updatedUser);
+    await printUsersLocal();
+  };
   return (
     <View style={styles.container}>
       <View style={styles.containerTop}>
         <TouchableOpacity onPress={() => {}}>
           {/* <View style={styles.photo}> */}
-          <UserAvatar size={110} name={"n"} style={styles.avatar}>
+          <UserAvatar size={110} name={editedName} style={styles.avatar}>
             {/* <View>
                 <Icon
                   name="camera"
@@ -84,6 +91,13 @@ export default function EditDriverPage({ navigation, route }) {
         />
         <TextInput
           mode="outlined"
+          value={editedEmail}
+          label="Email"
+          style={styles.input}
+          onChangeText={handleEmailChange}
+        />
+        <TextInput
+          mode="outlined"
           value={editedCarModel}
           label="Car Model"
           style={styles.input}
@@ -96,7 +110,7 @@ export default function EditDriverPage({ navigation, route }) {
           style={styles.input}
           onChangeText={handlePlateNumberChange}
         />
-        <Button style={styles.save_btn} mode="contained" >
+        <Button style={styles.save_btn} mode="contained" onPress={handleUpdate}>
           Save
         </Button>
       </View>

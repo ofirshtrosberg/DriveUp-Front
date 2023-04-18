@@ -11,31 +11,36 @@ const ip = "10.0.0.43";
 
 export default function PassengerProfilePage() {
   const navigation = useNavigation();
-  const [user, setUser] = useState("");
   // console.log(user.email);
   // console.log(user.full_name);
   // console.log(user.phone_number);
 
-  const myemail = "b@b.com";
-  const email = user.email;
   const fullName = user.full_name;
   const phoneNumber = user.phone_number;
 
+  const [email, setEmail] = useState("");
+  const [user, setUser] = useState("");
+
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        // Call the getUserByEmail function to get the user by email
-        const fetchedUser = await getUserByEmail(myemail);
+    AsyncStorage.getItem("currentUserEmail").then((value) => {
+      setEmail(value);
+      console.log(email);
+    });
+  }, []);
 
-        // Set the fetched user in state
-        setUser(fetchedUser);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-
-    fetchUser();
-  }, [myemail]);
+  useEffect(() => {
+    if (email != "") {
+      const fetchUser = async () => {
+        try {
+          const fetchedUser = await getUserByEmail(email);
+          setUser(fetchedUser);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+      fetchUser();
+    }
+  }, [email]);
 
   return (
     <View style={styles.container}>

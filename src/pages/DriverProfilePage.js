@@ -6,28 +6,57 @@ import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 import { getUserByEmail } from "../../AsyncStorageUsers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function DriverProfilePage() {
+export default function DriverProfilePage(props) {
   const navigation = useNavigation();
-  const driver_email = "f@f.com";
+  // const [driver_email, setDriverEmail] = useState("");
+  // const email = user.email;
+  // const [fullName, setFullName] = useState("");
+  // const [plateNumber, setPlateNumber] = useState("");
+  // const [carModel, setCarModel] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  const { email, fullName, plateNumber, phoneNumber, carModel } = props;
+  // console.log(fullName)
+  // const fullName = user.full_name;
+  // const plateNumber = user.plate_number;
+  // const carModel = user.car_model;
+  // const phoneNumber = user.phone_number;
   const [user, setUser] = useState("");
 
-  const fullName = user.full_name;
-  const plateNumber = user.plate_number;
-  const carModel = user.car_model;
-  const phoneNumber = user.phone_number;
+  // useEffect(() => {
+  //   AsyncStorage.getItem("currentUserEmail").then((value) => {
+  //     if (value != "") {
+  //       const fetchUser = async () => {
+  //         try {
+  //           const fetchedUser = await getUserByEmail(value);
+  //           setUser(fetchedUser);
+  //           setFullName(user.full_name);
+  //           setPlateNumber(user.plate_number);
+  //           setCarModel(user.car_model);
+  //           setPhoneNumber(user.phone_number);
+  //         } catch (error) {
+  //           console.error("Error fetching user:", error);
+  //         }
+  //       };
+  //       fetchUser();
+  //     }
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const fetchedUser = await getUserByEmail(driver_email);
-        setUser(fetchedUser);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-    fetchUser();
-  }, [driver_email]);
+  // useEffect(() => {
+  //   if (driver_email != "") {
+  //     const fetchUser = async () => {
+  //       try {
+  //         const fetchedUser = await getUserByEmail(driver_email);
+  //         setUser(fetchedUser);
+  //       } catch (error) {
+  //         console.error("Error fetching user:", error);
+  //       }
+  //     };
+  //     fetchUser();
+  //   }
+  // }, [driver_email]);
 
   return (
     <View style={styles.container}>
@@ -44,6 +73,7 @@ export default function DriverProfilePage() {
             navigation.navigate("EditDriver", {
               fullName,
               phoneNumber,
+              email,
               carModel,
               plateNumber,
             });
@@ -52,18 +82,9 @@ export default function DriverProfilePage() {
       </View>
       <Text style={styles.driver_name}>{fullName} </Text>
       <Text style={styles.driver_phone}>{phoneNumber} </Text>
+      <Text style={styles.driver_email}>{email} </Text>
       <Text style={styles.driver_carModel}>My car : {carModel} </Text>
       <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text>
-
-      {/* <Text style={styles.driver_details}>
-        Driver Name:{"\n"}
-        {"\n"}
-        Tel:{"\n"}
-        {"\n"}
-        Car model:{"\n"}
-        {"\n"}
-        Plate number:{"\n"}
-      </Text> */}
       <View style={styles.review_list}>
         <ScrollView>
           <Text>
@@ -113,7 +134,7 @@ const styles = StyleSheet.create({
   driver_carModel: {
     color: "black",
     fontSize: 20,
-    marginRight:200,
+    marginRight: 200,
     marginTop: 4,
     marginBottom: 10,
   },
