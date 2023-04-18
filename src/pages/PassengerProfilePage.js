@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
-  const { email, fullName, phoneNumber } = props;
+  const { email, fullName, phoneNumber, password } = props;
 
   return (
     <View style={styles.container}>
@@ -25,6 +25,7 @@ export default function PassengerProfilePage(props) {
               fullName,
               phoneNumber,
               email,
+              password,
             });
           }}
         ></Icon>
