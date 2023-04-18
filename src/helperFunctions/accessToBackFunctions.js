@@ -19,10 +19,11 @@ export const deleteUser = (email) => {
 };
 
 export const getUserByEmail = (email) => {
+  // var user = null;
   fetch(`http://${ip}:8000/users/${email}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      console.log(data)
     })
     .catch((error) => {
       console.error(error);
@@ -107,22 +108,42 @@ export const login = (email, password) => {
     }),
   });
 };
-export const createUserSubscription = (email) => {
-  fetch(`http://${ip}:8000/user_subscription_maps/`, {
+export const createUserSubscription = (
+  email,
+  id,
+  cardNumber,
+  cvv,
+  expMonth,
+  expYear
+) => {
+  // email = "n@n.com";
+  const date = new Date(expYear, expMonth, 1);
+  console.log(date);
+  fetch(`http://${ip}:8001/user_subscription_maps/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       parameter: {
-        subscription_name: "Basic",
+        subscription_name: "Premium",
         user_email: email,
-        card_owner_id: "",
-        card_number: "",
-        cvv: "",
-        start_date: "",
-        expiration_date: "",
+        card_owner_id: id,
+        card_number: cardNumber,
+        cvv: cvv,
+        start_date: null,
+        expiration_date: date,
       },
     }),
   });
+};
+export const getUsersSubscriptions = () => {
+  fetch(`http://${ip}:8001/user_subscription_maps/`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
