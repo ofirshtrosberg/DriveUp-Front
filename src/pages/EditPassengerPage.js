@@ -4,7 +4,8 @@ import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TextInput, Button } from "react-native-paper";
 import CurrentUserContext from "../../CurrentUserContext";
-export default function EditProfilePage({ navigation }) {
+
+export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Edit",
@@ -12,17 +13,29 @@ export default function EditProfilePage({ navigation }) {
     });
   }, [navigation]);
 
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("alalal n");
-  const [phoneNumber, setPhoneNumber] = useState("55555555");
+  const { fullName, phoneNumber, email } = route.params;
 
+  const [editedName, setEditedName] = useState(fullName);
+  const [editedPhone, setEditedPhone] = useState(phoneNumber);
+  const [editedEmail, setEditedEmail] = useState(email);
+  const handleNameChange = (text) => {
+    setEditedName(text);
+  };
+
+  const handlePhoneChange = (text) => {
+    setEditedPhone(text);
+  };
+
+  const handleEmailChange = (text) => {
+    setEditedEmail(text);
+  };
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity onPress={() => {}}>
             <View style={styles.photo}>
-              <UserAvatar size={110} name={name} style={styles.avatar}>
+              <UserAvatar size={110} name={editedName} style={styles.avatar}>
                 <View>
                   <Icon
                     name="camera"
@@ -38,23 +51,27 @@ export default function EditProfilePage({ navigation }) {
       </View>
       <View style={styles.user_details}>
         <TextInput
-          value={name}
+          value={editedName}
+          mode="outlined"
           label="Name"
           style={styles.input}
-          // onChangeText={}
+          onChangeText={handleNameChange}
         />
         <TextInput
-          value={email}
-          label="Email"
-          style={styles.input}
-          // onChangeText={}
-        />
-        <TextInput
-          value={phoneNumber}
+          mode="outlined"
+          value={editedPhone}
           label="Phone Number"
           style={styles.input}
-          // onChangeText={}
+          onChangeText={handlePhoneChange}
         />
+        <TextInput
+          mode="outlined"
+          value={editedEmail}
+          label="Email"
+          style={styles.input}
+          onChangeText={handleEmailChange}
+        />
+
         <Button
           style={styles.save_btn}
           mode="contained"

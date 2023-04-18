@@ -17,6 +17,9 @@ export default function PassengerProfilePage() {
   // console.log(user.phone_number);
 
   const myemail = "b@b.com";
+  const email = user.email;
+  const fullName = user.full_name;
+  const phoneNumber = user.phone_number;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -46,18 +49,18 @@ export default function PassengerProfilePage() {
           size={20}
           style={styles.edit_icon}
           onPress={() => {
-            navigation.navigate("EditPassenger");
+            navigation.navigate("EditPassenger", {
+              fullName,
+              phoneNumber,
+              email,
+            });
           }}
         ></Icon>
       </View>
 
-      <Text style={styles.passenger_name}>{user.full_name} </Text>
-      <Text style={styles.passenger_email}>{user.email} </Text>
-      <Text style={styles.passenger_phone}>
-        Phone Number : {user.phone_number}
-      </Text>
-
-      {/* <Text style={styles.email}>Email:</Text> */}
+      <Text style={styles.passenger_name}>{fullName} </Text>
+      <Text style={styles.passenger_email}>{email} </Text>
+      <Text style={styles.passenger_phone}>Phone Number : {phoneNumber}</Text>
 
       <Text style={styles.orders_title}>History Orders </Text>
       <View style={styles.orders_list}>
