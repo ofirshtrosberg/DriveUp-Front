@@ -1,16 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
 import HeaderLogout from "../components/HeaderLogout";
-import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native-paper";
 import DriverProfile from "./DriverProfilePage";
 import PassengerProfile from "./PassengerProfilePage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CurrentUserContext from "../../CurrentUserContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { getUserByEmail } from "../../AsyncStorageUsers";
-
-const isDriver = true;
 
 export default function ProfilePage({ navigation }) {
   React.useLayoutEffect(() => {
@@ -29,8 +25,8 @@ export default function ProfilePage({ navigation }) {
 
   const fetchUser = async () => {
     try {
-      const value = await AsyncStorage.getItem('currentUserEmail');
-      if (value !== null && value !== '') {
+      const value = await AsyncStorage.getItem("currentUserEmail");
+      if (value !== null && value !== "") {
         const fetchedUser = await getUserByEmail(value);
         setEmail(value);
         setUser(fetchedUser);
@@ -40,7 +36,7 @@ export default function ProfilePage({ navigation }) {
         setPhoneNumber(fetchedUser.phone_number);
       }
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error("Error fetching user:", error);
     }
   };
 
@@ -53,8 +49,13 @@ export default function ProfilePage({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* {carNumber === "" ? <PassengerProfile /> : <DriverProfile />} */}
-      {isDriver && (
+      {plateNumber === "" ? (
+        <PassengerProfile
+          email={email}
+          fullName={fullName}
+          phoneNumber={phoneNumber}
+        />
+      ) : (
         <DriverProfile
           email={email}
           fullName={fullName}
@@ -63,19 +64,6 @@ export default function ProfilePage({ navigation }) {
           carModel={carModel}
         />
       )}
-      {!isDriver && <PassengerProfile></PassengerProfile>}
-      <View>
-        <Button
-          style={styles.sub_btn}
-          mode="contained"
-          buttonColor="#111"
-          onPress={() => {
-            navigation.navigate("Subscription");
-          }}
-        >
-          Subscription
-        </Button>
-      </View>
     </View>
   );
 }

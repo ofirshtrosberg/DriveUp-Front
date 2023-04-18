@@ -1,11 +1,10 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import { getUserByEmail } from "../../AsyncStorageUsers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DriverProfilePage(props) {
@@ -47,6 +46,18 @@ export default function DriverProfilePage(props) {
             Shlomi:thank you!{"\n"}
           </Text>
         </ScrollView>
+        <View>
+          <Button
+            style={styles.sub_btn}
+            mode="contained"
+            buttonColor="#111"
+            onPress={() => {
+              navigation.navigate("Subscription");
+            }}
+          >
+            Subscription
+          </Button>
+        </View>
       </View>
     </View>
   );
