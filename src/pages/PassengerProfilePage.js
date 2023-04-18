@@ -1,46 +1,13 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
-import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { getUserByEmail } from "../../AsyncStorageUsers";
 
-const ip = "10.0.0.43";
-
-export default function PassengerProfilePage() {
+export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
-  // console.log(user.email);
-  // console.log(user.full_name);
-  // console.log(user.phone_number);
-
-  const fullName = user.full_name;
-  const phoneNumber = user.phone_number;
-
-  const [email, setEmail] = useState("");
-  const [user, setUser] = useState("");
-
-  useEffect(() => {
-    AsyncStorage.getItem("currentUserEmail").then((value) => {
-      setEmail(value);
-      console.log(email);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (email != "") {
-      const fetchUser = async () => {
-        try {
-          const fetchedUser = await getUserByEmail(email);
-          setUser(fetchedUser);
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      };
-      fetchUser();
-    }
-  }, [email]);
+  const { email, fullName, phoneNumber } = props;
 
   return (
     <View style={styles.container}>
@@ -48,7 +15,7 @@ export default function PassengerProfilePage() {
         <Text></Text>
       </View>
       <View style={{ alignItems: "center" }}>
-        <UserAvatar size={110} name={user.full_name} style={styles.avatar} />
+        <UserAvatar size={110} name={fullName} style={styles.avatar} />
         <Icon
           name="edit"
           size={20}
