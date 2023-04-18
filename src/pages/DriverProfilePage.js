@@ -20,16 +20,12 @@ export default function DriverProfilePage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // Call the getUserByEmail function to get the user by email
         const fetchedUser = await getUserByEmail(driver_email);
-
-        // Set the fetched user in state
         setUser(fetchedUser);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
     };
-
     fetchUser();
   }, [driver_email]);
 

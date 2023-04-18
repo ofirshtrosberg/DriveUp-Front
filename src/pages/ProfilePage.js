@@ -7,7 +7,7 @@ import DriverProfile from "./DriverProfilePage";
 import PassengerProfile from "./PassengerProfilePage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CurrentUserContext from "../../CurrentUserContext";
-const isDriver = true;
+const isDriver = false;
 
 export default function ProfilePage({ navigation }) {
   React.useLayoutEffect(() => {
