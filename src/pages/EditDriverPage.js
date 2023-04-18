@@ -1,30 +1,48 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import colors from "../config/colors.js";
+import { ScrollView } from "react-native-gesture-handler";
+import {
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateFullName,
+  validateCarModel,
+  validateCarColor,
+  validatePlateNumber,
+} from "../helperFunctions/validationFunctions.js";
 
 export default function EditDriverPage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Edit",
-      //   headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);
 
-  const { fullName, phoneNumber, email, carModel, plateNumber } = route.params;
+  const {
+    fullName,
+    phoneNumber,
+    email,
+    carModel,
+    plateNumber,
+    password,
+    carColor,
+  } = route.params;
 
-  // edited params
   const [editedName, setEditedName] = useState(fullName);
   const [editedPhone, setEditedPhone] = useState(phoneNumber);
   const [editedCarModel, setEditedCarModel] = useState(carModel);
   const [editedPlateNumber, setEditedPlateNumber] = useState(plateNumber);
   const [editedEmail, setEditedEmail] = useState(email);
+  const [editedPassword, setEditedPassword] = useState(password);
+  const [editedCarColor, setEditedCarColor] = useState(carColor);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  console.log(editedName);
   const handleNameChange = (text) => {
     setEditedName(text);
   };
@@ -44,20 +62,28 @@ export default function EditDriverPage({ navigation, route }) {
     setEditedPlateNumber(text);
   };
 
+  const handlePasswordChange = (text) => {
+    setEditedPassword(text);
+  };
+
+  const handleCarColorChange = (text) => {
+    setEditedCarColor(text);
+  };
+
   const handleUpdate = async () => {
     const updatedUser = {
-      email: email,
+      email: editedEmail,
       phone_number: editedPhone,
       full_name: editedName,
       car_model: editedCarModel,
       // car_color: carColor,
       plate_number: editedPlateNumber,
+      password: editedPassword,
     };
     await updateUserLocal(updatedUser);
-    await printUsersLocal();
   };
   return (
-    <View style={styles.container}>
+    <ScrollView>
       <View style={styles.containerTop}>
         <TouchableOpacity onPress={() => {}}>
           {/* <View style={styles.photo}> */}
@@ -71,7 +97,6 @@ export default function EditDriverPage({ navigation, route }) {
                 />
               </View> */}
           </UserAvatar>
-          {/* </View> */}
         </TouchableOpacity>
       </View>
       <View style={styles.user_details}>
@@ -98,10 +123,24 @@ export default function EditDriverPage({ navigation, route }) {
         />
         <TextInput
           mode="outlined"
+          value={editedPassword}
+          label="Password"
+          style={styles.input}
+          onChangeText={handlePasswordChange}
+        />
+        <TextInput
+          mode="outlined"
           value={editedCarModel}
           label="Car Model"
           style={styles.input}
           onChangeText={handleCarModelChange}
+        />
+        <TextInput
+          mode="outlined"
+          value={editedCarColor}
+          label="Car Color"
+          style={styles.input}
+          onChangeText={handleCarColorChange}
         />
         <TextInput
           mode="outlined"
@@ -110,11 +149,35 @@ export default function EditDriverPage({ navigation, route }) {
           style={styles.input}
           onChangeText={handlePlateNumberChange}
         />
-        <Button style={styles.save_btn} mode="contained" onPress={handleUpdate}>
+        <Button
+          style={styles.save_btn}
+          mode="contained"
+          onPress={() => {
+            if (!validateEmail(editedEmail)) {
+              setErrorMessage("Invalid email");
+            } else if (!validatePassword(editedPassword)) {
+              setErrorMessage("Invalid password");
+            } else if (!validatePhoneNumber(editedPhone)) {
+              setErrorMessage("Invalid phone number");
+            } else if (!validateFullName(editedName)) {
+              setErrorMessage("Invalid full name");
+            } else if (!validateCarModel(editedCarModel)) {
+              setErrorMessage("Invalid car model");
+            } else if (!validateCarColor(carColor)) {
+              setErrorMessage("Invalid car color");
+            } else if (!validatePlateNumber(editedPlateNumber)) {
+              setErrorMessage("Invalid plate number");
+            } else {
+              setErrorMessage("");
+              handleUpdate();
+            }
+          }}
+        >
           Save
         </Button>
+        <Text style={styles.error}>{errorMessage}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -151,5 +214,12 @@ const styles = StyleSheet.create({
     marginRight: 20,
     width: "50%",
     marginTop: 15,
+  },
+  error: {
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    alignSelf: "center",
+    color: colors.blue1,
   },
 });

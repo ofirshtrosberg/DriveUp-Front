@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
-  const { email, fullName, plateNumber, phoneNumber, carModel } = props;
+  const { email, fullName, plateNumber, phoneNumber, carModel ,password,carColor} = props;
 
   return (
     <View style={styles.container}>
@@ -29,6 +29,8 @@ export default function DriverProfilePage(props) {
               email,
               carModel,
               plateNumber,
+              password,
+              carColor,
             });
           }}
         ></Icon>
