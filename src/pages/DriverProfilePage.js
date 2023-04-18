@@ -10,53 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
-  // const [driver_email, setDriverEmail] = useState("");
-  // const email = user.email;
-  // const [fullName, setFullName] = useState("");
-  // const [plateNumber, setPlateNumber] = useState("");
-  // const [carModel, setCarModel] = useState("");
-  // const [phoneNumber, setPhoneNumber] = useState("");
   const { email, fullName, plateNumber, phoneNumber, carModel } = props;
-  // console.log(fullName)
-  // const fullName = user.full_name;
-  // const plateNumber = user.plate_number;
-  // const carModel = user.car_model;
-  // const phoneNumber = user.phone_number;
-  const [user, setUser] = useState("");
-
-  // useEffect(() => {
-  //   AsyncStorage.getItem("currentUserEmail").then((value) => {
-  //     if (value != "") {
-  //       const fetchUser = async () => {
-  //         try {
-  //           const fetchedUser = await getUserByEmail(value);
-  //           setUser(fetchedUser);
-  //           setFullName(user.full_name);
-  //           setPlateNumber(user.plate_number);
-  //           setCarModel(user.car_model);
-  //           setPhoneNumber(user.phone_number);
-  //         } catch (error) {
-  //           console.error("Error fetching user:", error);
-  //         }
-  //       };
-  //       fetchUser();
-  //     }
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   if (driver_email != "") {
-  //     const fetchUser = async () => {
-  //       try {
-  //         const fetchedUser = await getUserByEmail(driver_email);
-  //         setUser(fetchedUser);
-  //       } catch (error) {
-  //         console.error("Error fetching user:", error);
-  //       }
-  //     };
-  //     fetchUser();
-  //   }
-  // }, [driver_email]);
 
   return (
     <View style={styles.container}>

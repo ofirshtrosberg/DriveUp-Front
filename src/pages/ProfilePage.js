@@ -51,29 +51,6 @@ export default function ProfilePage({ navigation }) {
     }, [])
   );
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     AsyncStorage.getItem("currentUserEmail").then((value) => {
-  //       if (value != "") {
-  //         const fetchUser = async () => {
-  //           try {
-  //             const fetchedUser = await getUserByEmail(value);
-  //             setEmail(value);
-  //             setUser(fetchedUser);
-  //             setFullName(user.full_name);
-  //             setPlateNumber(user.plate_number);
-  //             setCarModel(user.car_model);
-  //             setPhoneNumber(user.phone_number);
-  //           } catch (error) {
-  //             console.error("Error fetching user:", error);
-  //           }
-  //         };
-  //         fetchUser();
-  //       }
-  //     });
-  //     return () => {};
-  //   }, [])
-  // );
   return (
     <View style={styles.container}>
       {/* {carNumber === "" ? <PassengerProfile /> : <DriverProfile />} */}
