@@ -2,9 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
-import { ip } from "../helperFunctions/accessToBackFunctions";
+import { ip, getUserByEmail } from "../helperFunctions/accessToBackFunctions";
 import CurrentUserContext from "../../CurrentUserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { isUserExistLocal, addUserLocal } from "../../AsyncStorageUsers";
+import { printUsersLocal, deleteUserLocal } from "../../AsyncStorageUsers";
 export default function LoginPage({ navigation }) {
   useEffect(() => {
     AsyncStorage.getItem("currentUserEmail").then((value) => {
@@ -17,6 +19,24 @@ export default function LoginPage({ navigation }) {
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleLoginLocal = async () => {
+    const isUserExist = await isUserExistLocal(email);
+    if (!isUserExist) {
+      fetch("http://" + ip + ":8000/users/" + email)
+        .then((response) => response.json())
+        .then((data) => {
+          const user = data.result;
+          addLocal(user);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+  const addLocal = async (user) => {
+    await addUserLocal(user);
+    await printUsersLocal();
+  };
   function login() {
     fetch("http://" + ip + ":8000/users/login", {
       method: "POST",
@@ -33,8 +53,8 @@ export default function LoginPage({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         setLoginResponse(data.detail);
-
         if (data.message === "User logged in successfully") {
+          handleLoginLocal();
           AsyncStorage.setItem("currentUserEmail", email);
           setEmail("");
           setPassword("");

@@ -10,8 +10,14 @@ import {
   validateCVV,
   validateId,
 } from "../helperFunctions/validationFunctions";
+import {
+  createUserSubscription,
+  getUsersSubscriptions,
+} from "../helperFunctions/accessToBackFunctions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const windowWidth = Dimensions.get("window").width;
 export default function SubscriptionBasic() {
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [ownerId, setOwnerId] = useState("");
   const [cardType, setCardType] = useState("Visa");
@@ -20,21 +26,32 @@ export default function SubscriptionBasic() {
   const [expMonth, setExpMonth] = useState("01");
   const [expYear, setExpYear] = useState("");
   function handleUpgrade() {
-    if (!validateId(ownerId)) {
-      setError("Invalid owner id");
-      return;
-    }
-    if (!validateCardNumber(cardType, cardNumber)) {
-      console.log(cardType);
-      setError("Invalid card number");
-      return;
-    }
-    if (!validateCVV(cvv)) {
-      setError("Invalid CVV");
-      return;
-    }
-    setError("");
-    //access to back
+    AsyncStorage.getItem("currentUserEmail").then((value) => {
+      setEmail(value);
+      setError("");
+      createUserSubscription(
+        value,
+        ownerId,
+        cardNumber,
+        cvv,
+        expMonth,
+        expYear
+      );
+      getUsersSubscriptions();
+    });
+    // if (!validateId(ownerId)) {
+    //   setError("Invalid owner id");
+    //   return;
+    // }
+    // if (!validateCardNumber(cardType, cardNumber)) {
+    //   console.log(cardType);
+    //   setError("Invalid card number");
+    //   return;
+    // }
+    // if (!validateCVV(cvv)) {
+    //   setError("Invalid CVV");
+    //   return;
+    // }
   }
   const handleIdChange = (text) => {
     setOwnerId(text);
@@ -117,7 +134,14 @@ export default function SubscriptionBasic() {
             <Picker.Item label="12" value="12" />
           </Picker>
         </View>
-        <View style={{ backgroundColor: "#fff", borderRadius: 10, borderColor:colors.blue1, borderWidth:3 }}>
+        <View
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 10,
+            borderColor: colors.blue1,
+            borderWidth: 3,
+          }}
+        >
           <Picker
             selectedValue={expYear}
             onValueChange={(value, index) => setExpYear(value)}

@@ -34,6 +34,13 @@ export const getUsersLocal = async () => {
     console.log(error);
   }
 };
+export const isUserExistLocal = async (email) => {
+  const users = getUsersLocal();
+  for (const user in users) {
+    if (user.email == email) return true;
+  }
+  return false;
+};
 export const printUsersLocal = async () => {
   try {
     const users = await getUsersLocal();
