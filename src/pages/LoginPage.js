@@ -2,7 +2,10 @@ import React, { useState, useContext, useEffect } from "react";
 import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
-import { ip } from "../helperFunctions/accessToBackFunctions";
+import {
+  ip,
+  createUserSubscription,
+} from "../helperFunctions/accessToBackFunctions";
 import CurrentUserContext from "../../CurrentUserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginPage({ navigation }) {
@@ -35,6 +38,7 @@ export default function LoginPage({ navigation }) {
         setLoginResponse(data.detail);
 
         if (data.message === "User logged in successfully") {
+          createUserSubscription(email);
           AsyncStorage.setItem("currentUserEmail", email);
           setEmail("");
           setPassword("");

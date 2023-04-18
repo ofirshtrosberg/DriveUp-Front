@@ -107,3 +107,22 @@ export const login = (email, password) => {
     }),
   });
 };
+export const createUserSubscription = (email) => {
+  fetch(`http://${ip}:8000/user_subscription_maps/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parameter: {
+        subscription_name: "Basic",
+        user_email: email,
+        card_owner_id: "",
+        card_number: "",
+        cvv: "",
+        start_date: "",
+        expiration_date: "",
+      },
+    }),
+  });
+};
