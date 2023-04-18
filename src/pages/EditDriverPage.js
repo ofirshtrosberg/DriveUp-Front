@@ -3,10 +3,11 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
+import { updateUserLocal } from "../../AsyncStorageUsers";
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export default function EditDriverPage({ navigation }) {
+export default function EditDriverPage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Edit",
@@ -14,17 +15,46 @@ export default function EditDriverPage({ navigation }) {
     });
   }, [navigation]);
 
-  const [carModel, setCarModel] = useState("fiat");
-  const [carNumber, setCarNumber] = useState("1111");
-  const [name, setName] = useState("jn j");
-  const [phoneNumber, setPhoneNumber] = useState("123456789");
+  const { fullName, phoneNumber, carModel, plateNumber } = route.params;
+
+  // edited params
+  const [editedName, setEditedName] = useState(fullName);
+  const [editedPhone, setEditedPhone] = useState(phoneNumber);
+  const [editedCarModel, setEditedCarModel] = useState(carModel);
+  const [editedPlateNumber, setEditedPlateNumber] = useState(plateNumber);
+
+  const handleNameChange = (text) => {
+    setEditedName(text);
+  };
+
+  const handlePhoneChange = (text) => {
+    setEditedPhone(text);
+  };
+
+  const handleCarModelChange = (text) => {
+    setEditedCarModel(text);
+  };
+
+  const handlePlateNumberChange = (text) => {
+    setEditedPlateNumber(text);
+  };
+
+  // const handleUpdate = () => {
+  //   const updatedUser = {
+  //     editedName,
+  //     editedPhone,
+  //     editedCarModel,
+  //     editedPlateNumber,
+  //   };
+  //   updateUserLocal(updatedUser);
+  // };
 
   return (
     <View style={styles.container}>
       <View style={styles.containerTop}>
         <TouchableOpacity onPress={() => {}}>
           {/* <View style={styles.photo}> */}
-          <UserAvatar size={110} name={name} style={styles.avatar}>
+          <UserAvatar size={110} name={"n"} style={styles.avatar}>
             {/* <View>
                 <Icon
                   name="camera"
@@ -39,34 +69,34 @@ export default function EditDriverPage({ navigation }) {
       </View>
       <View style={styles.user_details}>
         <TextInput
-          value={name}
+          value={editedName}
           mode="outlined"
           label="Name"
           style={styles.input}
-          // onChangeText={}
+          onChangeText={handleNameChange}
         />
         <TextInput
           mode="outlined"
-          value={phoneNumber}
+          value={editedPhone}
           label="Phone Number"
           style={styles.input}
-          // onChangeText={}
+          onChangeText={handlePhoneChange}
         />
         <TextInput
           mode="outlined"
-          value={carModel}
+          value={editedCarModel}
           label="Car Model"
           style={styles.input}
-          // onChangeText={}
+          onChangeText={handleCarModelChange}
         />
         <TextInput
           mode="outlined"
-          value={carNumber}
+          value={editedPlateNumber}
           label="Car Number"
           style={styles.input}
-          // onChangeText={}
+          onChangeText={handlePlateNumberChange}
         />
-        <Button style={styles.save_btn} mode="contained">
+        <Button style={styles.save_btn} mode="contained" >
           Save
         </Button>
       </View>
