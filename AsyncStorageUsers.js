@@ -11,6 +11,17 @@ export const addUserLocal = async (user) => {
   }
 };
 
+export const getUserByEmail = async (email) => {
+  try {
+    const users = await AsyncStorage.getItem("users");
+    const parsedUsers = JSON.parse(users);
+    const user = parsedUsers.find((user) => user.email === email);
+    return user;
+  } catch (error) {
+    console.error("Error fetching user from local database:", error);
+  }
+};
+
 export const getUsersLocal = async () => {
   try {
     const usersInDB = await AsyncStorage.getItem("users");

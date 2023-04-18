@@ -5,11 +5,33 @@ import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
+import { getUserByEmail } from "../../AsyncStorageUsers";
 
 export default function DriverProfilePage() {
   const navigation = useNavigation();
-  const driver_phone="052 - 5784421";
-  const driver_name = "Yossi Cohen";
+  const driver_email = "f@f.com";
+  const [user, setUser] = useState("");
+
+  const fullName = user.full_name;
+  const plateNumber = user.plate_number;
+  const carModel = user.car_model;
+  const phoneNumber = user.phone_number;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Call the getUserByEmail function to get the user by email
+        const fetchedUser = await getUserByEmail(driver_email);
+
+        // Set the fetched user in state
+        setUser(fetchedUser);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchUser();
+  }, [driver_email]);
 
   return (
     <View style={styles.container}>
@@ -17,18 +39,25 @@ export default function DriverProfilePage() {
         <Text></Text>
       </View>
       <View style={{ alignItems: "center" }}>
-        <UserAvatar size={110} name={driver_name} style={styles.avatar} />
+        <UserAvatar size={110} name={fullName} style={styles.avatar} />
         <Icon
           name="edit"
           size={20}
           style={styles.edit_icon}
           onPress={() => {
-            navigation.navigate("EditDriver");
+            navigation.navigate("EditDriver", {
+              fullName,
+              phoneNumber,
+              carModel,
+              plateNumber,
+            });
           }}
         ></Icon>
       </View>
-      <Text style={styles.driver_name}>{driver_name} </Text>
-      <Text style={styles.driver_phone}>{driver_phone} </Text>
+      <Text style={styles.driver_name}>{fullName} </Text>
+      <Text style={styles.driver_phone}>{phoneNumber} </Text>
+      <Text style={styles.driver_carModel}>My car : {carModel} </Text>
+      <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text>
 
       {/* <Text style={styles.driver_details}>
         Driver Name:{"\n"}
@@ -82,6 +111,20 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
     marginLeft: 0,
+    marginTop: 4,
+    marginBottom: 10,
+  },
+  driver_carModel: {
+    color: "black",
+    fontSize: 20,
+    marginRight:200,
+    marginTop: 4,
+    marginBottom: 10,
+  },
+  driver_plateNumber: {
+    color: "black",
+    fontSize: 20,
+    marginLeft: 150,
     marginTop: 4,
     marginBottom: 10,
   },

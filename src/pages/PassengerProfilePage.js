@@ -5,29 +5,34 @@ import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { getUserByEmail } from "../../AsyncStorageUsers";
 
-const ip = "10.100.102.101";
+const ip = "10.0.0.43";
 
 export default function PassengerProfilePage() {
   const navigation = useNavigation();
-  const user_name = "Lidor Danon";
-  const user_email = "Lid@dan.com";
+  const [user, setUser] = useState("");
+  // console.log(user.email);
+  // console.log(user.full_name);
+  // console.log(user.phone_number);
 
-  // const {email} = route.params;
-  // console.log({email});
+  const myemail = "b@b.com";
 
-  // const getUserByEmail = (email) => {
-  //   fetch(`http://${ip}:8000/users/${email}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-  // const user = getUserByEmail({email});
-  // console.log(user);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Call the getUserByEmail function to get the user by email
+        const fetchedUser = await getUserByEmail(myemail);
+
+        // Set the fetched user in state
+        setUser(fetchedUser);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchUser();
+  }, [myemail]);
 
   return (
     <View style={styles.container}>
@@ -35,7 +40,7 @@ export default function PassengerProfilePage() {
         <Text></Text>
       </View>
       <View style={{ alignItems: "center" }}>
-        <UserAvatar size={110} name={user_name} style={styles.avatar} />
+        <UserAvatar size={110} name={user.full_name} style={styles.avatar} />
         <Icon
           name="edit"
           size={20}
@@ -46,12 +51,15 @@ export default function PassengerProfilePage() {
         ></Icon>
       </View>
 
-      <Text style={styles.passenger_name}>{user_name} </Text>
-      <Text style={styles.passenger_email}>{user_email} </Text>
+      <Text style={styles.passenger_name}>{user.full_name} </Text>
+      <Text style={styles.passenger_email}>{user.email} </Text>
+      <Text style={styles.passenger_phone}>
+        Phone Number : {user.phone_number}
+      </Text>
 
       {/* <Text style={styles.email}>Email:</Text> */}
 
-      <Text>Orders </Text>
+      <Text style={styles.orders_title}>History Orders </Text>
       <View style={styles.orders_list}>
         <ScrollView>
           <Text>hello</Text>
@@ -81,18 +89,35 @@ const styles = StyleSheet.create({
   },
   passenger_name: {
     color: "black",
-    fontSize: 20,
+    fontSize: 22,
     marginLeft: 0,
     marginTop: 20,
     width: 300,
     textAlign: "center",
+    fontWeight: "600",
   },
   passenger_email: {
     color: "#626FB4",
     fontSize: 20,
     marginLeft: 0,
     marginTop: 4,
-    marginBottom: 10,
+    marginBottom: 7,
+  },
+  passenger_phone: {
+    color: "black",
+    fontSize: 20,
+    marginLeft: 0,
+    marginTop: 1,
+    marginBottom: 5,
+    // textDecorationLine: "underline",
+  },
+  orders_title: {
+    fontSize: 20,
+    padding: 10,
+    marginTop: 5,
+    marginBottom: 0,
+    textDecorationLine: "underline",
+    fontWeight: "400",
   },
   orders_list: {
     backgroundColor: "#000",
@@ -100,8 +125,8 @@ const styles = StyleSheet.create({
     width: "80%",
     backgroundColor: "#5F84A2",
     height: 150,
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: 5,
+    marginBottom: 10,
   },
   edit_icon: {
     padding: 5,
