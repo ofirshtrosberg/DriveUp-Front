@@ -12,12 +12,13 @@ export default function EditProfilePage({ navigation, route }) {
       // headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);
-
+const myemail="l@l.com"
   const { fullName, phoneNumber, email } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   const [editedPhone, setEditedPhone] = useState(phoneNumber);
   const [editedEmail, setEditedEmail] = useState(email);
+
   const handleNameChange = (text) => {
     setEditedName(text);
   };
@@ -28,6 +29,16 @@ export default function EditProfilePage({ navigation, route }) {
 
   const handleEmailChange = (text) => {
     setEditedEmail(text);
+  };
+
+  const handleUpdate = async () => {
+    const updatedUser = {
+      email: email,
+      phone_number: editedPhone,
+      full_name: editedName,
+    };
+    await updateUserLocal(updatedUser);
+    await printUsersLocal();
   };
   return (
     <View style={styles.container}>
