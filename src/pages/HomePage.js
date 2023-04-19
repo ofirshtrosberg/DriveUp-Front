@@ -3,7 +3,6 @@ import { Text, View, Image, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import HeaderLogout from "../components/HeaderLogout";
 import { useNavigation } from "@react-navigation/native";
-
 export default function HomePage() {
   const navigation = useNavigation();
   React.useLayoutEffect(() => {

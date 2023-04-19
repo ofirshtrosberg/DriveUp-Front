@@ -6,12 +6,13 @@ import {
   ip,
   getUserByEmail,
   isUserPremium,
+  getUsers,
 } from "../helperFunctions/accessToBackFunctions";
 import CurrentUserContext from "../../CurrentUserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isUserExistLocal, addUserLocal } from "../../AsyncStorageUsers";
 import { printUsersLocal, deleteUserLocal } from "../../AsyncStorageUsers";
-
+import { deleteUser } from "../helperFunctions/accessToBackFunctions";
 export default function LoginPage({ navigation }) {
   useEffect(() => {
     AsyncStorage.getItem("currentUserEmail").then((value) => {
@@ -26,6 +27,7 @@ export default function LoginPage({ navigation }) {
   const [password, setPassword] = useState("");
   const handleLoginLocal = async () => {
     const isUserExist = await isUserExistLocal(email);
+    console.log(isUserExist);
     if (!isUserExist) {
       fetch("http://" + ip + ":8000/users/" + email)
         .then((response) => response.json())
