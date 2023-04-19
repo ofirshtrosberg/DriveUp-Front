@@ -4,13 +4,10 @@ import { ip } from "../helperFunctions/accessToBackFunctions.js";
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
-
 import colors from "../config/colors.js";
 import { ScrollView } from "react-native-gesture-handler";
 import {
-  validateEmail,
   validatePassword,
-  validatePhoneNumber,
   validateFullName,
   validateCarModel,
   validateCarColor,
@@ -24,49 +21,38 @@ export default function EditDriverPage({ navigation, route }) {
     });
   }, [navigation]);
 
-  const {
-    fullName,
-    phoneNumber,
-    email,
-    carModel,
-    plateNumber,
-    password,
-    carColor,
-  } = route.params;
+  const { fullName, email, carModel, plateNumber, password, carColor } =
+    route.params;
 
   const [editedName, setEditedName] = useState(fullName);
-  const [editedPhone, setEditedPhone] = useState(phoneNumber);
   const [editedCarModel, setEditedCarModel] = useState(carModel);
   const [editedPlateNumber, setEditedPlateNumber] = useState(plateNumber);
-  const [editedEmail, setEditedEmail] = useState(email);
   const [editedPassword, setEditedPassword] = useState(password);
   const [editedCarColor, setEditedCarColor] = useState(carColor);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleUpdate = (
-    editedEmail,
+    email,
     editedName,
     editedCarModel,
     editedCarColor,
     editedPlateNumber,
-    editedPassword,
-    editedPhone
+    editedPassword
   ) => {
-    fetch("http://" + ip + ":8000/users/" + editedEmail, {
+    fetch("http://" + ip + ":8000/users/" + email, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         parameter: {
-          email: editedEmail,
+          email: email,
           full_name: editedName,
           car_model: editedCarModel,
           car_color: editedCarColor,
           plate_number: editedPlateNumber,
           password: editedPassword,
-          phone_number: editedPhone,
         },
       }),
     })
@@ -79,13 +65,12 @@ export default function EditDriverPage({ navigation, route }) {
       })
       .then((data) => {
         handleUpdateLocal(
-          editedEmail,
+          email,
           editedName,
           editedCarModel,
           editedCarColor,
           editedPlateNumber,
-          editedPassword,
-          editedPhone
+          editedPassword
         );
       })
       .catch((error) => {
@@ -94,29 +79,20 @@ export default function EditDriverPage({ navigation, route }) {
   };
   const handleUpdateLocal = async () => {
     const updatedUser = {
-      email: editedEmail,
+      email: email,
       full_name: editedName,
       car_model: editedCarModel,
       car_color: carColor,
       plate_number: editedPlateNumber,
       password: editedPassword,
-      phone_number: editedPhone,
     };
     await updateUserLocal(updatedUser);
     setSuccessMessage("Update successful!");
-    await printUsersLocal();
     console.log("User update successfully!");
   };
 
   const handleNameChange = (text) => {
     setEditedName(text);
-  };
-
-  const handlePhoneChange = (text) => {
-    setEditedPhone(text);
-  };
-  const handleEmailChange = (text) => {
-    setEditedEmail(text);
   };
 
   const handleCarModelChange = (text) => {
@@ -135,18 +111,6 @@ export default function EditDriverPage({ navigation, route }) {
     setEditedCarColor(text);
   };
 
-  // const handleUpdateLocal = async () => {
-  //   const updatedUser = {
-  //     email: editedEmail,
-  //     phone_number: editedPhone,
-  //     full_name: editedName,
-  //     car_model: editedCarModel,
-  //     car_color: carColor,
-  //     plate_number: editedPlateNumber,
-  //     password: editedPassword,
-  //   };
-  // await updateUserLocal(updatedUser);
-  // };
   return (
     <ScrollView>
       <View style={styles.containerTop}>
@@ -171,20 +135,6 @@ export default function EditDriverPage({ navigation, route }) {
           label="Name"
           style={styles.input}
           onChangeText={handleNameChange}
-        />
-        <TextInput
-          mode="outlined"
-          value={editedPhone}
-          label="Phone Number"
-          style={styles.input}
-          onChangeText={handlePhoneChange}
-        />
-        <TextInput
-          mode="outlined"
-          value={editedEmail}
-          label="Email"
-          style={styles.input}
-          onChangeText={handleEmailChange}
         />
         <TextInput
           mode="outlined"
@@ -218,12 +168,8 @@ export default function EditDriverPage({ navigation, route }) {
           style={styles.save_btn}
           mode="contained"
           onPress={() => {
-            if (!validateEmail(editedEmail)) {
-              setErrorMessage("Invalid email");
-            } else if (!validatePassword(editedPassword)) {
+            if (!validatePassword(editedPassword)) {
               setErrorMessage("Invalid password");
-            } else if (!validatePhoneNumber(editedPhone)) {
-              setErrorMessage("Invalid phone number");
             } else if (!validateFullName(editedName)) {
               setErrorMessage("Invalid full name");
             } else if (!validateCarModel(editedCarModel)) {
@@ -235,23 +181,24 @@ export default function EditDriverPage({ navigation, route }) {
             } else {
               setErrorMessage("");
               handleUpdate(
-                editedEmail,
+                email,
                 editedName,
                 editedCarModel,
                 editedCarColor,
                 editedPlateNumber,
-                editedPassword,
-                editedPhone
+                editedPassword
               );
             }
           }}
         >
           Save
         </Button>
-        {errorMessage !== "" && <Text style={styles.message} >{errorMessage}</Text>}
-        {successMessage !== "" && <Text style={styles.message}>{successMessage}</Text>}
-        {/* <Text style={styles.error}>{errorMessage}</Text>
-        <Text style={styles.error}>{message}</Text> */}
+        {errorMessage !== "" && (
+          <Text style={styles.message}>{errorMessage}</Text>
+        )}
+        {successMessage !== "" && (
+          <Text style={styles.message}>{successMessage}</Text>
+        )}
       </View>
     </ScrollView>
   );
@@ -293,7 +240,7 @@ const styles = StyleSheet.create({
   },
   message: {
     marginTop: 5,
-    marginBottom:5,
+    marginBottom: 5,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
