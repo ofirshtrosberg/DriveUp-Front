@@ -23,7 +23,6 @@ export default function PassengerProfilePage(props) {
           onPress={() => {
             navigation.navigate("EditPassenger", {
               fullName,
-              phoneNumber,
               email,
               password,
             });

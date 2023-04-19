@@ -37,7 +37,7 @@ export default function ProfilePage({ navigation }) {
         setCarModel(fetchedUser.car_model);
         setPhoneNumber(fetchedUser.phone_number);
         setPassword(fetchedUser.password);
-        setCarColor(fetchUser.car_color)
+        setCarColor(fetchedUser.car_color)
       }
     } catch (error) {
       console.error("Error fetching user:", error);
