@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, StyleSheet,Text } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TextInput, Button } from "react-native-paper";
 import CurrentUserContext from "../../CurrentUserContext";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 import {
-  validateEmail,
   validatePassword,
-  validatePhoneNumber,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
 import colors from "../config/colors.js";
+import { ip } from "../helperFunctions/accessToBackFunctions.js";
 
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -20,40 +19,59 @@ export default function EditProfilePage({ navigation, route }) {
     });
   }, [navigation]);
 
-  const { fullName, phoneNumber, email, password } = route.params;
+  const { fullName, email, password } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
-  const [editedPhone, setEditedPhone] = useState(phoneNumber);
-  const [editedEmail, setEditedEmail] = useState(email);
   const [editedPassword, setEditedPassword] = useState(password);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
+  const handleUpdate = (email, editedName, editedPassword) => {
+    fetch("http://" + ip + ":8000/users/" + email, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        parameter: {
+          email: email,
+          full_name: editedName,
+          password: editedPassword,
+        },
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error("Update failed");
+        }
+        response.json();
+      })
+      .then((data) => {
+        handleUpdateLocal(email, editedName, editedPassword);
+      })
+      .catch((error) => {
+        setErrorMessage("Update failed!");
+      });
+  };
+  const handleUpdateLocal = async () => {
+    const updatedUser = {
+      email: email,
+      full_name: editedName,
+      password: editedPassword,
+    };
+    await updateUserLocal(updatedUser);
+    setSuccessMessage("Update successful!");
+    console.log("User update successfully!");
+  };
   const handleNameChange = (text) => {
     setEditedName(text);
-  };
-
-  const handlePhoneChange = (text) => {
-    setEditedPhone(text);
-  };
-
-  const handleEmailChange = (text) => {
-    setEditedEmail(text);
   };
 
   const handlePasswordChange = (text) => {
     setEditedPassword(text);
   };
 
-  const handleUpdate = async () => {
-    const updatedUser = {
-      email: editedEmail,
-      phone_number: editedPhone,
-      full_name: editedName,
-      password: editedPassword,
-    };
-    await updateUserLocal(updatedUser);
-    // await printUsersLocal();
-  };
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
@@ -84,20 +102,6 @@ export default function EditProfilePage({ navigation, route }) {
         />
         <TextInput
           mode="outlined"
-          value={editedPhone}
-          label="Phone Number"
-          style={styles.input}
-          onChangeText={handlePhoneChange}
-        />
-        <TextInput
-          mode="outlined"
-          value={editedEmail}
-          label="Email"
-          style={styles.input}
-          onChangeText={handleEmailChange}
-        />
-        <TextInput
-          mode="outlined"
           value={editedPassword}
           label="Password"
           style={styles.input}
@@ -107,23 +111,24 @@ export default function EditProfilePage({ navigation, route }) {
           style={styles.save_btn}
           mode="contained"
           onPress={() => {
-            if (!validateEmail(editedEmail)) {
-              setErrorMessage("Invalid email");
-            } else if (!validatePassword(editedPassword)) {
+            if (!validatePassword(editedPassword)) {
               setErrorMessage("Invalid password");
-            } else if (!validatePhoneNumber(editedPhone)) {
-              setErrorMessage("Invalid phone number");
             } else if (!validateFullName(editedName)) {
               setErrorMessage("Invalid full name");
             } else {
               setErrorMessage("");
-              handleUpdate();
+              handleUpdate(email, editedName, editedPassword);
             }
           }}
         >
           Save
         </Button>
-        <Text style={styles.error}>{errorMessage}</Text>
+        {errorMessage !== "" && (
+          <Text style={styles.message}>{errorMessage}</Text>
+        )}
+        {successMessage !== "" && (
+          <Text style={styles.message}>{successMessage}</Text>
+        )}
       </View>
     </View>
   );
@@ -168,8 +173,9 @@ const styles = StyleSheet.create({
     width: "50%",
     marginTop: 15,
   },
-  error: {
-    marginTop: 10,
+  message: {
+    marginTop: 5,
+    marginBottom: 5,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
