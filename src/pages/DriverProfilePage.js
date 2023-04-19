@@ -46,17 +46,28 @@ export default function DriverProfilePage(props) {
         ></Icon>
       </View>
       <Text style={styles.driver_name}>{fullName} </Text>
-      <Text style={styles.driver_email}>{email} </Text>
-      <View style={styles.phoneContainer}>
-        {/* <FontAwesomeIcon
-          icon="fa-light fa-phone"
-          style={{ color: "#608cd7" }}
-        />{" "} */}
+      <View style={styles.data_icons_Container}>
+        <Icon
+          name="envelope"
+          size={30}
+          color="#608cd7"
+          style={styles.email_icon}
+        />
+        <Text style={styles.driver_email}>{email} </Text>
+      </View>
+      <View style={styles.data_icons_Container}>
+        <Icon
+          name="phone"
+          size={20}
+          color="#608cd7"
+          style={styles.phone_icon}
+        />
         <Text style={styles.driver_phone}>{phoneNumber} </Text>
       </View>
 
       <Text style={styles.driver_carModel}>
         My car : {carModel} , Car Number: {plateNumber}
+        
       </Text>
       {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
       <View style={styles.review_list}>
@@ -111,11 +122,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "600",
   },
-  phoneContainer: {
+  data_icons_Container: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 0,
+    marginRight:30,
   },
+  email_icon: { marginLeft: -10, marginRight: 20 },
+  phone_icon: { transform: [{ rotate: "95deg" }], marginTop: -5 },
   driver_phone: {
     color: "black",
     fontSize: 20,
@@ -123,7 +137,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 10,
   },
-  iconphone: { marginTop: -5 },
   driver_email: {
     color: "#626FB4",
     fontSize: 20,

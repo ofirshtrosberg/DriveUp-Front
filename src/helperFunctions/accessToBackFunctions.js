@@ -1,4 +1,4 @@
-export const ip = "10.0.0.43";
+export const ip = "10.160.0.242";
 export const getUsers = () => {
   fetch(`http://${ip}:8000/users/`)
     .then((response) => response.json())
@@ -23,7 +23,7 @@ export const getUserByEmail = (email) => {
   fetch(`http://${ip}:8000/users/${email}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
+      console.log(data);
     })
     .catch((error) => {
       console.error(error);

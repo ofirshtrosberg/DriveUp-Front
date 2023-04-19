@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native";
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password } = props;
-
   return (
     <View style={styles.container}>
       <View style={styles.color}>
@@ -31,9 +30,24 @@ export default function PassengerProfilePage(props) {
       </View>
 
       <Text style={styles.passenger_name}>{fullName} </Text>
-      <Text style={styles.passenger_email}>{email} </Text>
-      <Text style={styles.passenger_phone}>Phone Number : {phoneNumber}</Text>
-
+      <View style={styles.data_icons_Container}>
+        <Icon
+          name="envelope"
+          size={30}
+          color="#608cd7"
+          style={styles.email_icon}
+        />
+        <Text style={styles.passenger_email}>{email} </Text>
+      </View>
+      <View style={styles.data_icons_Container}>
+        <Icon
+          name="phone"
+          size={20}
+          color="#608cd7"
+          style={styles.phone_icon}
+        />
+        <Text style={styles.passenger_phone}>{phoneNumber} </Text>
+      </View>
       <Text style={styles.orders_title}>History Orders </Text>
       <View style={styles.orders_list}>
         <ScrollView>
@@ -81,10 +95,18 @@ const styles = StyleSheet.create({
   passenger_phone: {
     color: "black",
     fontSize: 20,
-    marginLeft: 0,
+    marginLeft: 15,
     marginTop: 1,
     marginBottom: 5,
     // textDecorationLine: "underline",
+  },
+  email_icon: { marginLeft: -10, marginRight: 20 },
+  phone_icon: { transform: [{ rotate: "95deg" }], marginTop: -5 },
+  data_icons_Container: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 0,
+    marginRight:30,
   },
   orders_title: {
     fontSize: 20,

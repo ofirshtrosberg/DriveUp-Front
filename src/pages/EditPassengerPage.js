@@ -21,14 +21,14 @@ export default function EditProfilePage({ navigation, route }) {
   }, [navigation]);
 
   // const navigation = useNavigation();
-  const { fullName, email, password } = route.params;
+  const { fullName, email } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
-  const [editedPassword, setEditedPassword] = useState(password);
+  // const [editedPassword, setEditedPassword] = useState(password);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleUpdate = (email, editedName, editedPassword) => {
+  const handleUpdate = (email, editedName) => {
     setErrorMessage("");
     setSuccessMessage("");
     fetch("http://" + ip + ":8000/users/" + email, {
@@ -40,7 +40,7 @@ export default function EditProfilePage({ navigation, route }) {
         parameter: {
           email: email,
           full_name: editedName,
-          password: editedPassword,
+          // password: editedPassword,
         },
       }),
     })
@@ -52,7 +52,7 @@ export default function EditProfilePage({ navigation, route }) {
         response.json();
       })
       .then((data) => {
-        handleUpdateLocal(email, editedName, editedPassword);
+        handleUpdateLocal(email, editedName);
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
@@ -62,11 +62,11 @@ export default function EditProfilePage({ navigation, route }) {
     const updatedUser = {
       email: email,
       full_name: editedName,
-      password: editedPassword,
+      // password: editedPassword,
     };
     await updateUserLocal(updatedUser);
     setSuccessMessage("Update successful!");
-    printUsersLocal(updatedUser)
+    printUsersLocal();
     console.log("User update successfully!");
     navigation.goBack();
   };
@@ -74,9 +74,9 @@ export default function EditProfilePage({ navigation, route }) {
     setEditedName(text);
   };
 
-  const handlePasswordChange = (text) => {
-    setEditedPassword(text);
-  };
+  // const handlePasswordChange = (text) => {
+  //   setEditedPassword(text);
+  // };
 
   return (
     <View style={styles.container}>
@@ -106,27 +106,28 @@ export default function EditProfilePage({ navigation, route }) {
           style={styles.input}
           onChangeText={handleNameChange}
         />
-        <TextInput
+        {/* <TextInput
           mode="outlined"
           value={editedPassword}
           label="Password"
           style={styles.input}
           onChangeText={handlePasswordChange}
-        />
+        /> */}
         <Button
           style={styles.save_btn}
           mode="contained"
           onPress={() => {
-            if (!validatePassword(editedPassword)) {
-              setErrorMessage("Invalid password");
-              setSuccessMessage("");
-            } else if (!validateFullName(editedName)) {
+            // if (!validatePassword(editedPassword)) {
+            //   setErrorMessage("Invalid password");
+            //   setSuccessMessage("");
+            // } else
+            if (!validateFullName(editedName)) {
               setErrorMessage("Invalid full name");
               setSuccessMessage("");
             } else {
               setSuccessMessage("");
               setErrorMessage("");
-              handleUpdate(email, editedName, editedPassword);
+              handleUpdate(email, editedName);
             }
           }}
         >

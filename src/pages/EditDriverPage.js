@@ -21,13 +21,12 @@ export default function EditDriverPage({ navigation, route }) {
     });
   }, [navigation]);
 
-  const { fullName, email, carModel, plateNumber, password, carColor } =
-    route.params;
+  const { fullName, email, carModel, plateNumber, carColor } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   const [editedCarModel, setEditedCarModel] = useState(carModel);
   const [editedPlateNumber, setEditedPlateNumber] = useState(plateNumber);
-  const [editedPassword, setEditedPassword] = useState(password);
+  // const [editedPassword, setEditedPassword] = useState(password);
   const [editedCarColor, setEditedCarColor] = useState(carColor);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -37,8 +36,8 @@ export default function EditDriverPage({ navigation, route }) {
     editedName,
     editedCarModel,
     editedCarColor,
-    editedPlateNumber,
-    editedPassword
+    editedPlateNumber
+    // editedPassword
   ) => {
     setSuccessMessage("");
     setErrorMessage("");
@@ -54,7 +53,7 @@ export default function EditDriverPage({ navigation, route }) {
           car_model: editedCarModel,
           car_color: editedCarColor,
           plate_number: editedPlateNumber,
-          password: editedPassword,
+          // password: editedPassword,
         },
       }),
     })
@@ -71,8 +70,8 @@ export default function EditDriverPage({ navigation, route }) {
           editedName,
           editedCarModel,
           editedCarColor,
-          editedPlateNumber,
-          editedPassword
+          editedPlateNumber
+          // editedPassword
         );
       })
       .catch((error) => {
@@ -86,9 +85,10 @@ export default function EditDriverPage({ navigation, route }) {
       car_model: editedCarModel,
       car_color: carColor,
       plate_number: editedPlateNumber,
-      password: editedPassword,
+      // password: editedPassword,
     };
     await updateUserLocal(updatedUser);
+    printUsersLocal();
     setSuccessMessage("Update successful!");
     console.log("User update successfully!");
     navigation.goBack();
@@ -106,9 +106,9 @@ export default function EditDriverPage({ navigation, route }) {
     setEditedPlateNumber(text);
   };
 
-  const handlePasswordChange = (text) => {
-    setEditedPassword(text);
-  };
+  // const handlePasswordChange = (text) => {
+  //   setEditedPassword(text);
+  // };
 
   const handleCarColorChange = (text) => {
     setEditedCarColor(text);
@@ -139,13 +139,13 @@ export default function EditDriverPage({ navigation, route }) {
           style={styles.input}
           onChangeText={handleNameChange}
         />
-        <TextInput
+        {/* <TextInput
           mode="outlined"
           value={editedPassword}
           label="Password"
           style={styles.input}
           onChangeText={handlePasswordChange}
-        />
+        /> */}
         <TextInput
           mode="outlined"
           value={editedCarModel}
@@ -171,10 +171,11 @@ export default function EditDriverPage({ navigation, route }) {
           style={styles.save_btn}
           mode="contained"
           onPress={() => {
-            if (!validatePassword(editedPassword)) {
-              setErrorMessage("Invalid password");
-              setSuccessMessage("");
-            } else if (!validateFullName(editedName)) {
+            // if (!validatePassword(editedPassword)) {
+            //   setErrorMessage("Invalid password");
+            //   setSuccessMessage("");
+            // } else
+            if (!validateFullName(editedName)) {
               setErrorMessage("Invalid full name");
               setSuccessMessage("");
             } else if (!validateCarModel(editedCarModel)) {
@@ -194,8 +195,8 @@ export default function EditDriverPage({ navigation, route }) {
                 editedName,
                 editedCarModel,
                 editedCarColor,
-                editedPlateNumber,
-                editedPassword
+                editedPlateNumber
+                // editedPassword
               );
             }
           }}
