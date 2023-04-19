@@ -20,6 +20,9 @@ export default function ProfilePage({ navigation }) {
   const [plateNumber, setPlateNumber] = useState("");
   const [carModel, setCarModel] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [carColor, setCarColor] = useState("");
+
   const [user, setUser] = useState("");
 
   const fetchUser = async () => {
@@ -33,6 +36,8 @@ export default function ProfilePage({ navigation }) {
         setPlateNumber(fetchedUser.plate_number);
         setCarModel(fetchedUser.car_model);
         setPhoneNumber(fetchedUser.phone_number);
+        setPassword(fetchedUser.password);
+        setCarColor(fetchUser.car_color)
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -53,6 +58,7 @@ export default function ProfilePage({ navigation }) {
           email={email}
           fullName={fullName}
           phoneNumber={phoneNumber}
+          password={password}
         />
       ) : (
         <DriverProfile
@@ -61,6 +67,8 @@ export default function ProfilePage({ navigation }) {
           plateNumber={plateNumber}
           phoneNumber={phoneNumber}
           carModel={carModel}
+          password={password}
+          carColor={carColor}
         />
       )}
     </View>

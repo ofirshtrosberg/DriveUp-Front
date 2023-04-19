@@ -1,23 +1,32 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet,Text } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TextInput, Button } from "react-native-paper";
 import CurrentUserContext from "../../CurrentUserContext";
+import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
+import {
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateFullName,
+} from "../helperFunctions/validationFunctions.js";
+import colors from "../config/colors.js";
 
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Edit",
-      // headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);
-const myemail="l@l.com"
-  const { fullName, phoneNumber, email } = route.params;
+
+  const { fullName, phoneNumber, email, password } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   const [editedPhone, setEditedPhone] = useState(phoneNumber);
   const [editedEmail, setEditedEmail] = useState(email);
+  const [editedPassword, setEditedPassword] = useState(password);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleNameChange = (text) => {
     setEditedName(text);
@@ -31,14 +40,19 @@ const myemail="l@l.com"
     setEditedEmail(text);
   };
 
+  const handlePasswordChange = (text) => {
+    setEditedPassword(text);
+  };
+
   const handleUpdate = async () => {
     const updatedUser = {
-      email: email,
+      email: editedEmail,
       phone_number: editedPhone,
       full_name: editedName,
+      password: editedPassword,
     };
     await updateUserLocal(updatedUser);
-    await printUsersLocal();
+    // await printUsersLocal();
   };
   return (
     <View style={styles.container}>
@@ -82,14 +96,34 @@ const myemail="l@l.com"
           style={styles.input}
           onChangeText={handleEmailChange}
         />
-
+        <TextInput
+          mode="outlined"
+          value={editedPassword}
+          label="Password"
+          style={styles.input}
+          onChangeText={handlePasswordChange}
+        />
         <Button
           style={styles.save_btn}
           mode="contained"
-          //   buttonColor="#91AEC4"
+          onPress={() => {
+            if (!validateEmail(editedEmail)) {
+              setErrorMessage("Invalid email");
+            } else if (!validatePassword(editedPassword)) {
+              setErrorMessage("Invalid password");
+            } else if (!validatePhoneNumber(editedPhone)) {
+              setErrorMessage("Invalid phone number");
+            } else if (!validateFullName(editedName)) {
+              setErrorMessage("Invalid full name");
+            } else {
+              setErrorMessage("");
+              handleUpdate();
+            }
+          }}
         >
           Save
         </Button>
+        <Text style={styles.error}>{errorMessage}</Text>
       </View>
     </View>
   );
@@ -133,5 +167,12 @@ const styles = StyleSheet.create({
     marginRight: 20,
     width: "50%",
     marginTop: 15,
+  },
+  error: {
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    alignSelf: "center",
+    color: colors.blue1,
   },
 });
