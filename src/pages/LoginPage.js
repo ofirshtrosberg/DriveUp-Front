@@ -32,7 +32,6 @@ export default function LoginPage({ navigation }) {
         .then((data) => {
           const user = data.result;
           addLocal(user);
-          currentSubscription(email);
         })
         .catch((error) => {
           console.error(error);
@@ -42,12 +41,6 @@ export default function LoginPage({ navigation }) {
   const addLocal = async (user) => {
     await addUserLocal(user);
     await printUsersLocal();
-  };
-  const currentSubscription = async (email) => {
-    const value = await isUserPremium(email);
-    console.log(value);
-    if (value) AsyncStorage.setItem("currentUserSubscription", "Premium");
-    else AsyncStorage.setItem("currentUserSubscription", "Basic");
   };
   function login() {
     fetch("http://" + ip + ":8000/users/login", {

@@ -25,7 +25,7 @@ export default function SubscriptionBasic() {
   const [cvv, setCvv] = useState("");
   const [expMonth, setExpMonth] = useState("01");
   const [expYear, setExpYear] = useState("");
-  function handleUpgrade() {
+  async function handleUpgrade () {
     AsyncStorage.getItem("currentUserEmail").then((value) => {
       setEmail(value);
       setError("");
@@ -37,7 +37,7 @@ export default function SubscriptionBasic() {
         expMonth,
         expYear
       );
-      AsyncStorage.setItem("currentUserSubscription", "Premium");
+      // AsyncStorage.setItem("currentUserSubscription", "Premium");
       getUsersSubscriptions();
     });
     // if (!validateId(ownerId)) {

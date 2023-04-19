@@ -5,15 +5,34 @@ import SubscriptionPremium from "./SubscriptionPremium";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { isUserPremium } from "../helperFunctions/accessToBackFunctions";
-export default function SubscriptionPage() {
+import HeaderLogout from "../components/HeaderLogout";
+import { ip } from "../helperFunctions/accessToBackFunctions";
+export default function SubscriptionPage({ navigation }) {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Subscription",
+      headerRight: () => <HeaderLogout />,
+    });
+  }, [navigation]);
   const [isPremium, setIsPremium] = useState(false);
   const getCurrentSubscription = async () => {
-    try {
-      const value = await AsyncStorage.getItem("currentUserSubscription");
-      if (value === "Basic") setIsPremium(false);
-      else setIsPremium(true);
-    } catch (error) {
-      console.error("Error get user subscription:", error);
+    const value = await AsyncStorage.getItem("currentUserEmail");
+    if (value !== null && value !== "") {
+      fetch("http://" + ip + ":8001/user_subscription_maps/")
+        .then((response) => response.json())
+        .then((data) => {
+          for (const index in data.result) {
+            if (data.result[index].user_email === value) {
+              setIsPremium(true);
+              return;
+            }
+          }
+          setIsPremium(false);
+          return;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
@@ -26,8 +45,11 @@ export default function SubscriptionPage() {
 
   return (
     <View style={styles.container}>
-      {!isPremium && <SubscriptionBasic></SubscriptionBasic>}
-      {isPremium && <SubscriptionPremium></SubscriptionPremium>}
+      {!isPremium ? (
+        <SubscriptionBasic></SubscriptionBasic>
+      ) : (
+        <SubscriptionPremium></SubscriptionPremium>
+      )}
     </View>
   );
 }
