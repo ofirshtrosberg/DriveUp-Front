@@ -40,6 +40,8 @@ export default function EditDriverPage({ navigation, route }) {
     editedPlateNumber,
     editedPassword
   ) => {
+    setSuccessMessage("");
+    setErrorMessage("");
     fetch("http://" + ip + ":8000/users/" + email, {
       method: "PUT",
       headers: {
@@ -170,15 +172,21 @@ export default function EditDriverPage({ navigation, route }) {
           onPress={() => {
             if (!validatePassword(editedPassword)) {
               setErrorMessage("Invalid password");
+              setSuccessMessage("");
             } else if (!validateFullName(editedName)) {
               setErrorMessage("Invalid full name");
+              setSuccessMessage("");
             } else if (!validateCarModel(editedCarModel)) {
               setErrorMessage("Invalid car model");
+              setSuccessMessage("");
             } else if (!validateCarColor(carColor)) {
               setErrorMessage("Invalid car color");
+              setSuccessMessage("");
             } else if (!validatePlateNumber(editedPlateNumber)) {
               setErrorMessage("Invalid plate number");
+              setSuccessMessage("");
             } else {
+              setSuccessMessage("");
               setErrorMessage("");
               handleUpdate(
                 email,
