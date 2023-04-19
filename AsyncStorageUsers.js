@@ -56,7 +56,6 @@ export const printUsersLocal = async () => {
 export const updateUserLocal = async (user) => {
   try {
     const usersAlreadyInDB = await getUsersLocal();
-
     const foundUserIndex = usersAlreadyInDB.findIndex(
       (currUser) => currUser.email === user.email
     );

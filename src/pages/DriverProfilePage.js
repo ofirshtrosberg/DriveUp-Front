@@ -1,4 +1,6 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
+// import Icon from "react-native-vector-icons/Feather";
+
 import React from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import { Button } from "react-native-paper";
@@ -9,7 +11,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
-  const { email, fullName, plateNumber, phoneNumber, carModel ,password,carColor} = props;
+  const {
+    email,
+    fullName,
+    plateNumber,
+    phoneNumber,
+    carModel,
+    password,
+    carColor,
+  } = props;
 
   return (
     <View style={styles.container}>
@@ -36,10 +46,19 @@ export default function DriverProfilePage(props) {
         ></Icon>
       </View>
       <Text style={styles.driver_name}>{fullName} </Text>
-      <Text style={styles.driver_phone}>{phoneNumber} </Text>
       <Text style={styles.driver_email}>{email} </Text>
-      <Text style={styles.driver_carModel}>My car : {carModel} </Text>
-      <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text>
+      <View style={styles.phoneContainer}>
+        {/* <FontAwesomeIcon
+          icon="fa-light fa-phone"
+          style={{ color: "#608cd7" }}
+        />{" "} */}
+        <Text style={styles.driver_phone}>{phoneNumber} </Text>
+      </View>
+
+      <Text style={styles.driver_carModel}>
+        My car : {carModel} , Car Number: {plateNumber}
+      </Text>
+      {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
       <View style={styles.review_list}>
         <ScrollView>
           <Text>
@@ -48,18 +67,18 @@ export default function DriverProfilePage(props) {
             Shlomi:thank you!{"\n"}
           </Text>
         </ScrollView>
-        <View>
-          <Button
-            style={styles.sub_btn}
-            mode="contained"
-            buttonColor="#111"
-            onPress={() => {
-              navigation.navigate("Subscription");
-            }}
-          >
-            Subscription
-          </Button>
-        </View>
+      </View>
+      <View>
+        <Button
+          style={styles.sub_btn}
+          mode="contained"
+          buttonColor="#111"
+          onPress={() => {
+            navigation.navigate("Subscription");
+          }}
+        >
+          Subscription
+        </Button>
       </View>
     </View>
   );
@@ -85,30 +104,44 @@ const styles = StyleSheet.create({
   },
   driver_name: {
     color: "black",
-    fontSize: 20,
+    fontSize: 22,
     marginLeft: 0,
     marginTop: 20,
     width: 300,
     textAlign: "center",
+    fontWeight: "600",
+  },
+  phoneContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
   },
   driver_phone: {
     color: "black",
     fontSize: 20,
-    marginLeft: 0,
+    marginLeft: 20,
     marginTop: 4,
     marginBottom: 10,
+  },
+  iconphone: { marginTop: -5 },
+  driver_email: {
+    color: "#626FB4",
+    fontSize: 20,
+    marginLeft: 0,
+    marginTop: 4,
+    marginBottom: 7,
   },
   driver_carModel: {
     color: "black",
     fontSize: 20,
-    marginRight: 200,
+    marginRight: 0,
     marginTop: 4,
     marginBottom: 10,
   },
   driver_plateNumber: {
     color: "black",
     fontSize: 20,
-    marginLeft: 150,
+    marginLeft: 160,
     marginTop: 4,
     marginBottom: 10,
   },
@@ -125,5 +158,12 @@ const styles = StyleSheet.create({
     height: 130,
     marginTop: 15,
     marginBottom: 15,
+  },
+  sub_btn: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 50,
+    marginRight: 50,
+    width: "50%",
   },
 });

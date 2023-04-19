@@ -11,6 +11,7 @@ import {
 } from "../helperFunctions/validationFunctions.js";
 import colors from "../config/colors.js";
 import { ip } from "../helperFunctions/accessToBackFunctions.js";
+import { useNavigation } from "@react-navigation/native";
 
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -19,6 +20,7 @@ export default function EditProfilePage({ navigation, route }) {
     });
   }, [navigation]);
 
+  // const navigation = useNavigation();
   const { fullName, email, password } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
@@ -64,7 +66,9 @@ export default function EditProfilePage({ navigation, route }) {
     };
     await updateUserLocal(updatedUser);
     setSuccessMessage("Update successful!");
+    printUsersLocal(updatedUser)
     console.log("User update successfully!");
+    navigation.goBack();
   };
   const handleNameChange = (text) => {
     setEditedName(text);
