@@ -2,11 +2,16 @@ import React, { useState, useContext, useEffect } from "react";
 import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
-import { ip, getUserByEmail } from "../helperFunctions/accessToBackFunctions";
+import {
+  ip,
+  getUserByEmail,
+  isUserPremium,
+} from "../helperFunctions/accessToBackFunctions";
 import CurrentUserContext from "../../CurrentUserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isUserExistLocal, addUserLocal } from "../../AsyncStorageUsers";
 import { printUsersLocal, deleteUserLocal } from "../../AsyncStorageUsers";
+
 export default function LoginPage({ navigation }) {
   useEffect(() => {
     AsyncStorage.getItem("currentUserEmail").then((value) => {
@@ -27,6 +32,7 @@ export default function LoginPage({ navigation }) {
         .then((data) => {
           const user = data.result;
           addLocal(user);
+          currentSubscription(email);
         })
         .catch((error) => {
           console.error(error);
@@ -36,6 +42,12 @@ export default function LoginPage({ navigation }) {
   const addLocal = async (user) => {
     await addUserLocal(user);
     await printUsersLocal();
+  };
+  const currentSubscription = async (email) => {
+    const value = await isUserPremium(email);
+    console.log(value);
+    if (value) AsyncStorage.setItem("currentUserSubscription", "Premium");
+    else AsyncStorage.setItem("currentUserSubscription", "Basic");
   };
   function login() {
     fetch("http://" + ip + ":8000/users/login", {

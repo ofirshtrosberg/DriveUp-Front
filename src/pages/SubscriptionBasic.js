@@ -37,6 +37,7 @@ export default function SubscriptionBasic() {
         expMonth,
         expYear
       );
+      AsyncStorage.setItem("currentUserSubscription", "Premium");
       getUsersSubscriptions();
     });
     // if (!validateId(ownerId)) {
