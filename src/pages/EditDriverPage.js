@@ -59,7 +59,7 @@ export default function EditDriverPage({ navigation, route }) {
       }),
     })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (!response.ok) {
           throw new Error("Update failed");
         }
@@ -89,8 +89,9 @@ export default function EditDriverPage({ navigation, route }) {
       password: editedPassword,
     };
     await updateUserLocal(updatedUser);
+    await printUsersLocal();
     setSuccessMessage("Update successful!");
-    console.log("User update successfully!");
+    // console.log("User update successfully!");
     navigation.goBack();
   };
 

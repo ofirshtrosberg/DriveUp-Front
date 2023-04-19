@@ -35,9 +35,9 @@ export const getUsersLocal = async () => {
   }
 };
 export const isUserExistLocal = async (email) => {
-  const users = getUsersLocal();
-  for (const user in users) {
-    if (user.email == email) return true;
+  const users = await getUsersLocal();
+  for (const index in users) {
+    if (users[index].email == email) return true;
   }
   return false;
 };
@@ -59,7 +59,7 @@ export const updateUserLocal = async (user) => {
     const foundUserIndex = usersAlreadyInDB.findIndex(
       (currUser) => currUser.email === user.email
     );
-
+    console.log(foundUserIndex);
     if (foundUserIndex === -1) {
       const usersAfterUpdate = [...usersAlreadyInDB, user];
       await AsyncStorage.setItem("users", JSON.stringify(usersAfterUpdate));
