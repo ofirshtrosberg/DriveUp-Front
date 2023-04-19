@@ -4,7 +4,6 @@ import HeaderLogout from "../components/HeaderLogout";
 import DriverProfile from "./DriverProfilePage";
 import PassengerProfile from "./PassengerProfilePage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CurrentUserContext from "../../CurrentUserContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { getUserByEmail } from "../../AsyncStorageUsers";
 

@@ -1,4 +1,5 @@
 export const ip = "10.160.0.242";
+
 export const getUsers = () => {
   fetch(`http://${ip}:8000/users/`)
     .then((response) => response.json())
@@ -116,9 +117,7 @@ export const createUserSubscription = (
   expMonth,
   expYear
 ) => {
-  // email = "n@n.com";
   const date = new Date(expYear, expMonth, 1);
-  console.log(date);
   fetch(`http://${ip}:8001/user_subscription_maps/`, {
     method: "POST",
     headers: {
@@ -146,4 +145,25 @@ export const getUsersSubscriptions = () => {
     .catch((error) => {
       console.error(error);
     });
+};
+export const isUserPremium = (email) => {
+  fetch(`http://${ip}:8001/user_subscription_maps/`)
+    .then((response) => response.json())
+    .then((data) => {
+      for(const user in data.result){
+        if(user.email===email)
+          return true;
+      }
+      return false
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+export const deleteSubscription = (email) => {
+  fetch(`http://${ip}:8001/user_subscription_maps/${email}/Premium`, {
+    method: "DELETE",
+  }).catch((error) => {
+    console.error(error);
+  });
 };

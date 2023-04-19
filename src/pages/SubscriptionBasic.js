@@ -8,6 +8,7 @@ import colors from "../config/colors";
 import {
   validateCardNumber,
   validateCVV,
+  validateExpDate,
   validateId,
 } from "../helperFunctions/validationFunctions";
 import {
@@ -15,20 +16,40 @@ import {
   getUsersSubscriptions,
 } from "../helperFunctions/accessToBackFunctions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 export default function SubscriptionBasic() {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [ownerId, setOwnerId] = useState("");
-  const [cardType, setCardType] = useState("Visa");
+  const [cardType, setCardType] = useState("visa");
   const [cardNumber, setCardNumber] = useState("");
   const [cvv, setCvv] = useState("");
   const [expMonth, setExpMonth] = useState("01");
-  const [expYear, setExpYear] = useState("");
-  function handleUpgrade() {
+  const [expYear, setExpYear] = useState("2021");
+  async function handleUpgrade() {
     AsyncStorage.getItem("currentUserEmail").then((value) => {
       setEmail(value);
       setError("");
+      const expDate = new Date(expYear, expMonth, 1);
+      if (!validateId(ownerId)) {
+        setError("Invalid owner id");
+        return;
+      }
+      if (!validateCardNumber(cardType, cardNumber)) {
+        console.log(cardType);
+        setError("Invalid card number");
+        return;
+      }
+      if (!validateCVV(cvv)) {
+        setError("Invalid CVV");
+        return;
+      }
+      if (!validateExpDate(expDate)) {
+        setError("Invalid exp date");
+        return;
+      }
       createUserSubscription(
         value,
         ownerId,
@@ -37,21 +58,8 @@ export default function SubscriptionBasic() {
         expMonth,
         expYear
       );
-      getUsersSubscriptions();
+      navigation.goBack();
     });
-    // if (!validateId(ownerId)) {
-    //   setError("Invalid owner id");
-    //   return;
-    // }
-    // if (!validateCardNumber(cardType, cardNumber)) {
-    //   console.log(cardType);
-    //   setError("Invalid card number");
-    //   return;
-    // }
-    // if (!validateCVV(cvv)) {
-    //   setError("Invalid CVV");
-    //   return;
-    // }
   }
   const handleIdChange = (text) => {
     setOwnerId(text);
