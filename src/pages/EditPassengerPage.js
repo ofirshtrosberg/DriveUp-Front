@@ -27,6 +27,8 @@ export default function EditProfilePage({ navigation, route }) {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleUpdate = (email, editedName, editedPassword) => {
+    setErrorMessage("");
+    setSuccessMessage("");
     fetch("http://" + ip + ":8000/users/" + email, {
       method: "PUT",
       headers: {
@@ -113,9 +115,12 @@ export default function EditProfilePage({ navigation, route }) {
           onPress={() => {
             if (!validatePassword(editedPassword)) {
               setErrorMessage("Invalid password");
+              setSuccessMessage("");
             } else if (!validateFullName(editedName)) {
               setErrorMessage("Invalid full name");
+              setSuccessMessage("");
             } else {
+              setSuccessMessage("");
               setErrorMessage("");
               handleUpdate(email, editedName, editedPassword);
             }
