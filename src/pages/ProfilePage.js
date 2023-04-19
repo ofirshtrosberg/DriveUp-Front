@@ -80,11 +80,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // alignItems: "center",
   },
-  sub_btn: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 100,
-    marginRight: 20,
-    width: "50%",
-  },
 });

@@ -91,6 +91,7 @@ export default function EditDriverPage({ navigation, route }) {
     await updateUserLocal(updatedUser);
     setSuccessMessage("Update successful!");
     console.log("User update successfully!");
+    navigation.goBack();
   };
 
   const handleNameChange = (text) => {
