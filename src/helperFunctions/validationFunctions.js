@@ -61,3 +61,8 @@ export const removeWhiteSpaces = (text) => {
 export const trimText = (text) => {
   return text.trim();
 };
+export const validateExpDate = (expDate) => {
+  const currentDate = new Date();
+  if (expDate.getTime() < currentDate.getTime()) return false;
+  else return true;
+};

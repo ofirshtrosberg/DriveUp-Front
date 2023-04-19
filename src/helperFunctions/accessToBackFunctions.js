@@ -117,7 +117,6 @@ export const createUserSubscription = (
   expYear
 ) => {
   const date = new Date(expYear, expMonth, 1);
-  console.log(date);
   fetch(`http://${ip}:8001/user_subscription_maps/`, {
     method: "POST",
     headers: {
@@ -159,4 +158,11 @@ export const isUserPremium = (email) => {
     .catch((error) => {
       console.error(error);
     });
+};
+export const deleteSubscription = (email) => {
+  fetch(`http://${ip}:8001/user_subscription_maps/${email}/Premium`, {
+    method: "DELETE",
+  }).catch((error) => {
+    console.error(error);
+  });
 };

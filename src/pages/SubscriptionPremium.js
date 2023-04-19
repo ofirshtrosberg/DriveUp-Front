@@ -3,7 +3,22 @@ import { Text, View, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { Lobster_400Regular } from "@expo-google-fonts/lobster";
 import { Button } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { deleteSubscription } from "../helperFunctions/accessToBackFunctions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function SubscriptionPremium() {
+  const navigation = useNavigation();
+  const handleCancelSubscription =async () => {
+     try {
+       const value = await AsyncStorage.getItem("currentUserEmail");
+       if (value !== null && value !== "") {
+         deleteSubscription(value);
+         navigation.goBack();
+       }
+     } catch (error) {
+       console.error("Error deleting subscription:", error);
+     }
+  };
   const [fontsLoaded] = useFonts({
     Lobster_400Regular,
   });
@@ -19,6 +34,7 @@ export default function SubscriptionPremium() {
         style={styles.subscriptionBtn}
         mode="contained"
         buttonColor="#111"
+        onPress={handleCancelSubscription}
       >
         Cancel subscription
       </Button>
