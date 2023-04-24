@@ -89,8 +89,7 @@ export default function EditDriverPage({ navigation, route }) {
     };
     await updateUserLocal(updatedUser);
     printUsersLocal();
-ge("Update successful!");
-    // console.log("User update successfully!");
+    console.log("User update successfully!");
     navigation.goBack();
   };
 
