@@ -1,4 +1,4 @@
-export const ip = "10.160.0.242";
+export const ip = "10.100.102.101";
 
 export const getUsers = () => {
   fetch(`http://${ip}:8000/users/`)

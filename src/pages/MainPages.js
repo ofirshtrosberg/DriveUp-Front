@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomePage from "./HomePage";
-import OrderTaxiPage from "./OrderTaxiPage";
+import TaxiPage from "./TaxiPage";
 import ProfilePage from "./ProfilePage";
 
 export default function MainPages() {
@@ -14,7 +14,7 @@ export default function MainPages() {
           let iconName;
           if (route.name === "Home") {
             iconName = focused ? "ios-home" : "ios-home-outline";
-          } else if (route.name === "OrderTaxi") {
+          } else if (route.name === "TaxiPage") {
             iconName = focused ? "ios-car-sport" : "ios-car-sport-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "ios-person" : "ios-person-outline";
@@ -26,7 +26,7 @@ export default function MainPages() {
       })}
     >
       <Tab.Screen name="Home" component={HomePage} />
-      <Tab.Screen name="OrderTaxi" component={OrderTaxiPage} />
+      <Tab.Screen name="TaxiPage" component={TaxiPage} />
       <Tab.Screen name="Profile" component={ProfilePage} />
     </Tab.Navigator>
   );
