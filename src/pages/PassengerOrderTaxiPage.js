@@ -43,12 +43,6 @@ export default function PassengerOrderTaxiPage({ navigation }) {
         });
     })();
   }, []);
-  const handleStartAddressChange = (text) => {
-    setStartAddress(text);
-  };
-  const handleDestinationAddressChange = (text) => {
-    setDestinationAddress(text);
-  };
   const handleNumberOfPassengersChange = (text) => {
     setNumberOfPassengers(text);
   };
@@ -69,7 +63,7 @@ export default function PassengerOrderTaxiPage({ navigation }) {
           styles={{
             container: {
               position: "absolute",
-              top: 0,
+              top: 10,
               left: 0,
               right: 0,
               zIndex: 9999,
@@ -80,7 +74,7 @@ export default function PassengerOrderTaxiPage({ navigation }) {
           }}
         />
         <GooglePlacesAutocomplete
-          placeholder="Destination"
+          placeholder="Destination Address"
           fetchDetails={true}
           onPress={(data, details = null) => {
             setDestinationAddress(data.description);
@@ -92,7 +86,7 @@ export default function PassengerOrderTaxiPage({ navigation }) {
           styles={{
             container: {
               position: "absolute",
-              top: 60,
+              top: 70,
               left: 0,
               right: 0,
               zIndex: 9997,
@@ -111,7 +105,7 @@ export default function PassengerOrderTaxiPage({ navigation }) {
             height: 50,
             zIndex: 100,
             position: "absolute",
-            top: 120,
+            top: 130,
             left: 0,
             right: 0,
           }}
