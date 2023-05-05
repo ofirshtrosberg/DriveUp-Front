@@ -12,37 +12,49 @@ import { useState } from "react";
 import * as Location from "expo-location";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
-export default function PassengerOrderTaxiPage({ navigation }) {
+import { addOrder } from "../helperFunctions/accessToBackFunctions";
+import { useNavigation } from "@react-navigation/core";
+export default function PassengerOrderTaxiPage({ currentUserEmail }) {
+  const navigation = useNavigation();
   const [startAddress, setStartAddress] = useState("");
+  const [currAddress, setCurrAddress] = useState("");
   const [destinationAddress, setDestinationAddress] = useState("");
   const [numberOfPassengers, setNumberOfPassengers] = useState("");
   const [checked, setChecked] = useState(false);
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-        return;
-      }
+  const updateCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permission to access location was denied");
+      return;
+    }
 
-      let location = await Location.getCurrentPositionAsync({});
-      // Reverse geocoding
-      fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${GOOGLE_MAPS_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "OK") {
-            setStartAddress(data.results[0].formatted_address);
-          } else {
-            console.log("Geocoding failed:", data.status);
-          }
-        })
-        .catch((error) => {
-          console.log("Geocoding error:", error);
-        });
-    })();
+    let location = await Location.getCurrentPositionAsync({});
+    // Reverse geocoding
+    fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${GOOGLE_MAPS_API_KEY}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "OK") {
+          setCurrAddress(data.results[0].formatted_address);
+          setStartAddress(data.results[0].formatted_address);
+        } else {
+          console.log("Geocoding failed:", data.status);
+        }
+      })
+      .catch((error) => {
+        console.log("Geocoding error:", error);
+      });
+  };
+  useEffect(() => {
+    updateCurrentLocation();
   }, []);
+  const handleDestinationAddressChange = (text) => {
+    setDestinationAddress(text);
+  };
+  const handleStartAddressChange = (text) => {
+    setStartAddress(text);
+  };
   const handleNumberOfPassengersChange = (text) => {
     setNumberOfPassengers(text);
   };
@@ -55,6 +67,10 @@ export default function PassengerOrderTaxiPage({ navigation }) {
           fetchDetails={true}
           onPress={(data, details = null) => {
             setStartAddress(data.description);
+          }}
+          textInputProps={{
+            onChangeText: handleStartAddressChange,
+            value: startAddress,
           }}
           query={{
             key: GOOGLE_MAPS_API_KEY,
@@ -78,6 +94,10 @@ export default function PassengerOrderTaxiPage({ navigation }) {
           fetchDetails={true}
           onPress={(data, details = null) => {
             setDestinationAddress(data.description);
+          }}
+          textInputProps={{
+            onChangeText: handleDestinationAddressChange,
+            value: destinationAddress,
           }}
           query={{
             key: GOOGLE_MAPS_API_KEY,
@@ -139,7 +159,29 @@ export default function PassengerOrderTaxiPage({ navigation }) {
           mode="contained"
           buttonColor="#111"
           style={styles.inviteBtn}
-          onPress={() => {}}
+          onPress={() => {
+            if (startAddress == "") {
+              addOrder(
+                currentUserEmail,
+                currAddress,
+                destinationAddress,
+                numberOfPassengers
+              );
+            } else {
+              addOrder(
+                currentUserEmail,
+                startAddress,
+                destinationAddress,
+                numberOfPassengers
+              );
+            }
+            navigation.navigate("OrderOnMap", {
+              currentUserEmail,
+              currAddress,
+              startAddress,
+              destinationAddress,
+            });
+          }}
         >
           Invite now
         </Button>
