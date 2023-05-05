@@ -10,8 +10,6 @@ import {
 import { Button, Checkbox } from "react-native-paper";
 import { useState } from "react";
 import * as Location from "expo-location";
-// import Geolocation from "react-native-geolocation-service";
-// import Geolocation from "@react-native-community/geolocation";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 export default function PassengerOrderTaxiPage({ navigation }) {
@@ -140,9 +138,6 @@ export default function PassengerOrderTaxiPage({ navigation }) {
           <Text>Want to share a ride?</Text>
         </View>
       </View>
-      {/* <View style={{ flex: 2 }}>
-        <Image style={styles.img} source={require("../assets/map.png")}></Image>
-      </View> */}
       <View
         style={{ flex: 1, position: "absolute", top: 400, left: 0, right: 0 }}
       >
