@@ -14,6 +14,8 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { addOrder } from "../helperFunctions/accessToBackFunctions";
 import { useNavigation } from "@react-navigation/core";
+import Geocoder from "react-native-geocoding";
+
 export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const navigation = useNavigation();
   const [startAddress, setStartAddress] = useState("");
@@ -27,11 +29,12 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       console.log("Permission to access location was denied");
       return;
     }
-
     let location = await Location.getCurrentPositionAsync({});
+    let lon = location.coords.longitude;
+    let lat = location.coords.latitude;
     // Reverse geocoding
     fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.coords.latitude},${location.coords.longitude}&key=${GOOGLE_MAPS_API_KEY}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -46,7 +49,24 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         console.log("Geocoding error:", error);
       });
   };
+  const handleAddOrder = async (startLocation, destinationLocation) => {
+    try {
+      const responseStart = await Geocoder.from(startLocation);
+      const responseDest = await Geocoder.from(destinationLocation);
+      addOrder(
+        currentUserEmail,
+        responseStart.results[0].geometry.location.lat,
+        responseStart.results[0].geometry.location.lng,
+        responseDest.results[0].geometry.location.lat,
+        responseDest.results[0].geometry.location.lng,
+        numberOfPassengers
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
+    Geocoder.init(GOOGLE_MAPS_API_KEY);
     updateCurrentLocation();
   }, []);
   const handleDestinationAddressChange = (text) => {
@@ -161,26 +181,10 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
           style={styles.inviteBtn}
           onPress={() => {
             if (startAddress == "") {
-              addOrder(
-                currentUserEmail,
-                currAddress,
-                destinationAddress,
-                numberOfPassengers
-              );
+              handleAddOrder(currAddress, destinationAddress);
             } else {
-              addOrder(
-                currentUserEmail,
-                startAddress,
-                destinationAddress,
-                numberOfPassengers
-              );
+              handleAddOrder(startAddress, destinationAddress);
             }
-            navigation.navigate("OrderOnMap", {
-              currentUserEmail,
-              currAddress,
-              startAddress,
-              destinationAddress,
-            });
           }}
         >
           Invite now

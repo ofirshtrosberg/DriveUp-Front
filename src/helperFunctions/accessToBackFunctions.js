@@ -168,15 +168,19 @@ export const deleteSubscription = (email) => {
 };
 
 export const addOrder = (
-  userEmail,
-  startAddress,
-  destinationAddress,
-  passengersAmount
+  currentUserEmail,
+  startLat,
+  startLon,
+  destinationLat,
+  destinationLon,
+  numberOfPassengers
 ) => {
-  console.log(userEmail);
-  console.log(startAddress);
-  console.log(destinationAddress);
-  console.log(passengersAmount);
+  console.log(currentUserEmail);
+  console.log(startLat);
+  console.log(startLon);
+  console.log(destinationLat);
+  console.log(destinationLon);
+  console.log(numberOfPassengers);
 };
 export const getDriveByOrderId = () => {};
 export const requestDrives = () => {};
