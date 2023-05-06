@@ -15,6 +15,7 @@ import EditDriverPage from "./src/pages/EditDriverPage";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PassengerOrderOnMap from "./src/pages/PassengerOrderOnMap";
+import PassengerOrderResult from "./src/pages/PassengerOrderResult";
 const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function App() {
           <Stack.Screen name="EditPassenger" component={EditPassengerPage} />
           <Stack.Screen name="EditDriver" component={EditDriverPage} />
           <Stack.Screen name="OrderOnMap" component={PassengerOrderOnMap} />
+          <Stack.Screen name="OrderResult" component={PassengerOrderResult} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
