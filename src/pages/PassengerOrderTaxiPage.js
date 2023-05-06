@@ -61,6 +61,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         responseDest.results[0].geometry.location.lng,
         numberOfPassengers
       );
+      navigation.navigate("OrderOnMap");
     } catch (error) {
       console.log(error);
     }
