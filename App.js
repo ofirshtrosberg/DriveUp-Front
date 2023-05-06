@@ -14,7 +14,7 @@ import EditPassengerPage from "./src/pages/EditPassengerPage";
 import EditDriverPage from "./src/pages/EditDriverPage";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import PassengerOrderOnMap from "./src/pages/PassengerOrederOnMap";
+import PassengerOrderOnMap from "./src/pages/PassengerOrderOnMap";
 const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {

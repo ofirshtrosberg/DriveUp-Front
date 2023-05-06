@@ -15,7 +15,8 @@ import { GOOGLE_MAPS_API_KEY } from "@env";
 import { addOrder } from "../helperFunctions/accessToBackFunctions";
 import { useNavigation } from "@react-navigation/core";
 import Geocoder from "react-native-geocoding";
-
+import Modal from "react-native-modal";
+import PassengerOrderOnMap from "./PassengerOrderOnMap";
 export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const navigation = useNavigation();
   const [startAddress, setStartAddress] = useState("");
@@ -23,6 +24,11 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [destinationAddress, setDestinationAddress] = useState("");
   const [numberOfPassengers, setNumberOfPassengers] = useState("");
   const [checked, setChecked] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
   const updateCurrentLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -179,7 +185,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         <Button
           mode="contained"
           buttonColor="#111"
-          style={styles.inviteBtn}
+          style={styles.btn}
           onPress={() => {
             if (startAddress == "") {
               handleAddOrder(currAddress, destinationAddress);
@@ -190,6 +196,22 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         >
           Invite now
         </Button>
+
+        <Button
+          mode="contained"
+          buttonColor="#111"
+          style={{ marginHorizontal: 70, marginTop: 10 }}
+          onPress={() => {
+            toggleModal();
+          }}
+        >
+          Show on map
+        </Button>
+        <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+          <View style={{ flex: 1 }}>
+            <PassengerOrderOnMap />
+          </View>
+        </Modal>
       </View>
     </KeyboardAvoidingView>
   );
@@ -202,7 +224,7 @@ const styles = StyleSheet.create({
     marginBottom: 7,
     marginHorizontal: 30,
   },
-  inviteBtn: {
+  btn: {
     marginHorizontal: 70,
   },
   img: {
