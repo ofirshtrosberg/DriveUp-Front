@@ -3,10 +3,15 @@ import { StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_MAPS_API_KEY } from "@env";
-const origin = { latitude: 37.78899, longitude: -122.4324 };
-const destination = { latitude: 37.78935, longitude: -122.45 };
 
-export default function PassengerOrderOnMap () {
+export default function PassengerOrderOnMap({
+  startLat,
+  startLon,
+  destinationLat,
+  destinationLon,
+}) {
+  const origin = { latitude: startLat, longitude: startLon };
+  const destination = { latitude: destinationLat, longitude: destinationLon };
   const latitude = (origin.latitude + destination.latitude) / 2;
   const longitude = (origin.longitude + destination.longitude) / 2;
 
@@ -30,7 +35,7 @@ export default function PassengerOrderOnMap () {
       />
     </MapView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   map: {

@@ -28,6 +28,12 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [isGeocodingFine, setIsGeocodingFine] = useState(false);
+
+  const [startLat, setStartLat] = useState(0);
+  const [destinationLat, setDestinationLat] = useState(0);
+  const [startLon, setStartLon] = useState(0);
+  const [destinationLon, setDestinationLon] = useState(0);
+
   const toggleModal = () => {
     setShowErrorMessage(false);
     setIsModalVisible(!isModalVisible);
@@ -82,12 +88,29 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
       setIsGeocodingFine(true);
+      setStartLat(responseStart.results[0].geometry.location.lat);
+      setStartLon(responseStart.results[0].geometry.location.lng);
+      setDestinationLat(responseDest.results[0].geometry.location.lat);
+      setDestinationLon(responseDest.results[0].geometry.location.lng);
     } catch (error) {
-      // console.log(error);
       setIsGeocodingFine(false);
     }
   };
-  useEffect(() => {}, [startAddress]);
+  useEffect(() => {
+    console.log(startLat);
+  }, [startLat]);
+  useEffect(() => {
+    console.log(startLon);
+  }, [startLon]);
+  useEffect(() => {
+    console.log(destinationLat);
+  }, [destinationLat]);
+  useEffect(() => {
+    console.log(destinationLon);
+  }, [destinationLon]);
+  useEffect(() => {
+    console.log(startAddress);
+  }, [startAddress]);
   useEffect(() => {
     Geocoder.init(GOOGLE_MAPS_API_KEY);
     updateCurrentLocation();
@@ -247,7 +270,12 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         )}
         <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
           <View style={{ flex: 1 }}>
-            <PassengerOrderOnMap />
+            <PassengerOrderOnMap
+              startLat={startLat}
+              startLon={startLon}
+              destinationLat={destinationLat}
+              destinationLon={destinationLon}
+            />
           </View>
         </Modal>
       </View>
