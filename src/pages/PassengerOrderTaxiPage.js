@@ -83,7 +83,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       const responseDest = await Geocoder.from(destinationLocation);
       setIsGeocodingFine(true);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setIsGeocodingFine(false);
     }
   };
@@ -189,8 +189,12 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
           <Checkbox
             status={checked ? "checked" : "unchecked"}
             onPress={() => {
+              if (!checked) {
+                setStartAddress(currAddress);
+              } else {
+                setStartAddress("");
+              }
               setChecked(!checked);
-              setStartAddress(currAddress);
             }}
           />
           <Text>Use current location as start address</Text>
@@ -238,7 +242,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         >
           Show on map
         </Button>
-        {showErrorMessage && <Text>{errorMessage}</Text>}
+        {showErrorMessage && (
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        )}
         <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
           <View style={{ flex: 1 }}>
             <PassengerOrderOnMap />
@@ -263,5 +269,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: undefined,
     aspectRatio: 16 / 9,
+  },
+  errorText: {
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    alignSelf: "center",
   },
 });
