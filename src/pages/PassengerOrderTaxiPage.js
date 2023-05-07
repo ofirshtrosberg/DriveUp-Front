@@ -12,7 +12,7 @@ import { useState } from "react";
 import * as Location from "expo-location";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
-import { addOrder } from "../helperFunctions/accessToBackFunctions";
+import { passengerOrderDrive } from "../helperFunctions/accessToBackFunctions";
 import { useNavigation } from "@react-navigation/core";
 import Geocoder from "react-native-geocoding";
 import Modal from "react-native-modal";
@@ -27,7 +27,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [isGeocodingFine, setIsGeocodingFine] = useState(false);
   const toggleModal = () => {
+    setShowErrorMessage(false);
     setIsModalVisible(!isModalVisible);
   };
   const updateCurrentLocation = async () => {
@@ -47,7 +49,6 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       .then((data) => {
         if (data.status === "OK") {
           setCurrAddress(data.results[0].formatted_address);
-          setStartAddress(data.results[0].formatted_address);
         } else {
           console.log("Geocoding failed:", data.status);
         }
@@ -60,7 +61,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     try {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
-      addOrder(
+      passengerOrderDrive(
         currentUserEmail,
         responseStart.results[0].geometry.location.lat,
         responseStart.results[0].geometry.location.lng,
@@ -73,6 +74,20 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       console.log(error);
     }
   };
+  const checkIfLocationsAreFine = async (
+    startLocation,
+    destinationLocation
+  ) => {
+    try {
+      const responseStart = await Geocoder.from(startLocation);
+      const responseDest = await Geocoder.from(destinationLocation);
+      setIsGeocodingFine(true);
+    } catch (error) {
+      console.log(error);
+      setIsGeocodingFine(false);
+    }
+  };
+  useEffect(() => {}, [startAddress]);
   useEffect(() => {
     Geocoder.init(GOOGLE_MAPS_API_KEY);
     updateCurrentLocation();
@@ -91,7 +106,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     <KeyboardAvoidingView style={styles.container}>
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
-          placeholder={startAddress}
+          placeholder="Start Address"
           fetchDetails={true}
           onPress={(data, details = null) => {
             setStartAddress(data.description);
@@ -207,7 +222,18 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
           buttonColor="#111"
           style={{ marginHorizontal: 70, marginTop: 10 }}
           onPress={() => {
-            toggleModal();
+            if (startAddress == "" || destinationAddress == "") {
+              setErrorMessage("Invalid address");
+              setShowErrorMessage(true);
+            } else {
+              checkIfLocationsAreFine(startAddress, destinationAddress);
+              if (isGeocodingFine) {
+                toggleModal();
+              } else {
+                setErrorMessage("Invalid address");
+                setShowErrorMessage(true);
+              }
+            }
           }}
         >
           Show on map
