@@ -1,7 +1,7 @@
-export const ip = "10.100.102.101";
+import { IP } from "@env";
 
 export const getUsers = () => {
-  fetch(`http://${ip}:8000/users/`)
+  fetch(`http://${IP}:8000/users/`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -12,7 +12,7 @@ export const getUsers = () => {
 };
 
 export const deleteUser = (email) => {
-  fetch(`http://${ip}:8000/users/${email}`, {
+  fetch(`http://${IP}:8000/users/${email}`, {
     method: "DELETE",
   }).catch((error) => {
     console.error(error);
@@ -20,8 +20,7 @@ export const deleteUser = (email) => {
 };
 
 export const getUserByEmail = (email) => {
-  // var user = null;
-  fetch(`http://${ip}:8000/users/${email}`)
+  fetch(`http://${IP}:8000/users/${email}`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -38,7 +37,7 @@ export const updateUser = (
   carColor,
   plateNumber
 ) => {
-  fetch(`http://${ip}:8000/users/${email}`, {
+  fetch(`http://${IP}:8000/users/${email}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -70,7 +69,7 @@ export const addUser = (
   carColor,
   plateNumber
 ) => {
-  fetch(`http://${ip}:8000/users/`, {
+  fetch(`http://${IP}:8000/users/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -96,7 +95,7 @@ export const addUser = (
     });
 };
 export const login = (email, password) => {
-  fetch(`http://${ip}:8000/users/login`, {
+  fetch(`http://${IP}:8000/users/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -118,7 +117,7 @@ export const createUserSubscription = (
   expYear
 ) => {
   const date = new Date(expYear, expMonth, 1);
-  fetch(`http://${ip}:8001/user_subscription_maps/`, {
+  fetch(`http://${IP}:8001/user_subscription_maps/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -137,7 +136,7 @@ export const createUserSubscription = (
   });
 };
 export const getUsersSubscriptions = () => {
-  fetch(`http://${ip}:8001/user_subscription_maps/`)
+  fetch(`http://${IP}:8001/user_subscription_maps/`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -147,7 +146,7 @@ export const getUsersSubscriptions = () => {
     });
 };
 export const isUserPremium = (email) => {
-  fetch(`http://${ip}:8001/user_subscription_maps/`)
+  fetch(`http://${IP}:8001/user_subscription_maps/`)
     .then((response) => response.json())
     .then((data) => {
       for (const user in data.result) {
@@ -160,7 +159,7 @@ export const isUserPremium = (email) => {
     });
 };
 export const deleteSubscription = (email) => {
-  fetch(`http://${ip}:8001/user_subscription_maps/${email}/Premium`, {
+  fetch(`http://${IP}:8001/user_subscription_maps/${email}/Premium`, {
     method: "DELETE",
   }).catch((error) => {
     console.error(error);

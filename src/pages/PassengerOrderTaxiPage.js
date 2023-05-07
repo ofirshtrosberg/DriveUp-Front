@@ -25,7 +25,8 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [numberOfPassengers, setNumberOfPassengers] = useState("");
   const [checked, setChecked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
@@ -174,9 +175,10 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             status={checked ? "checked" : "unchecked"}
             onPress={() => {
               setChecked(!checked);
+              setStartAddress(currAddress);
             }}
           />
-          <Text>Want to share a ride?</Text>
+          <Text>Use current location as start address</Text>
         </View>
       </View>
       <View
@@ -187,9 +189,12 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
           buttonColor="#111"
           style={styles.btn}
           onPress={() => {
-            if (startAddress == "") {
-              handleAddOrder(currAddress, destinationAddress);
+            if (startAddress == "" || destinationAddress == "") {
+              setErrorMessage("Invalid address");
+              setShowErrorMessage(true);
             } else {
+              setErrorMessage("");
+              setShowErrorMessage(false);
               handleAddOrder(startAddress, destinationAddress);
             }
           }}
@@ -207,6 +212,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         >
           Show on map
         </Button>
+        {showErrorMessage && <Text>{errorMessage}</Text>}
         <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
           <View style={{ flex: 1 }}>
             <PassengerOrderOnMap />

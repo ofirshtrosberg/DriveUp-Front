@@ -8,7 +8,7 @@ import {
   validatePhoneNumber,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
-import { ip } from "../helperFunctions/accessToBackFunctions.js";
+import { IP } from "@env";
 import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 export default function RegisterAsDriverPage({ navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,7 +21,7 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
-    fetch("http://" + ip + ":8000/users/", {
+    fetch("http://" + IP + ":8000/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

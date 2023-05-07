@@ -10,7 +10,7 @@ import {
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
 import colors from "../config/colors.js";
-import { ip } from "../helperFunctions/accessToBackFunctions.js";
+import { IP } from "@env";
 import { useNavigation } from "@react-navigation/native";
 
 export default function EditProfilePage({ navigation, route }) {
@@ -31,7 +31,7 @@ export default function EditProfilePage({ navigation, route }) {
   const handleUpdate = (email, editedName) => {
     setErrorMessage("");
     setSuccessMessage("");
-    fetch("http://" + ip + ":8000/users/" + email, {
+    fetch("http://" + IP + ":8000/users/" + email, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

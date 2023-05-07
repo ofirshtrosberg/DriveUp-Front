@@ -3,11 +3,11 @@ import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 import {
-  ip,
   getUserByEmail,
   isUserPremium,
   getUsers,
 } from "../helperFunctions/accessToBackFunctions";
+import { IP } from "@env";
 import CurrentUserContext from "../../CurrentUserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isUserExistLocal, addUserLocal } from "../../AsyncStorageUsers";
@@ -29,7 +29,7 @@ export default function LoginPage({ navigation }) {
     const isUserExist = await isUserExistLocal(email);
     console.log(isUserExist);
     if (!isUserExist) {
-      fetch("http://" + ip + ":8000/users/" + email)
+      fetch("http://" + IP + ":8000/users/" + email)
         .then((response) => response.json())
         .then((data) => {
           const user = data.result;
@@ -45,7 +45,7 @@ export default function LoginPage({ navigation }) {
     await printUsersLocal();
   };
   function login() {
-    fetch("http://" + ip + ":8000/users/login", {
+    fetch("http://" + IP + ":8000/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
