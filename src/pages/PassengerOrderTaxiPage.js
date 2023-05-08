@@ -28,7 +28,6 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [isGeocodingFine, setIsGeocodingFine] = useState(false);
-
   const [startLat, setStartLat] = useState(0);
   const [destinationLat, setDestinationLat] = useState(0);
   const [startLon, setStartLon] = useState(0);
@@ -67,7 +66,8 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     try {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
-      passengerOrderDrive(
+
+      const response = passengerOrderDrive(
         currentUserEmail,
         responseStart.results[0].geometry.location.lat,
         responseStart.results[0].geometry.location.lng,
@@ -75,6 +75,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         responseDest.results[0].geometry.location.lng,
         numberOfPassengers
       );
+
       navigation.navigate("OrderResult");
     } catch (error) {
       console.log(error);
@@ -87,11 +88,11 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     try {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
-      setIsGeocodingFine(true);
       setStartLat(responseStart.results[0].geometry.location.lat);
       setStartLon(responseStart.results[0].geometry.location.lng);
       setDestinationLat(responseDest.results[0].geometry.location.lat);
       setDestinationLon(responseDest.results[0].geometry.location.lng);
+      setIsGeocodingFine(true);
     } catch (error) {
       setIsGeocodingFine(false);
     }
@@ -109,7 +110,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log(destinationLon);
   }, [destinationLon]);
   useEffect(() => {
-    console.log(startAddress);
+    console.log("start change");
   }, [startAddress]);
   useEffect(() => {
     Geocoder.init(GOOGLE_MAPS_API_KEY);
@@ -120,6 +121,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   };
   const handleStartAddressChange = (text) => {
     setStartAddress(text);
+    if (checked) {
+      setChecked(!checked);
+    }
   };
   const handleNumberOfPassengersChange = (text) => {
     setNumberOfPassengers(text);
