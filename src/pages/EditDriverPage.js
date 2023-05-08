@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
-import { ip } from "../helperFunctions/accessToBackFunctions.js";
+import { IP } from "@env";
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
@@ -41,7 +41,7 @@ export default function EditDriverPage({ navigation, route }) {
   ) => {
     setSuccessMessage("");
     setErrorMessage("");
-    fetch("http://" + ip + ":8000/users/" + email, {
+    fetch("http://" + IP + ":8000/users/" + email, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

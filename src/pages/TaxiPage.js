@@ -8,8 +8,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserByEmail } from "../../AsyncStorageUsers";
 import { useState } from "react";
-export default function TaxiPage() {
-  const navigation = useNavigation();
+export default function TaxiPage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Order Taxi",
@@ -19,6 +18,7 @@ export default function TaxiPage() {
 
   const [plateNumber, setPlateNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [currentUserEmail, setCurrentUserEmail] = useState("");
   const fetchUser = async () => {
     try {
       setIsLoading(true);
@@ -26,6 +26,7 @@ export default function TaxiPage() {
       if (value !== null && value !== "") {
         const fetchedUser = await getUserByEmail(value);
         setPlateNumber(fetchedUser.plate_number);
+        setCurrentUserEmail(value);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -48,7 +49,7 @@ export default function TaxiPage() {
       {isLoading ? (
         <ActivityIndicator size="large" color="#000" />
       ) : plateNumber === "" ? (
-        <PassengerOrderTaxiPage />
+        <PassengerOrderTaxiPage currentUserEmail={currentUserEmail} />
       ) : (
         <DriverRoutesOffersPage />
       )}
