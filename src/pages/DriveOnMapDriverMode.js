@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
+
 const orderLocations = [
   {
     userEmail: "d@a.com",
@@ -45,7 +46,7 @@ function calculateLatLonDelta(orderLocations) {
   const longitudeDelta = longitudeRange * 2;
   return { latitudeDelta, longitudeDelta };
 }
-export default function DriveMapPassengerMode() {
+export default function DriveOnMapDriverMode() {
   const { latitudeDelta, longitudeDelta } =
     calculateLatLonDelta(orderLocations);
   let latitude = 0;
@@ -91,21 +92,53 @@ export default function DriveMapPassengerMode() {
         })}
       </MapView>
       <View style={styles.bottomView}>
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          //!!!!!!! change this
-          <Image
-            style={styles.driverImage}
-            source={require("../assets/img1.png")}
-          ></Image>
-          <View>
-            <Text style={styles.driverName}>Yossi Cohen</Text>
-            <Text style={styles.text}>054-1111122</Text>
-            <Text style={styles.text}>White Ford, 11112222222</Text>
+        <View style={{ flex: 1, flexDirection: "row", marginTop: 10 }}>
+          <View style={styles.passengerImgPrice}>
+            <Image
+              style={styles.img}
+              source={require("../assets/1761892.png")}
+            ></Image>
+            <Text>12$</Text>
+          </View>
+          <View style={styles.passengerImgPrice}>
+            <Image
+              style={styles.img}
+              source={require("../assets/User-Avatar-in-Suit-PNG.png")}
+            ></Image>
+            <Text>10$</Text>
+          </View>
+          <View style={styles.passengerImgPrice}>
+            <Image
+              style={styles.img}
+              source={require("../assets/img1.png")}
+            ></Image>
+            <Text>9$</Text>
+          </View>
+          <View style={styles.passengerImgPrice}>
+            <Image
+              style={styles.img}
+              source={require("../assets/person5.png")}
+            ></Image>
+            <Text>8$</Text>
+          </View>
+          <View style={styles.passengerImgPrice}>
+            <Image
+              style={styles.img}
+              source={require("../assets/images.png")}
+            ></Image>
+            <Text>7$</Text>
+          </View>
+          <View style={styles.passengerImgPrice}>
+            <Image
+              style={styles.img}
+              source={require("../assets/img1.png")}
+            ></Image>
+            <Text>15$</Text>
           </View>
         </View>
-        <View style={{ flex: 1, marginTop: 20 }}>
-          <Text style={styles.boldText}>You need to pay: 10$</Text>
-          <Text style={styles.boldText}>Driver will arrive at: 17:43</Text>
+        <View style={{ flex: 2, marginTop: 20 }}>
+          <Text style={styles.boldText}>Order number: 123456</Text>
+          <Text style={styles.boldText}>Profit: 61$</Text>
           <Button
             mode="contained"
             buttonColor="#111"
@@ -131,12 +164,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
   },
-  driverImage: {
+  img: {
     marginTop: 10,
-    width: 100,
-    height: 100,
+    width: "70%",
+    height: undefined,
+    aspectRatio: 5 / 5,
     borderRadius: 50,
-    marginRight: 10,
   },
   text: {
     marginTop: 5,
@@ -152,5 +185,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 20,
     fontWeight: "bold",
+  },
+  passengerImgPrice: {
+    flexDirection: "column",
+    flex: 1,
+    alignItems: "center",
   },
 });
