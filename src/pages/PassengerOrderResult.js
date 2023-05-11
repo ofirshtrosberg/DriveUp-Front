@@ -7,9 +7,7 @@ import DriveMapPassengerMode from "../components/DriveMapPassengerMode";
 export default function PassengerOrderResult() {
   return (
     <View style={styles.container}>
-      //!!!! if ready load this:
-      <DriveMap />
-      //!!!! else load: waiting for drive
+      <DriveMapPassengerMode />
     </View>
   );
 }
