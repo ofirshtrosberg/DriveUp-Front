@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import {
-  ip,
   addUser,
   getUsers,
   deleteUser,
 } from "../helperFunctions/accessToBackFunctions.js";
+import { IP } from "@env";
 import colors from "../config/colors.js";
 import {
   validateEmail,
@@ -35,7 +35,7 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
-    fetch("http://" + ip + ":8000/users/", {
+    fetch("http://" + IP + ":8000/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -3,7 +3,9 @@ import { Text, View, Image, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import HeaderLogout from "../components/HeaderLogout";
 import { useNavigation } from "@react-navigation/native";
+// import { GOOGLE_MAPS_API_KEY } from "@env";
 export default function HomePage() {
+  // console.log(GOOGLE_MAPS_API_KEY);
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
     navigation.setOptions({
