@@ -1,13 +1,46 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
-import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import {
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native-paper";
 
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password } = props;
+  const [orders, setOrders] = useState([
+    { id: "1", date: "2023-05-07", time: "10:00am" },
+    { id: "2", date: "2023-04-08", time: "2:00pm" },
+    { id: "4", date: "2023-03-12", time: "11:00am" },
+    { id: "5", date: "2023-03-12", time: "11:00am" },
+    { id: "6", date: "2023-03-12", time: "11:00am" },
+    { id: "7", date: "2023-03-12", time: "11:00am" },
+    { id: "8", date: "2023-03-12", time: "12:00am" },
+  ]);
+  const handlePressOrder = (order) => {
+    navigation.navigate("OrderDetails");
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.listContainer}>
+      <View style={styles.info}>
+        <Text style={styles.date}>
+          {item.date} - {item.time}
+        </Text>
+      </View>
+      <TouchableOpacity style={styles.Button} onPress={handlePressOrder}>
+        <Text style={styles.textButton}>WATCH ORDER DETAILS</Text>
+      </TouchableOpacity>
+    </View>
+  );
   return (
     <View style={styles.container}>
       <View style={styles.color}>
@@ -28,7 +61,6 @@ export default function PassengerProfilePage(props) {
           }}
         ></Icon>
       </View>
-
       <Text style={styles.passenger_name}>{fullName} </Text>
       <View style={styles.data_icons_Container}>
         <Icon
@@ -50,10 +82,21 @@ export default function PassengerProfilePage(props) {
       </View>
       <Text style={styles.orders_title}>History Orders </Text>
       <View style={styles.orders_list}>
-        <ScrollView>
-          <Text>hello</Text>
-        </ScrollView>
+        <FlatList
+          data={orders}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+        />
       </View>
+      {/* <Text>hello</Text>
+          <Button
+            onPress={() => {
+              handlePressOrder;
+            }}
+            style={styles.Button}
+          >
+            <Text style={styles.passenger_name}>WATCH ORDER DETAILS </Text>
+          </Button> */}
     </View>
   );
 }
@@ -106,7 +149,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 0,
-    marginRight:30,
+    marginRight: 30,
   },
   orders_title: {
     fontSize: 20,
@@ -119,9 +162,9 @@ const styles = StyleSheet.create({
   orders_list: {
     backgroundColor: "#000",
     padding: 10,
-    width: "80%",
+    width: "90%",
     backgroundColor: "#5F84A2",
-    height: 150,
+    height: 100,
     marginTop: 5,
     marginBottom: 10,
   },
@@ -129,5 +172,25 @@ const styles = StyleSheet.create({
     padding: 5,
     marginLeft: 350,
     marginTop: -50,
+  },
+  listContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  info: {
+    flex: 1,
+  },
+  Button: {
+    backgroundColor: "black",
+    borderRadius: 20,
+    width: 170,
+  },
+  textButton: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

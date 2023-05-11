@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
+import React, { useState, useRef } from "react";
+import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import UserAvatar from "react-native-user-avatar";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import { TextInput, Button } from "react-native-paper";
 import CurrentUserContext from "../../CurrentUserContext";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
@@ -12,6 +12,9 @@ import {
 import colors from "../config/colors.js";
 import { ip } from "../helperFunctions/accessToBackFunctions.js";
 import { useNavigation } from "@react-navigation/native";
+import { FontAwesome } from "@expo/vector-icons";
+import { BottomSheet } from "react-native-elements";
+import * as ImagePicker from "expo-image-picker";
 
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -20,13 +23,13 @@ export default function EditProfilePage({ navigation, route }) {
     });
   }, [navigation]);
 
-  // const navigation = useNavigation();
   const { fullName, email } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   // const [editedPassword, setEditedPassword] = useState(password);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [image, setImage] = useState(null);
 
   const handleUpdate = (email, editedName) => {
     setErrorMessage("");
@@ -78,34 +81,101 @@ export default function EditProfilePage({ navigation, route }) {
   //   setEditedPassword(text);
   // };
 
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  const handleCloseBottomSheet = () => {
+    setIsBottomSheetVisible(false);
+  };
+
+  // const handleImageChange = (image) => {
+  //   setImage(image);
+  // };
+
+  async function takePhoto() {
+    handleCloseBottomSheet();
+    let newImage = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!newImage.canceled) {
+      if (newImage.assets && newImage.assets.length > 0) {
+        setImage(newImage.assets[0].uri);
+      } else {
+        setImage(newImage.uri);
+      }
+    }
+  }
+
+  async function pickImage() {
+    handleCloseBottomSheet();
+
+    let newImage = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!newImage.canceled) {
+      if (newImage.assets && newImage.assets.length > 0) {
+        setImage(newImage.assets[0].uri);
+      } else {
+        setImage(newImage.uri);
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
         <View style={{ alignItems: "center" }}>
-          <TouchableOpacity onPress={() => {}}>
-            <View style={styles.photo}>
-              <UserAvatar size={110} name={editedName} style={styles.avatar}>
-                <View>
-                  <Icon
-                    name="camera"
-                    size={35}
-                    color="#91AEC4"
-                    style={styles.camera}
-                  />
-                </View>
-              </UserAvatar>
-            </View>
+          <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
+            {image ? (
+              <Image source={{ uri: image }} style={styles.profileImage} />
+            ) : (
+              <UserAvatar
+                size={110}
+                name={editedName}
+                style={styles.profileImage}
+              />
+            )}
           </TouchableOpacity>
         </View>
       </View>
+      <BottomSheet
+        isVisible={isBottomSheetVisible}
+        style={styles.bottomSheet}
+        backdropStyle={styles.backdropStyle}
+      >
+        <Text style={styles.bottomSheetsTitle}>
+          Choose Youe Profile Picture
+        </Text>
+        <Button onPress={() => takePhoto()} style={styles.bottomSheetsButton}>
+          <Text style={styles.bottomSheetsText}>Take a Photo</Text>
+        </Button>
+        <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
+          <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
+        </Button>
+        <Button
+          onPress={() => handleCloseBottomSheet(true)}
+          style={styles.bottomSheetsButton}
+        >
+          <Text style={styles.bottomSheetsText}>CANCEL</Text>
+        </Button>
+      </BottomSheet>
       <View style={styles.user_details}>
-        <TextInput
-          value={editedName}
-          mode="outlined"
-          label="Name"
-          style={styles.input}
-          onChangeText={handleNameChange}
-        />
+        <View style={styles.data_icons_Container}>
+          <FontAwesome name="user-o" size={20} style={styles.user_icon} />
+          <TextInput
+            value={editedName}
+            mode="outlined"
+            label="Name"
+            style={styles.input}
+            onChangeText={handleNameChange}
+          />
+        </View>
         {/* <TextInput
           mode="outlined"
           value={editedPassword}
@@ -155,11 +225,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  avatar: {
+  profileImage: {
     width: 130,
     height: 130,
     borderRadius: 100,
-    marginTop: 100,
+    marginTop: 70,
     backgroundColor: "#91AEC4",
   },
   camera: {
@@ -169,10 +239,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
     borderRadius: 10,
+    marginTop: -10,
   },
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
+    width: 340,
   },
   user_details: { marginTop: 100 },
   save_btn: {
@@ -190,5 +262,44 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     color: colors.blue1,
+  },
+  data_icons_Container: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: -15,
+    marginBottom: 10,
+  },
+  user_icon: { marginLeft: 10 },
+  bottomSheet: {
+    backgroundColor: "rgba(92, 162, 176, 0.6)",
+    height: 320,
+    // justifyContent: "space-around",
+    marginTop: 355,
+    borderRadius: 20,
+  },
+  bottomSheetsButton: {
+    margin: 10,
+    backgroundColor: "grey",
+    fontSize: 50,
+    borderRadius: 20,
+  },
+  bottomSheetsText: {
+    fontSize: 18,
+    color: "#FFFFFF",
+    textAlign: "center",
+    marginTop: 5,
+    marginBottom: 5,
+    fontWeight: "bold",
+  },
+  bottomSheetsTitle: {
+    fontSize: 23,
+    color: "#FFFFFF",
+    textAlign: "center",
+    marginTop: 10,
+    marginBottom: 25,
+    fontWeight: "bold",
+  },
+  backdropStyle: {
+    backgroundColor: "rgba(0, 0, 0, 1)",
   },
 });

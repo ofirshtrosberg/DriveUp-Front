@@ -1,49 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
-import { ip } from "../helperFunctions/accessToBackFunctions.js";
-import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { TextInput, Button } from "react-native-paper";
+import CurrentUserContext from "../../CurrentUserContext";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
-import colors from "../config/colors.js";
-import { ScrollView } from "react-native-gesture-handler";
 import {
   validatePassword,
   validateFullName,
-  validateCarModel,
-  validateCarColor,
-  validatePlateNumber,
 } from "../helperFunctions/validationFunctions.js";
+import colors from "../config/colors.js";
+import { ip } from "../helperFunctions/accessToBackFunctions.js";
+import { useNavigation } from "@react-navigation/native";
+import { FontAwesome } from "@expo/vector-icons";
 import { BottomSheet } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 
-export default function EditDriverPage({ navigation, route }) {
+export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Edit",
     });
   }, [navigation]);
 
-  const { fullName, email, carModel, plateNumber, carColor } = route.params;
+  const { fullName, email } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
-  const [editedCarModel, setEditedCarModel] = useState(carModel);
-  const [editedPlateNumber, setEditedPlateNumber] = useState(plateNumber);
   // const [editedPassword, setEditedPassword] = useState(password);
-  const [editedCarColor, setEditedCarColor] = useState(carColor);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [image, setImage] = useState(null);
 
-  const handleUpdate = (
-    email,
-    editedName,
-    editedCarModel,
-    editedCarColor,
-    editedPlateNumber
-    // editedPassword
-  ) => {
-    setSuccessMessage("");
+  const handleUpdate = (email, editedName) => {
     setErrorMessage("");
+    setSuccessMessage("");
     fetch("http://" + ip + ":8000/users/" + email, {
       method: "PUT",
       headers: {
@@ -53,29 +44,19 @@ export default function EditDriverPage({ navigation, route }) {
         parameter: {
           email: email,
           full_name: editedName,
-          car_model: editedCarModel,
-          car_color: editedCarColor,
-          plate_number: editedPlateNumber,
           // password: editedPassword,
         },
       }),
     })
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         if (!response.ok) {
           throw new Error("Update failed");
         }
         response.json();
       })
       .then((data) => {
-        handleUpdateLocal(
-          email,
-          editedName,
-          editedCarModel,
-          editedCarColor,
-          editedPlateNumber
-          // editedPassword
-        );
+        handleUpdateLocal(email, editedName);
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
@@ -85,42 +66,30 @@ export default function EditDriverPage({ navigation, route }) {
     const updatedUser = {
       email: email,
       full_name: editedName,
-      car_model: editedCarModel,
-      car_color: carColor,
-      plate_number: editedPlateNumber,
       // password: editedPassword,
     };
     await updateUserLocal(updatedUser);
+    setSuccessMessage("Update successful!");
     printUsersLocal();
-    ge("Update successful!");
-    // console.log("User update successfully!");
+    console.log("User update successfully!");
     navigation.goBack();
   };
-
   const handleNameChange = (text) => {
     setEditedName(text);
-  };
-
-  const handleCarModelChange = (text) => {
-    setEditedCarModel(text);
-  };
-
-  const handlePlateNumberChange = (text) => {
-    setEditedPlateNumber(text);
   };
 
   // const handlePasswordChange = (text) => {
   //   setEditedPassword(text);
   // };
 
-  const handleCarColorChange = (text) => {
-    setEditedCarColor(text);
-  };
-
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const handleCloseBottomSheet = () => {
     setIsBottomSheetVisible(false);
   };
+
+  // const handleImageChange = (image) => {
+  //   setImage(image);
+  // };
 
   async function takePhoto() {
     handleCloseBottomSheet();
@@ -160,19 +129,21 @@ export default function EditDriverPage({ navigation, route }) {
   }
 
   return (
-    <ScrollView>
-      <View style={styles.containerTop}>
-        <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
-          {image ? (
-            <Image source={{ uri: image }} style={styles.profileImage} />
-          ) : (
-            <UserAvatar
-              size={110}
-              name={editedName}
-              style={styles.profileImage}
-            />
-          )}
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={{ margin: 20 }}>
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
+            {image ? (
+              <Image source={{ uri: image }} style={styles.profileImage} />
+            ) : (
+              <UserAvatar
+                size={110}
+                name={editedName}
+                style={styles.profileImage}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
       <BottomSheet
         isVisible={isBottomSheetVisible}
@@ -182,6 +153,26 @@ export default function EditDriverPage({ navigation, route }) {
         <Text style={styles.bottomSheetsTitle}>
           Choose Youe Profile Picture
         </Text>
+        {/* <TouchableOpacity
+          style={styles.bottomSheetsButton}
+          onPress={() => takePhoto()}
+        >
+          <Text style={styles.bottomSheetsText}>Take Photo</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.bottomSheetsButton}
+          onPress={() => pickImage()}
+        >
+          <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
+        </TouchableOpacity> */}
+        {/* 
+        <TouchableOpacity
+          style={styles.bottomSheetsButton}
+          onPress={() => handleCloseBottomSheet()}
+        >
+          <Text style={styles.bottomSheetsText}>CLOSE</Text>
+        </TouchableOpacity> */}
         <Button onPress={() => takePhoto()} style={styles.bottomSheetsButton}>
           <Text style={styles.bottomSheetsText}>Take a Photo</Text>
         </Button>
@@ -196,13 +187,16 @@ export default function EditDriverPage({ navigation, route }) {
         </Button>
       </BottomSheet>
       <View style={styles.user_details}>
-        <TextInput
-          value={editedName}
-          mode="outlined"
-          label="Name"
-          style={styles.input}
-          onChangeText={handleNameChange}
-        />
+        <View style={styles.data_icons_Container}>
+          <FontAwesome name="user-o" size={20} style={styles.user_icon} />
+          <TextInput
+            value={editedName}
+            mode="outlined"
+            label="Name"
+            style={styles.input}
+            onChangeText={handleNameChange}
+          />
+        </View>
         {/* <TextInput
           mode="outlined"
           value={editedPassword}
@@ -210,27 +204,6 @@ export default function EditDriverPage({ navigation, route }) {
           style={styles.input}
           onChangeText={handlePasswordChange}
         /> */}
-        <TextInput
-          mode="outlined"
-          value={editedCarModel}
-          label="Car Model"
-          style={styles.input}
-          onChangeText={handleCarModelChange}
-        />
-        <TextInput
-          mode="outlined"
-          value={editedCarColor}
-          label="Car Color"
-          style={styles.input}
-          onChangeText={handleCarColorChange}
-        />
-        <TextInput
-          mode="outlined"
-          value={editedPlateNumber}
-          label="Car Number"
-          style={styles.input}
-          onChangeText={handlePlateNumberChange}
-        />
         <Button
           style={styles.save_btn}
           mode="contained"
@@ -242,26 +215,10 @@ export default function EditDriverPage({ navigation, route }) {
             if (!validateFullName(editedName)) {
               setErrorMessage("Invalid full name");
               setSuccessMessage("");
-            } else if (!validateCarModel(editedCarModel)) {
-              setErrorMessage("Invalid car model");
-              setSuccessMessage("");
-            } else if (!validateCarColor(carColor)) {
-              setErrorMessage("Invalid car color");
-              setSuccessMessage("");
-            } else if (!validatePlateNumber(editedPlateNumber)) {
-              setErrorMessage("Invalid plate number");
-              setSuccessMessage("");
             } else {
               setSuccessMessage("");
               setErrorMessage("");
-              handleUpdate(
-                email,
-                editedName,
-                editedCarModel,
-                editedCarColor,
-                editedPlateNumber
-                // editedPassword
-              );
+              handleUpdate(email, editedName);
             }
           }}
         >
@@ -274,7 +231,7 @@ export default function EditDriverPage({ navigation, route }) {
           <Text style={styles.message}>{successMessage}</Text>
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
@@ -283,12 +240,17 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
   },
-  containerTop: { alignItems: "center", flex: 1, justifyContent: "center" },
-
-  avatar: {
+  photo: {
+    height: 100,
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profileImage: {
     width: 130,
     height: 130,
     borderRadius: 100,
+    marginTop: 70,
     backgroundColor: "#91AEC4",
   },
   camera: {
@@ -298,12 +260,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
     borderRadius: 10,
+    marginTop: -10,
   },
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
+    width: 340,
   },
-  user_details: { flex: 2, marginTop: 20 },
+  user_details: { marginTop: 100 },
   save_btn: {
     justifyContent: "center",
     alignItems: "center",
@@ -320,11 +284,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: colors.blue1,
   },
-  button: {
-    margin: 10,
-    backgroundColor: "black",
-    fontSize: 50,
+  data_icons_Container: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: -15,
+    marginBottom: 10,
   },
+  user_icon: { marginLeft: 10 },
   bottomSheet: {
     backgroundColor: "rgba(92, 162, 176, 0.6)",
     height: 320,
@@ -356,12 +322,5 @@ const styles = StyleSheet.create({
   },
   backdropStyle: {
     backgroundColor: "rgba(0, 0, 0, 1)",
-  },
-  profileImage: {
-    width: 130,
-    height: 130,
-    borderRadius: 100,
-    marginTop: 40,
-    backgroundColor: "#91AEC4",
   },
 });

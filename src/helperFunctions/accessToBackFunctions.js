@@ -1,4 +1,4 @@
-export const ip = "10.160.0.242";
+export const ip = "10.0.0.43";
 
 export const getUsers = () => {
   fetch(`http://${ip}:8000/users/`)
@@ -150,11 +150,10 @@ export const isUserPremium = (email) => {
   fetch(`http://${ip}:8001/user_subscription_maps/`)
     .then((response) => response.json())
     .then((data) => {
-      for(const user in data.result){
-        if(user.email===email)
-          return true;
+      for (const user in data.result) {
+        if (user.email === email) return true;
       }
-      return false
+      return false;
     })
     .catch((error) => {
       console.error(error);
