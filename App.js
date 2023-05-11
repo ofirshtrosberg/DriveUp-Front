@@ -12,6 +12,7 @@ import { printUsersLocal } from "./AsyncStorageUsers";
 import SubscriptionPage from "./src/pages/SubscriptionPage";
 import EditPassengerPage from "./src/pages/EditPassengerPage";
 import EditDriverPage from "./src/pages/EditDriverPage";
+import OrderDetailsPage from "./src/pages/OrderDetailsPage";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PassengerOrderOnMap from "./src/pages/PassengerOrderOnMap";
@@ -48,6 +49,8 @@ export default function App() {
           <Stack.Screen name="Profile" component={ProfilePage} />
           <Stack.Screen name="EditPassenger" component={EditPassengerPage} />
           <Stack.Screen name="EditDriver" component={EditDriverPage} />
+          <Stack.Screen name="OrderDetails" component={OrderDetailsPage} />
+
           <Stack.Screen name="OrderOnMap" component={PassengerOrderOnMap} />
           <Stack.Screen name="OrderResult" component={PassengerOrderResult} />
           <Stack.Screen
