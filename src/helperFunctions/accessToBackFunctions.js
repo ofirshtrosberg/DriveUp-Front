@@ -1,4 +1,3 @@
-
 import { IP } from "@env";
 
 export const getUsers = () => {
@@ -175,22 +174,22 @@ export const passengerOrderDrive = (
   destinationLon,
   numberOfPassengers
 ) => {
-  // fetch(`http://${IP}:8002/passenger/order-drive`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     parameter: {
-  //       currentUserEmail: currentUserEmail,
-  //       startLat: startLat,
-  //       startLon: startLon,
-  //       destinationLat: destinationLat,
-  //       destinationLon: destinationLon,
-  //       numberOfPassengers: numberOfPassengers,
-  //     },
-  //   }),
-  // });
+  fetch(`http://${IP}:8002/passenger/order-drive`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parameter: {
+        currentUserEmail: currentUserEmail,
+        startLat: startLat,
+        startLon: startLon,
+        destinationLat: destinationLat,
+        destinationLon: destinationLon,
+        numberOfPassengers: numberOfPassengers,
+      },
+    }),
+  });
 };
 
 export const getDriveByOrderId = (orderId) => {

@@ -19,6 +19,7 @@ export default function DriverProfilePage(props) {
     carModel,
     password,
     carColor,
+    forOrder,
   } = props;
 
   return (
@@ -28,22 +29,24 @@ export default function DriverProfilePage(props) {
       </View>
       <View style={{ alignItems: "center" }}>
         <UserAvatar size={110} name={fullName} style={styles.avatar} />
-        <Icon
-          name="edit"
-          size={20}
-          style={styles.edit_icon}
-          onPress={() => {
-            navigation.navigate("EditDriver", {
-              fullName,
-              phoneNumber,
-              email,
-              carModel,
-              plateNumber,
-              password,
-              carColor,
-            });
-          }}
-        ></Icon>
+        {forOrder === "false" && (
+          <Icon
+            name="edit"
+            size={20}
+            style={styles.edit_icon}
+            onPress={() => {
+              navigation.navigate("EditDriver", {
+                fullName,
+                phoneNumber,
+                email,
+                carModel,
+                plateNumber,
+                password,
+                carColor,
+              });
+            }}
+          ></Icon>
+        )}
       </View>
       <Text style={styles.driver_name}>{fullName} </Text>
       <View style={styles.data_icons_Container}>
@@ -67,7 +70,6 @@ export default function DriverProfilePage(props) {
 
       <Text style={styles.driver_carModel}>
         My car : {carModel} , Car Number: {plateNumber}
-        
       </Text>
       {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
       <View style={styles.review_list}>
@@ -80,16 +82,18 @@ export default function DriverProfilePage(props) {
         </ScrollView>
       </View>
       <View>
-        <Button
-          style={styles.sub_btn}
-          mode="contained"
-          buttonColor="#111"
-          onPress={() => {
-            navigation.navigate("Subscription");
-          }}
-        >
-          Subscription
-        </Button>
+        {forOrder === "false" && (
+          <Button
+            style={styles.sub_btn}
+            mode="contained"
+            buttonColor="#111"
+            onPress={() => {
+              navigation.navigate("Subscription");
+            }}
+          >
+            Subscription
+          </Button>
+        )}
       </View>
     </View>
   );
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 0,
-    marginRight:30,
+    marginRight: 30,
   },
   email_icon: { marginLeft: -10, marginRight: 20 },
   phone_icon: { transform: [{ rotate: "95deg" }], marginTop: -5 },

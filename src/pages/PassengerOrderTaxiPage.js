@@ -64,16 +64,16 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   };
   const handleAddOrder = async (startLocation, destinationLocation) => {
     try {
-      // const responseStart = await Geocoder.from(startLocation);
-      // const responseDest = await Geocoder.from(destinationLocation);
-      // const response = passengerOrderDrive(
-      //   currentUserEmail,
-      //   responseStart.results[0].geometry.location.lat,
-      //   responseStart.results[0].geometry.location.lng,
-      //   responseDest.results[0].geometry.location.lat,
-      //   responseDest.results[0].geometry.location.lng,
-      //   numberOfPassengers
-      // );
+      const responseStart = await Geocoder.from(startLocation);
+      const responseDest = await Geocoder.from(destinationLocation);
+      const response = passengerOrderDrive(
+        currentUserEmail,
+        responseStart.results[0].geometry.location.lat,
+        responseStart.results[0].geometry.location.lng,
+        responseDest.results[0].geometry.location.lat,
+        responseDest.results[0].geometry.location.lng,
+        numberOfPassengers
+      );
       navigation.navigate("OrderResult");
     } catch (error) {
       console.log(error);
