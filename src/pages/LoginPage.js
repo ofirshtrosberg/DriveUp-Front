@@ -1,19 +1,17 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { URLSearchParams } from "react-native-url-polyfill";
 import { ImageBackground, Text, View, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
-import {
-  getUserByEmail,
-  isUserPremium,
-  getUsers,
-} from "../helperFunctions/accessToBackFunctions";
-import { IP } from "@env";
-import CurrentUserContext from "../../CurrentUserContext";
+import { IP, PORT } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isUserExistLocal, addUserLocal } from "../../AsyncStorageUsers";
-import { printUsersLocal, deleteUserLocal } from "../../AsyncStorageUsers";
-import { deleteUser } from "../helperFunctions/accessToBackFunctions";
+import { printUsersLocal } from "../../AsyncStorageUsers";
 export default function LoginPage({ navigation }) {
+  const [loginResponse, setLoginResponse] = useState("");
+  const [navigateNow, setNavigateNow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   useEffect(() => {
     AsyncStorage.getItem("currentUserEmail").then((value) => {
       if (value !== null && value !== "") {
@@ -21,15 +19,12 @@ export default function LoginPage({ navigation }) {
       }
     });
   }, []);
-  const [loginResponse, setLoginResponse] = useState("");
-  const [navigateNow, setNavigateNow] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const handleLoginLocal = async () => {
     const isUserExist = await isUserExistLocal(email);
     console.log(isUserExist);
     if (!isUserExist) {
-      fetch("http://" + IP + ":8000/users/" + email)
+      fetch("http://" + IP + ":" + PORT + "/users/" + email)
         .then((response) => response.json())
         .then((data) => {
           const user = data.result;
@@ -44,34 +39,44 @@ export default function LoginPage({ navigation }) {
     await addUserLocal(user);
     await printUsersLocal();
   };
-  function login() {
-    fetch("http://" + IP + ":8000/users/login", {
+  async function login() {
+    const params = new URLSearchParams();
+    params.append("grant_type", "");
+    params.append("username", email);
+    params.append("password", password);
+    params.append("scope", "");
+    params.append("client_id", "");
+    params.append("client_secret", "");
+
+    fetch(`http://${IP}:${PORT}/login`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
-        parameter: {
-          email: email,
-          password: password,
-        },
-      }),
+      body: params.toString(),
     })
       .then((response) => response.json())
       .then((data) => {
-        setLoginResponse(data.detail);
-        if (data.message === "User logged in successfully") {
+        console.log("data", data);
+        if (data.detail) {
+          setLoginResponse(data.detail.detail);
+        } else {
+          setLoginResponse("");
           handleLoginLocal();
           AsyncStorage.setItem("currentUserEmail", email);
-          setEmail("");
-          setPassword("");
-          navigation.navigate("Main");
+          AsyncStorage.setItem("userToken", data.access_token).then(()=>{
+             setEmail("");
+             setPassword("");
+             navigation.navigate("Main");
+          });
+         
         }
       })
       .catch((error) => {
         console.error(error);
       });
   }
+
   const handleEmailChange = (text) => {
     setEmail(text);
   };

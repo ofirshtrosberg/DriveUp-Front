@@ -3,19 +3,17 @@ import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { TextInput, Button } from "react-native-paper";
-import CurrentUserContext from "../../CurrentUserContext";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 import {
   validatePassword,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
 import colors from "../config/colors.js";
-import { IP } from "@env";
+import { IP, PORT } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { BottomSheet } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
-
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,7 +32,7 @@ export default function EditProfilePage({ navigation, route }) {
   const handleUpdate = (email, editedName) => {
     setErrorMessage("");
     setSuccessMessage("");
-    fetch("http://" + IP + ":8000/users/" + email, {
+    fetch("http://" + IP + ":"+PORT+"/users/" + email, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

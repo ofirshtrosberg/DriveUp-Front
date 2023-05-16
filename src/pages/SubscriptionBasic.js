@@ -13,7 +13,6 @@ import {
 } from "../helperFunctions/validationFunctions";
 import {
   createUserSubscription,
-  getUsersSubscriptions,
 } from "../helperFunctions/accessToBackFunctions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";

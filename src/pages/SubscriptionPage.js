@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { isUserPremium } from "../helperFunctions/accessToBackFunctions";
 import HeaderLogout from "../components/HeaderLogout";
-import { IP } from "@env";
+import { IP, PORT } from "@env";
 export default function SubscriptionPage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -16,23 +16,11 @@ export default function SubscriptionPage({ navigation }) {
   }, [navigation]);
   const [isPremium, setIsPremium] = useState(false);
   const getCurrentSubscription = async () => {
+    
     const value = await AsyncStorage.getItem("currentUserEmail");
     if (value !== null && value !== "") {
-      fetch("http://" + IP + ":8001/user_subscription_maps/")
-        .then((response) => response.json())
-        .then((data) => {
-          for (const index in data.result) {
-            if (data.result[index].user_email === value) {
-              setIsPremium(true);
-              return;
-            }
-          }
-          setIsPremium(false);
-          return;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      const premium = await isUserPremium(value);
+      setIsPremium(premium);
     }
   };
 

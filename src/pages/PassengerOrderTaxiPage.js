@@ -66,7 +66,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     try {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
-      const response = passengerOrderDrive(
+      const response = await passengerOrderDrive(
         currentUserEmail,
         responseStart.results[0].geometry.location.lat,
         responseStart.results[0].geometry.location.lng,

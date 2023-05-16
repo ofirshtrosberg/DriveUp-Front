@@ -37,7 +37,7 @@ export default function ProfilePage({ navigation }) {
         setCarModel(fetchedUser.car_model);
         setPhoneNumber(fetchedUser.phone_number);
         setPassword(fetchedUser.password);
-        setCarColor(fetchedUser.car_color)
+        setCarColor(fetchedUser.car_color);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -69,6 +69,7 @@ export default function ProfilePage({ navigation }) {
           carModel={carModel}
           password={password}
           carColor={carColor}
+          forOrder="false"
         />
       )}
     </View>

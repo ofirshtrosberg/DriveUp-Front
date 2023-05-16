@@ -26,6 +26,11 @@ export default function App() {
         AsyncStorage.setItem("currentUserEmail", "");
       }
     });
+    AsyncStorage.getItem("userToken").then((value) => {
+      if (value == null) {
+        AsyncStorage.setItem("userToken", "");
+      }
+    });
   }, []);
   return (
     <PaperProvider theme={theme}>
