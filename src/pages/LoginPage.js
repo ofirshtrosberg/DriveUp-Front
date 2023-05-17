@@ -47,7 +47,7 @@ export default function LoginPage({ navigation }) {
     await addUserLocal(user);
     await printUsersLocal();
   };
-  const loginBackend=()=> {
+  const loginBackend = () => {
     const params = new URLSearchParams();
     params.append("grant_type", "");
     params.append("username", email);
@@ -56,6 +56,7 @@ export default function LoginPage({ navigation }) {
     params.append("client_id", "");
     params.append("client_secret", "");
 
+    console.log(`http://${IP}:${PORT}/login`);
     fetch(`http://${IP}:${PORT}/login`, {
       method: "POST",
       headers: {
@@ -63,7 +64,9 @@ export default function LoginPage({ navigation }) {
       },
       body: params.toString(),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => {
         console.log("data", data);
         if (data.detail) {
@@ -83,7 +86,7 @@ export default function LoginPage({ navigation }) {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   const handleEmailChange = (text) => {
     setEmail(text);
