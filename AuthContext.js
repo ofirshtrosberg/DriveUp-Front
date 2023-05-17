@@ -4,6 +4,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState("");
+  const [tokenExpTime, setTokenExpTime] = useState("");
 
   const login = (token) => {
     setUserToken(token);
@@ -16,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        tokenExpTime,
         userToken,
         login,
         logout,
