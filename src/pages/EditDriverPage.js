@@ -35,9 +35,13 @@ export default function EditDriverPage({ navigation, route }) {
   const [successMessage, setSuccessMessage] = useState("");
   const [image, setImage] = useState(null);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> b1fb05d (using tokens)
+=======
+// !!!!!
+>>>>>>> 4ec3865 (tokens using)
   const handleUpdate = (
     email,
     editedName,

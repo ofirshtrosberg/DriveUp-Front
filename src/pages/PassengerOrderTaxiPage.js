@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
 import {
   Text,
   View,
@@ -18,6 +19,7 @@ import Geocoder from "react-native-geocoding";
 import Modal from "react-native-modal";
 import PassengerOrderOnMap from "./PassengerOrderOnMap";
 export default function PassengerOrderTaxiPage({ currentUserEmail }) {
+  const { userToken, login, logout } = useContext(AuthContext);
   const navigation = useNavigation();
   const [startAddress, setStartAddress] = useState("");
   const [currAddress, setCurrAddress] = useState("");
@@ -66,13 +68,14 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     try {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
-      const response = await passengerOrderDrive(
+      const response = passengerOrderDrive(
         currentUserEmail,
         responseStart.results[0].geometry.location.lat,
         responseStart.results[0].geometry.location.lng,
         responseDest.results[0].geometry.location.lat,
         responseDest.results[0].geometry.location.lng,
-        numberOfPassengers
+        numberOfPassengers,
+        userToken
       );
       navigation.navigate("OrderResult");
     } catch (error) {
@@ -241,8 +244,8 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             //   if (isGeocodingFine) {
             //     setErrorMessage("");
             //     setShowErrorMessage(false);
-                handleAddOrder(startAddress, destinationAddress);
-              // }
+            handleAddOrder(startAddress, destinationAddress);
+            // }
             // }
           }}
         >

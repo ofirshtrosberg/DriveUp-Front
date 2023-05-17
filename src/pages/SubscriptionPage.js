@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
 import { Text, View, StyleSheet } from "react-native";
 import SubscriptionBasic from "./SubscriptionBasic";
 import SubscriptionPremium from "./SubscriptionPremium";
@@ -8,6 +9,7 @@ import { isUserPremium } from "../helperFunctions/accessToBackFunctions";
 import HeaderLogout from "../components/HeaderLogout";
 import { IP, PORT } from "@env";
 export default function SubscriptionPage({ navigation }) {
+  const { userToken, login, logout } = useContext(AuthContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Subscription",
@@ -15,14 +17,21 @@ export default function SubscriptionPage({ navigation }) {
     });
   }, [navigation]);
   const [isPremium, setIsPremium] = useState(false);
-  const getCurrentSubscription = async () => {
-    
-    const value = await AsyncStorage.getItem("currentUserEmail");
-    if (value !== null && value !== "") {
-      const premium = await isUserPremium(value);
-      setIsPremium(premium);
-    }
-  };
+const getCurrentSubscription = async () => {
+  const value = await AsyncStorage.getItem("currentUserEmail");
+  if (value !== null && value !== "") {
+    isUserPremium(value, userToken)
+      .then((result) => {
+        console.log("is premium", result);
+        setIsPremium(result);
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsPremium(false);
+      });
+  }
+};
+
 
   useFocusEffect(
     React.useCallback(() => {

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
 import { useFonts } from "expo-font";
 import { Lobster_400Regular } from "@expo-google-fonts/lobster";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
@@ -11,13 +12,12 @@ import {
   validateExpDate,
   validateId,
 } from "../helperFunctions/validationFunctions";
-import {
-  createUserSubscription,
-} from "../helperFunctions/accessToBackFunctions";
+import { createUserSubscription } from "../helperFunctions/accessToBackFunctions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 export default function SubscriptionBasic() {
+  const { userToken, login, logout } = useContext(AuthContext);
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -55,7 +55,8 @@ export default function SubscriptionBasic() {
         cardNumber,
         cvv,
         expMonth,
-        expYear
+        expYear,
+        userToken
       );
       navigation.goBack();
     });
