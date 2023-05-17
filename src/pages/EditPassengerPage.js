@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
 import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -20,7 +21,7 @@ export default function EditProfilePage({ navigation, route }) {
       headerTitle: "Edit",
     });
   }, [navigation]);
-
+  const { userToken, login, logout } = useContext(AuthContext);
   const { fullName, email } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
@@ -28,20 +29,24 @@ export default function EditProfilePage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [image, setImage] = useState(null);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b1fb05d (using tokens)
   const handleUpdate = (email, editedName) => {
+    console.log(userToken);
     setErrorMessage("");
     setSuccessMessage("");
-    fetch("http://" + IP + ":"+PORT+"/users/" + email, {
+    fetch("http://" + IP + ":" + PORT + "/users/update", {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${userToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         parameter: {
           email: email,
           full_name: editedName,
-          // password: editedPassword,
         },
       }),
     })
