@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useContext} from "react";
+import { AuthContext } from "../../AuthContext";
 import { Text, View, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { Lobster_400Regular } from "@expo-google-fonts/lobster";
@@ -7,12 +8,13 @@ import { useNavigation } from "@react-navigation/native";
 import { deleteSubscription } from "../helperFunctions/accessToBackFunctions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function SubscriptionPremium() {
+  const { userToken, login, logout } = useContext(AuthContext);
   const navigation = useNavigation();
   const handleCancelSubscription =async () => {
      try {
        const value = await AsyncStorage.getItem("currentUserEmail");
        if (value !== null && value !== "") {
-         deleteSubscription(value);
+         deleteSubscription(value, userToken);
          navigation.goBack();
        }
      } catch (error) {

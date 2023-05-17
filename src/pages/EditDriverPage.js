@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
 import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
-// import { ip } from "../helperFunctions/accessToBackFunctions.js";
-import { IP } from "@env";
+import { IP, PORT } from "@env";
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
@@ -23,7 +23,7 @@ export default function EditDriverPage({ navigation, route }) {
       headerTitle: "Edit",
     });
   }, [navigation]);
-
+  const { userToken, login, logout } = useContext(AuthContext);
   const { fullName, email, carModel, plateNumber, carColor } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
@@ -34,7 +34,6 @@ export default function EditDriverPage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [image, setImage] = useState(null);
-
   const handleUpdate = (
     email,
     editedName,
@@ -45,9 +44,10 @@ export default function EditDriverPage({ navigation, route }) {
   ) => {
     setSuccessMessage("");
     setErrorMessage("");
-    fetch("http://" + IP + ":8000/users/" + email, {
+    fetch("http://" + IP + ":" + PORT + "/users/update/", {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${userToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -57,7 +57,6 @@ export default function EditDriverPage({ navigation, route }) {
           car_model: editedCarModel,
           car_color: editedCarColor,
           plate_number: editedPlateNumber,
-          // password: editedPassword,
         },
       }),
     })
@@ -93,7 +92,7 @@ export default function EditDriverPage({ navigation, route }) {
     };
     await updateUserLocal(updatedUser);
     printUsersLocal();
-//     ge("Update successful!");
+    //     ge("Update successful!");
     // console.log("User update successfully!");
     console.log("User update successfully!");
     navigation.goBack();

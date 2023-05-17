@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors.js";
@@ -8,7 +8,7 @@ import {
   validatePhoneNumber,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
-import { IP } from "@env";
+import { IP, PORT } from "@env";
 import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 export default function RegisterAsDriverPage({ navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,7 +21,7 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
-    fetch("http://" + IP + ":8000/users/", {
+    fetch("http://" + IP + ":"+PORT+"/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { View, ImageBackground, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import {
-  addUser,
-  getUsers,
-  deleteUser,
-} from "../helperFunctions/accessToBackFunctions.js";
-import { IP } from "@env";
+import { IP, PORT } from "@env";
 import colors from "../config/colors.js";
 import {
   validateEmail,
@@ -35,7 +30,7 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
-    fetch("http://" + IP + ":8000/users/", {
+    fetch("http://" + IP + ":" + PORT + "/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

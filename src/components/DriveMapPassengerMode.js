@@ -4,6 +4,10 @@ import MapView, { Marker, Callout } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
+import { useNavigation } from "@react-navigation/native";
+import Modal from "react-native-modal";
+import DriverProfilePage from "../pages/DriverProfilePage";
+import { useState } from "react";
 const orderLocations = [
   {
     userEmail: "d@a.com",
@@ -46,6 +50,11 @@ function calculateLatLonDelta(orderLocations) {
   return { latitudeDelta, longitudeDelta };
 }
 export default function DriveMapPassengerMode() {
+  const [isModalVisibleProfile, setIsModalVisibleProfile] = useState(false);
+  const toggleModalProfile = () => {
+    setIsModalVisibleProfile(!isModalVisibleProfile);
+  };
+  const navigation = useNavigation();
   const { latitudeDelta, longitudeDelta } =
     calculateLatLonDelta(orderLocations);
   let latitude = 0;
@@ -99,7 +108,17 @@ export default function DriveMapPassengerMode() {
           <View>
             <Text style={styles.driverName}>Yossi Cohen</Text>
             <Text style={styles.text}>054-1111122</Text>
-            <Text style={styles.text}>White Ford, 11112222222</Text>
+            {/* <Text style={styles.text}>White Ford, 11112222222</Text> */}
+            <Button
+              mode="contained"
+              buttonColor="#111"
+              style={{ marginTop: 10 }}
+              onPress={() => {
+                setIsModalVisibleProfile(true);
+              }}
+            >
+              Watch Profile
+            </Button>
           </View>
         </View>
         <View style={{ flex: 1, marginTop: 20 }}>
@@ -115,6 +134,23 @@ export default function DriveMapPassengerMode() {
           </Button>
         </View>
       </View>
+      <Modal
+        isVisible={isModalVisibleProfile}
+        onBackdropPress={toggleModalProfile}
+      >
+        <View style={{ flex: 1, backgroundColor: "#fff" }}>
+          <DriverProfilePage
+            email="d@d.com"
+            fullName="Yossi Cohen"
+            plateNumber="53443434343"
+            phoneNumber="5454554545"
+            carModel="Kia"
+            password="123434"
+            carColor="White"
+            forOrder="true"
+          />
+        </View>
+      </Modal>
     </View>
   );
 }

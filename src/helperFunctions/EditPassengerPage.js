@@ -1,16 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
 import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { TextInput, Button } from "react-native-paper";
-import CurrentUserContext from "../../CurrentUserContext";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
 import {
   validatePassword,
   validateFullName,
 } from "../helperFunctions/validationFunctions.js";
 import colors from "../config/colors.js";
-import { ip } from "../helperFunctions/accessToBackFunctions.js";
+import { IP, PORT } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { BottomSheet } from "react-native-elements";
@@ -23,7 +23,7 @@ export default function EditProfilePage({ navigation, route }) {
       headerTitle: "Edit",
     });
   }, [navigation]);
-
+ const { userToken, login, logout } = useContext(AuthContext);
   const { fullName, email } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
@@ -31,13 +31,13 @@ export default function EditProfilePage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [image, setImage] = useState(null);
-
   const handleUpdate = (email, editedName) => {
     setErrorMessage("");
     setSuccessMessage("");
-    fetch("http://" + ip + ":8000/users/" + email, {
+    fetch("http://" + IP + ":" + PORT + "/users/update/", {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${userToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
