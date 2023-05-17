@@ -70,12 +70,12 @@ export default function LoginPage({ navigation }) {
       .then((data) => {
         console.log("data", data);
         if (data.detail) {
-          setLoginResponse(data.detail.detail);
+          if (data.detail.detail) setLoginResponse(data.detail.detail);
+          else setLoginResponse("Field missing");
         } else {
           setLoginResponse("");
           handleLoginLocal();
           AsyncStorage.setItem("currentUserEmail", email);
-          // AsyncStorage.setItem("userToken", data.access_token).then(()=>{
           login(data.access_token);
           setEmail("");
           setPassword("");
