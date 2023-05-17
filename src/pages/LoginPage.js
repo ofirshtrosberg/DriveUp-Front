@@ -80,7 +80,6 @@ export default function LoginPage({ navigation }) {
           setEmail("");
           setPassword("");
           navigation.navigate("Main");
-          // });
         }
       })
       .catch((error) => {
