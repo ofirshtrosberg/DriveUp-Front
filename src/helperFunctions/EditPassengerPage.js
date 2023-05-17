@@ -34,7 +34,7 @@ export default function EditProfilePage({ navigation, route }) {
   const handleUpdate = (email, editedName) => {
     setErrorMessage("");
     setSuccessMessage("");
-    fetch("http://" + IP + ":" + PORT + "/users/update/" + email, {
+    fetch("http://" + IP + ":" + PORT + "/users/update/", {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${userToken}`,
