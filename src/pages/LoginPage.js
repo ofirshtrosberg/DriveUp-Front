@@ -15,7 +15,7 @@ export default function LoginPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   useEffect(() => {
-    AsyncStorage.getItem("currentUserEmail").then((value) => {
+    AsyncStorage.getItem("userToken").then((value) => {
       if (value !== null && value !== "") {
         navigation.navigate("Main");
       }
