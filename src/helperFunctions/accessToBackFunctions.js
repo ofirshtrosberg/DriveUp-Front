@@ -225,56 +225,56 @@ export const passengerOrderDrive = (
 };
 
 export const getDriveByOrderId = (orderId) => {
-  // fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`)
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log(data);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
+  fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 //driver:
 export const requestDrives = (currUserEmail, currLat, currLon) => {
-  // fetch(`http://${IP}:${PORT}/driver/request-drives`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     parameter: {
-  //       currUserEmail: currUserEmail,
-  //       currLat: currLat,
-  //       currLon: currLon,
-  //     },
-  //   }),
-  // });
+  fetch(`http://${IP}:${PORT}/driver/request-drives`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parameter: {
+        email: currUserEmail,
+        current_lat: currLat,
+        current_lon: currLon,
+      },
+    }),
+  });
 };
-export const acceptDrive = (driveId, currUserEmail) => {
-  // fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     parameter: {
-  //       driveId:driveId,
-  //       currUserEmail: currUserEmail,
-  //     },
-  //   }),
-  // });
+export const acceptDrive = (orderId, currUserEmail) => {
+  fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parameter: {
+        order_id: orderId,
+        email: currUserEmail,
+      },
+    }),
+  });
 };
 export const rejectDrives = (currUserEmail) => {
-  // fetch(`http://${IP}:${PORT}/driver/reject-drives`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     parameter: {
-  //       currUserEmail: currUserEmail,
-  //     },
-  //   }),
-  // });
+  fetch(`http://${IP}:${PORT}/driver/reject-drives`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parameter: {
+        currUserEmail: currUserEmail,
+      },
+    }),
+  });
 };
