@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const storeToken = async (token) => {
     try {
       await AsyncStorage.setItem("userToken", token);
-      console.log("Token stored successfully");
+      console.log("Token changed in storage successfully");
     } catch (error) {
       console.log("Error storing token:", error);
     }

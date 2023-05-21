@@ -9,7 +9,6 @@ const Header = ({ title }) => {
   const navigation = useNavigation();
   const handleLogout =async () => {
     AsyncStorage.setItem("currentUserEmail", "");
-    // await AsyncStorage.setItem("userToken", "");
     logout();
     navigation.navigate("Login");
   };
