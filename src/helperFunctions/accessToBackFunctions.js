@@ -184,7 +184,7 @@ export const deleteSubscription = (email, userToken) => {
   });
 };
 
-export const passengerOrderDrive = (
+export const passengerOrderDrive = async (
   currentUserEmail,
   startLat,
   startLon,
@@ -194,41 +194,51 @@ export const passengerOrderDrive = (
   userToken
 ) => {
   console.log(userToken);
-  fetch(`http://${IP}:${PORT}/passenger/order-drive`, {
-    method: "POST",
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/passenger/order-drive`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        parameter: {
+          currentUserEmail: currentUserEmail,
+          startLat: parseFloat(startLat),
+          startLon: parseFloat(startLon),
+          destinationLat: parseFloat(destinationLat),
+          destinationLon: parseFloat(destinationLon),
+          numberOfPassengers: parseInt(numberOfPassengers),
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.orderId) {
+          console.log("passengerOrderDrive", data.orderId);
+          resolve(data.orderId);
+        } else {
+          reject(new Error("Order creation failed"));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
+};
+
+export const getDriveByOrderId = (orderId, userToken) => {
+  fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${userToken}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      parameter: {
-        currentUserEmail: currentUserEmail,
-        startLat: parseFloat(startLat),
-        startLon: parseFloat(startLon),
-        destinationLat: parseFloat(destinationLat),
-        destinationLon: parseFloat(destinationLon),
-        numberOfPassengers: parseInt(numberOfPassengers),
-      },
-    }),
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.orderId) {
-        console.log(data.orderId);
-        return data.orderId;
-      } else {
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
-
-export const getDriveByOrderId = (orderId) => {
-  fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
+      console.log("getDriveByOrderId", data.driveId);
     })
     .catch((error) => {
       console.error(error);
@@ -236,10 +246,11 @@ export const getDriveByOrderId = (orderId) => {
 };
 
 //driver:
-export const requestDrives = (currUserEmail, currLat, currLon) => {
+export const requestDrives = (currUserEmail, currLat, currLon, userToken) => {
   fetch(`http://${IP}:${PORT}/driver/request-drives`, {
     method: "POST",
     headers: {
+      Authorization: `Bearer ${userToken}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -251,10 +262,11 @@ export const requestDrives = (currUserEmail, currLat, currLon) => {
     }),
   });
 };
-export const acceptDrive = (orderId, currUserEmail) => {
+export const acceptDrive = (orderId, currUserEmail, userToken) => {
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
+      Authorization: `Bearer ${userToken}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -265,10 +277,11 @@ export const acceptDrive = (orderId, currUserEmail) => {
     }),
   });
 };
-export const rejectDrives = (currUserEmail) => {
+export const rejectDrives = (currUserEmail, userToken) => {
   fetch(`http://${IP}:${PORT}/driver/reject-drives`, {
     method: "POST",
     headers: {
+      Authorization: `Bearer ${userToken}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({

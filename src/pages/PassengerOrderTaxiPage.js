@@ -68,7 +68,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     try {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
-      const response = passengerOrderDrive(
+      const response = await passengerOrderDrive(
         currentUserEmail,
         responseStart.results[0].geometry.location.lat,
         responseStart.results[0].geometry.location.lng,
@@ -77,9 +77,13 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         numberOfPassengers,
         userToken
       );
-      navigation.navigate("OrderResult");
+      setErrorMessage("");
+      setShowErrorMessage(false);
+      navigation.navigate("OrderResult", { orderId: response });
     } catch (error) {
       console.log(error);
+      setErrorMessage("Order Failed");
+      setShowErrorMessage(true);
     }
   };
   const checkIfLocationsAreFine = async (
