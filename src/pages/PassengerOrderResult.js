@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import HeaderLogout from "../components/HeaderLogout";
-import { useNavigation } from "@react-navigation/native";
-import { GOOGLE_MAPS_API_KEY } from "@env";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import { AuthContext } from "../../AuthContext";
 import { getDriveByOrderId } from "../helperFunctions/accessToBackFunctions";
 import DriveMapPassengerMode from "../components/DriveMapPassengerMode";
@@ -11,13 +8,43 @@ export default function PassengerOrderResult() {
   const route = useRoute();
   const { orderId } = route.params;
   const { userToken, login, logout } = useContext(AuthContext);
-  const [driveId, setDriveId] = useState(0);
+  const [driveId, setDriveId] = useState(null);
+  const checkDrive = async () => {
+    try {
+      const response = await getDriveByOrderId(orderId, userToken);
+      console.log("drive id", response);
+      setDriveId(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getDriveByOrderId(orderId, userToken);
-  }, []);
+    let interval;
+
+    const checkDriveWithInterval = async () => {
+      if (driveId === null) {
+        await checkDrive();
+      } else {
+        clearInterval(interval);
+      }
+    };
+
+    interval = setInterval(checkDriveWithInterval, 5000);
+    checkDriveWithInterval();
+
+    return () => clearInterval(interval);
+  }, [driveId]);
   return (
     <View style={styles.container}>
-      <DriveMapPassengerMode />
+      {driveId !== null ? (
+        <DriveMapPassengerMode />
+      ) : (
+        <View>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text>Finding you a drive</Text>
+        </View>
+      )}
     </View>
   );
 }

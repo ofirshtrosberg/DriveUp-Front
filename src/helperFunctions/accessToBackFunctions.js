@@ -228,21 +228,28 @@ export const passengerOrderDrive = async (
   });
 };
 
-export const getDriveByOrderId = (orderId, userToken) => {
-  fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("getDriveByOrderId", data.driveId);
+export const getDriveByOrderId = async (orderId, userToken) => {
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
     })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.driveId !== undefined) {
+          resolve(data.driveId);
+        } else {
+          reject(new Error("Drive check failed"));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
 };
 
 //driver:
