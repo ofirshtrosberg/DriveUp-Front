@@ -115,7 +115,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log(destinationLon);
   }, [destinationLon]);
   useEffect(() => {
-    console.log("start change");
+    console.log("start change", startLat, startLon);
   }, [startAddress]);
   useEffect(() => {
     Geocoder.init(GOOGLE_MAPS_API_KEY);

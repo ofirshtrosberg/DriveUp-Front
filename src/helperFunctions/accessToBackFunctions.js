@@ -193,7 +193,7 @@ export const passengerOrderDrive = async (
   numberOfPassengers,
   userToken
 ) => {
-  console.log(userToken);
+  console.log(startLat, startLon, destinationLat, destinationLon);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/passenger/order-drive`, {
       method: "POST",
@@ -237,7 +237,10 @@ export const getDriveByOrderId = async (orderId, userToken) => {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
       .then((data) => {
         if (data.driveId !== undefined) {
           resolve(data.driveId);
@@ -246,29 +249,48 @@ export const getDriveByOrderId = async (orderId, userToken) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.error("getDriveByOrderId", error);
+        reject(error);
+      });
+  });
+};
+export const requestDrives = async (
+  userToken,
+  currUserEmail,
+  currLat,
+  currLon
+) => {
+  console.log(userToken);
+  console.log(currUserEmail);
+  console.log("currLat", currLat);
+  console.log("currLon", currLon);
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/driver/request-drives`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: currUserEmail,
+        currentLat: currLat,
+        currentLon: currLon,
+        limits: {},
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
         reject(error);
       });
   });
 };
 
-//driver:
-export const requestDrives = (currUserEmail, currLat, currLon, userToken) => {
-  fetch(`http://${IP}:${PORT}/driver/request-drives`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      parameter: {
-        email: currUserEmail,
-        current_lat: currLat,
-        current_lon: currLon,
-      },
-    }),
-  });
-};
 export const acceptDrive = (orderId, currUserEmail, userToken) => {
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
