@@ -48,11 +48,17 @@ export default function PassengerOrderResult() {
       ) : (
         <ImageBackground
           source={require("../assets/backgroundDriveup.png")}
-          style={{ flex: 1 }}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <View>
-            <ActivityIndicator style={{marginVertical: 50, marginHorizontal:50}} size="large" color="#fff" />
-            <Text style={{ color: "#fff" }}>Finding you a drive</Text>
+            <Text style={{ color: "#fff", fontSize: 30 }}>
+              Finding you a drive
+            </Text>
+            <ActivityIndicator
+              size="large"
+              color="#fff"
+              style={{marginTop:10}}
+            />
           </View>
         </ImageBackground>
       )}
