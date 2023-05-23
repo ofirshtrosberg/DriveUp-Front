@@ -6,16 +6,17 @@ import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { requestDrives } from "../helperFunctions/accessToBackFunctions";
-// const data = [
-//   { orderNumber: "12345", numberOfPassengers: 3, estimatedProfit: 35 },
-//   { orderNumber: "12346", numberOfPassengers: 4, estimatedProfit: 36 },
-//   { orderNumber: "12347", numberOfPassengers: 5, estimatedProfit: 40 },
-// ];
+
 export default function DriverRoutesOffersPage() {
   const { userToken, login, logout } = useContext(AuthContext);
   const [data, setData] = useState(null);
   const [currLat, setCurrLat] = useState(0);
   const [currLon, setCurrLon] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    fetchSuggestions();
+    setIsLoading(false);
+  }, []);
   const updateCurrentLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -34,19 +35,15 @@ export default function DriverRoutesOffersPage() {
   useEffect(() => {
     console.log(currLon);
   }, [currLon]);
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   const fetchSuggestions = async () => {
     try {
       await updateCurrentLocation();
-      const value = await AsyncStorage.getItem("currentUserEmail");
-      if (value !== null && value !== "") {
-        const response = await requestDrives(
-          userToken,
-          value,
-          currLat,
-          currLon
-        );
-        console.log("fetchSuggestions", response);
-      }
+      const response = await requestDrives(userToken, currLat, currLon);
+      console.log(response);
+      setData(response.solutions);
     } catch (error) {
       console.log(error);
     }
@@ -54,50 +51,64 @@ export default function DriverRoutesOffersPage() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      {/* {data.map((item) => (
-        <View
-          key={item.orderNumber}
-          style={{
-            borderBottomWidth: 1,
-            padding: 10,
-            flexDirection: "row",
-            alignItems: "center",
+      {data === null ? (
+        <Button
+          mode="contained"
+          buttonColor="#111"
+          style={styles.loadBtn}
+          onPress={() => {
+            fetchSuggestions();
           }}
         >
-          <View style={{ flex: 1, justifyContent: "space-between" }}>
-            <Text style={{ marginBottom: 2 }}>
-              Order number:{item.orderNumber}
-            </Text>
-            <Text style={{ marginBottom: 2 }}>
-              Number of passengers:{item.numberOfPassengers}
-            </Text>
-            <Text style={{ marginBottom: 2 }}>
-              Estimated Profit:{item.estimatedProfit}$
-            </Text>
-          </View>
-          <View>
-            <Button
-              mode="contained"
-              buttonColor="#111"
-              style={styles.watchDetailsBtn}
-              onPress={() => {
-                navigation.navigate("DriveDriverMode");
+          Load drive suggestions
+        </Button>
+      ) : (
+        <View>
+          {Object.keys(data).map((key) => (
+            <View
+              key={key}
+              style={{
+                borderBottomWidth: 1,
+                padding: 10,
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              Watch details
-            </Button>
-          </View>
+              <View style={{ flex: 1, justifyContent: "space-between" }}>
+                {/* <Text style={{ marginBottom: 2 }}>Order number:{key}</Text> */}
+                <Text style={{ marginBottom: 2 }}>
+                  Number of passengers:{data[key].totalVolume}
+                </Text>
+                <Text style={{ marginBottom: 2 }}>
+                  Estimated Profit:{data[key].totalValue}$
+                </Text>
+              </View>
+              <View>
+                <Button
+                  mode="contained"
+                  buttonColor="#111"
+                  style={styles.watchDetailsBtn}
+                  onPress={() => {
+                    navigation.navigate("DriveDriverMode", { driveId: key });
+                  }}
+                >
+                  Watch details
+                </Button>
+              </View>
+            </View>
+          ))}
+          <Button
+            mode="contained"
+            buttonColor="#111"
+            style={styles.loadBtn}
+            onPress={() => {
+              fetchSuggestions();
+            }}
+          >
+            Load drive suggestions
+          </Button>
         </View>
-      ))} */}
-      <Button
-        mode="contained"
-        buttonColor="#111"
-        onPress={() => {
-          fetchSuggestions();
-        }}
-      >
-        Load drive suggestions
-      </Button>
+      )}
     </View>
   );
 }
@@ -107,5 +118,9 @@ const styles = StyleSheet.create({
   },
   watchDetailsBtn: {
     width: 150,
+  },
+  loadBtn: {
+    marginTop: 15,
+    marginHorizontal: 90,
   },
 });

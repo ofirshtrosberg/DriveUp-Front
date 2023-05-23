@@ -17,6 +17,8 @@ export default function LoginPage({ navigation }) {
   useEffect(() => {
     AsyncStorage.getItem("userToken").then((value) => {
       if (value !== null && value !== "") {
+        login(value);
+        console.log(userToken)
         navigation.navigate("Main");
       }
     });
