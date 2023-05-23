@@ -21,7 +21,7 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
-    fetch("http://" + IP + ":"+PORT+"/users/", {
+    fetch("http://" + IP + ":" + PORT + "/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,6 +76,7 @@ export default function RegisterAsDriverPage({ navigation }) {
       car_model: carModel,
       car_color: carColor,
       plate_number: plateNumber,
+      image_url: "",
     };
     await addUserLocal(user);
     await printUsersLocal();

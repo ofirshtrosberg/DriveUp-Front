@@ -6,7 +6,11 @@ import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 import { IP, PORT } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { isUserExistLocal, addUserLocal } from "../../AsyncStorageUsers";
+import {
+  isUserExistLocal,
+  addUserLocal,
+  deleteUserLocal,
+} from "../../AsyncStorageUsers";
 import { printUsersLocal } from "../../AsyncStorageUsers";
 export default function LoginPage({ navigation }) {
   const { userToken, login, logout } = useContext(AuthContext);
@@ -14,11 +18,15 @@ export default function LoginPage({ navigation }) {
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  //  deleteUserLocal("v@p.com")
+  // deleteUserLocal("pp@pp.com");
+  //   deleteUserLocal("p@new.com");
+  //   deleteUserLocal("d@new.com");
   useEffect(() => {
     AsyncStorage.getItem("userToken").then((value) => {
       if (value !== null && value !== "") {
         login(value);
-        console.log(userToken)
+        console.log(userToken);
         navigation.navigate("Main");
       }
     });
@@ -46,9 +54,19 @@ export default function LoginPage({ navigation }) {
     }
   };
   const addLocal = async (user) => {
-    console.log(user)
-    await addUserLocal(user);
-    await printUsersLocal();
+    if (!user.hasOwnProperty("car_model")) {
+      const newUser = {
+        ...user,
+        car_model: "",
+        car_color: "",
+        plate_number: "",
+      };
+      await addUserLocal(newUser);
+      await printUsersLocal();
+    } else {
+      await addUserLocal(user);
+      await printUsersLocal();
+    }
   };
   const loginBackend = () => {
     const params = new URLSearchParams();

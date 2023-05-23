@@ -85,6 +85,7 @@ export default function RegisterAsDriverPage({ navigation }) {
       car_model: carModel,
       car_color: carColor,
       plate_number: plateNumber,
+      image_url: "",
     };
     await addUserLocal(user);
     await printUsersLocal();
