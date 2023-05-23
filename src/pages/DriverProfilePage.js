@@ -73,13 +73,6 @@ export default function DriverProfilePage(props) {
       </Text>
       {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
       <View style={styles.review_list}>
-        <ScrollView>
-          <Text>
-            Haim: very good{"\n"}
-            Eti: nice{"\n"}
-            Shlomi:thank you!{"\n"}
-          </Text>
-        </ScrollView>
       </View>
       <View>
         {forOrder === "false" && (

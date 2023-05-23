@@ -7,15 +7,20 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
-
+import {
+  updateUserLocal,
+  printUsersLocal,
+  deleteUserLocal,
+} from "../../AsyncStorageUsers";
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
-  const { email, fullName, phoneNumber, password } = props;
+  const { email, fullName, phoneNumber, password, imageProfile } = props;
   const [orders, setOrders] = useState([
     { id: "1", date: "2023-05-07", time: "10:00am" },
     { id: "2", date: "2023-04-08", time: "2:00pm" },
@@ -27,6 +32,15 @@ export default function PassengerProfilePage(props) {
   ]);
   const handlePressOrder = (order) => {
     navigation.navigate("OrderDetails");
+  };
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const handleImageTap = () => {
+    setIsPopupVisible(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
   };
 
   const renderItem = ({ item }) => (
@@ -47,7 +61,28 @@ export default function PassengerProfilePage(props) {
         <Text></Text>
       </View>
       <View style={{ alignItems: "center" }}>
-        <UserAvatar size={110} name={fullName} style={styles.avatar} />
+        <TouchableOpacity>
+          {imageProfile ? (
+            <Image source={{ uri: imageProfile }} style={styles.avatar} />
+          ) : (
+            <UserAvatar size={110} name={fullName} style={styles.avatar} />
+          )}
+          {/* {imageProfile ? (
+            <Image source={{ uri: imageProfile }} style={styles.profileImage} />
+          ) : (
+            <UserAvatar size={110} name={fullName} style={styles.avatar} />
+          )} */}
+          {/* <UserAvatar size={110} name={fullName} style={styles.avatar} /> */}
+        </TouchableOpacity>
+        <Modal visible={isPopupVisible} onRequestClose={closePopup}>
+          <View style={styles.popupContainer}>
+            <Image
+              // source={require("path/to/profile/image")}
+              style={styles.popupImage}
+            />
+            {/* Add any additional content for the popup */}
+          </View>
+        </Modal>
         <Icon
           name="edit"
           size={20}
@@ -56,6 +91,7 @@ export default function PassengerProfilePage(props) {
             navigation.navigate("EditPassenger", {
               fullName,
               email,
+              imageProfile,
               password,
             });
           }}
@@ -70,6 +106,7 @@ export default function PassengerProfilePage(props) {
           style={styles.email_icon}
         />
         <Text style={styles.passenger_email}>{email} </Text>
+        {/* <Text>{imageProfile}</Text> */}
       </View>
       <View style={styles.data_icons_Container}>
         <Icon
