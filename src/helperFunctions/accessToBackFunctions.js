@@ -1,5 +1,4 @@
 import { IP, PORT } from "@env";
-
 // export const getUsers = () => {
 //   fetch(`http://${IP}:${PORT}/users/`)
 //     .then((response) => response.json())
@@ -139,7 +138,7 @@ export const getUsersSubscriptions = (userToken) => {
       console.error(error);
     });
 };
-export const isUserPremium = (email, userToken) => {
+export const isUserPremium = (email, userToken, navigation) => {
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
       method: "GET",
@@ -148,7 +147,13 @@ export const isUserPremium = (email, userToken) => {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        // if (response.status === 401) {
+        //   console.log("401 error");
+        //   navigation.navigate("Login");
+        // }
+        return response.json();
+      })
       .then((data) => {
         console.log(data);
         for (const user of data.result) {

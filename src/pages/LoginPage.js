@@ -15,7 +15,7 @@ export default function LoginPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   useEffect(() => {
-    AsyncStorage.getItem("currentUserEmail").then((value) => {
+    AsyncStorage.getItem("userToken").then((value) => {
       if (value !== null && value !== "") {
         navigation.navigate("Main");
       }
@@ -56,7 +56,6 @@ export default function LoginPage({ navigation }) {
     params.append("client_id", "");
     params.append("client_secret", "");
 
-    console.log(`http://${IP}:${PORT}/login`);
     fetch(`http://${IP}:${PORT}/login`, {
       method: "POST",
       headers: {
@@ -68,19 +67,17 @@ export default function LoginPage({ navigation }) {
         return response.json();
       })
       .then((data) => {
-        console.log("data", data);
         if (data.detail) {
-          setLoginResponse(data.detail.detail);
+          if (data.detail.detail) setLoginResponse(data.detail.detail);
+          else setLoginResponse("Field missing");
         } else {
           setLoginResponse("");
           handleLoginLocal();
           AsyncStorage.setItem("currentUserEmail", email);
-          // AsyncStorage.setItem("userToken", data.access_token).then(()=>{
           login(data.access_token);
           setEmail("");
           setPassword("");
           navigation.navigate("Main");
-          // });
         }
       })
       .catch((error) => {

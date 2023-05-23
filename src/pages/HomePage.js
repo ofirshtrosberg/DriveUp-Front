@@ -19,7 +19,11 @@ export default function HomePage() {
         <View style={styles.aboutContainer}>
           <Text numberOfLines={10}>
             About Us:{"\n\n"}DriveUp is a mobile app for ride sharing.{"\n"}
-            On our app you can......
+            On our app you can share rides with other passengers. DriveUp is
+            also aspires to reduce the traffic jams by merging similar drives,
+            and reducing the amount of private cars on the roads. By doing so,
+            gas pollution from private cars will be reduced, which we hope can
+            benefit our planet.
           </Text>
         </View>
       </View>
