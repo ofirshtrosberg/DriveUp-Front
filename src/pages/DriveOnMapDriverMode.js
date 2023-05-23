@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
+import { AuthContext } from "../../AuthContext";
 import MapViewDirections from "react-native-maps-directions";
 import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { useRoute } from "@react-navigation/native";
+import { driveDetails } from "../helperFunctions/accessToBackFunctions";
 const orderLocations = [
   {
     userEmail: "d@a.com",
@@ -47,9 +49,13 @@ function calculateLatLonDelta(orderLocations) {
   return { latitudeDelta, longitudeDelta };
 }
 export default function DriveOnMapDriverMode() {
+  const { userToken, login, logout } = useContext(AuthContext);
   const route = useRoute();
   const { driveId } = route.params;
-  console.log("driveid:", driveId)
+  console.log("driveid:", driveId);
+  useEffect(() => {
+    driveDetails(userToken,driveId);
+  });
   const { latitudeDelta, longitudeDelta } =
     calculateLatLonDelta(orderLocations);
   let latitude = 0;

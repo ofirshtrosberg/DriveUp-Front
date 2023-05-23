@@ -46,6 +46,7 @@ export default function LoginPage({ navigation }) {
     }
   };
   const addLocal = async (user) => {
+    console.log(user)
     await addUserLocal(user);
     await printUsersLocal();
   };

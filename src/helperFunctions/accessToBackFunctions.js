@@ -254,12 +254,8 @@ export const getDriveByOrderId = async (orderId, userToken) => {
       });
   });
 };
-export const requestDrives = async (
-  userToken,
-  currLat,
-  currLon
-) => {
-  console.log("token",userToken)
+export const requestDrives = async (userToken, currLat, currLon) => {
+  console.log("token", userToken);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/request-drives`, {
       method: "POST",
@@ -274,7 +270,7 @@ export const requestDrives = async (
       }),
     })
       .then((response) => {
-        console.log(response)
+        console.log(response);
         return response.json();
       })
       .then((data) => {
@@ -313,5 +309,26 @@ export const rejectDrives = (currUserEmail, userToken) => {
         currUserEmail: currUserEmail,
       },
     }),
+  });
+};
+
+export const driveDetails = async (userToken, driveId) => {
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/driver/drive-details/${driveId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("driveDetails", data);
+        resolve(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
   });
 };
