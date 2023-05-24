@@ -1,10 +1,13 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState("");
   const [tokenExpTime, setTokenExpTime] = useState("");
+  useEffect(() => {
+    console.log("userToken now:", userToken);
+  }, [userToken]);
   const storeToken = async (token) => {
     try {
       await AsyncStorage.setItem("userToken", token);

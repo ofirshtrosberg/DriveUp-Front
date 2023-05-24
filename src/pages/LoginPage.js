@@ -22,15 +22,18 @@ export default function LoginPage({ navigation }) {
     AsyncStorage.getItem("userToken").then((value) => {
       if (value !== null && value !== "") {
         login(value);
-        console.log(userToken);
         navigation.navigate("Main");
       }
     });
   }, []);
+  useEffect(() => {
+    console.log(userToken);
+  }, [userToken]);
 
   const handleLoginLocal = async () => {
     const isUserExist = await isUserExistLocal(email);
     console.log(isUserExist);
+    // console.log(",handleLoginLocal email", userToken);
     if (!isUserExist) {
       fetch("http://" + IP + ":" + PORT + "/users/" + email, {
         method: "GET",
@@ -39,13 +42,17 @@ export default function LoginPage({ navigation }) {
           "Content-Type": "application/json",
         },
       })
-        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
         .then((data) => {
           const user = data.result;
+          console.log("fetched user", user);
           addLocal(user);
         })
         .catch((error) => {
-          console.error(error);
+          console.error("handleLoginLocal", error);
         });
     }
   };
@@ -64,6 +71,7 @@ export default function LoginPage({ navigation }) {
       await printUsersLocal();
     }
   };
+
   const loginBackend = () => {
     const params = new URLSearchParams();
     params.append("grant_type", "");
@@ -89,9 +97,9 @@ export default function LoginPage({ navigation }) {
           else setLoginResponse("Field missing");
         } else {
           setLoginResponse("");
-          handleLoginLocal();
           AsyncStorage.setItem("currentUserEmail", email);
           login(data.access_token);
+          handleLoginLocal();
           setEmail("");
           setPassword("");
           navigation.navigate("Main");
