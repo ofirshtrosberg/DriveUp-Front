@@ -18,16 +18,30 @@ import { IP, PORT } from "@env";
 //   });
 // };
 
-// export const getUserByEmail = (email) => {
-//   fetch(`http://${IP}:${PORT}/users/${email}`)
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log(data);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// };
+export const getUserByEmail = async (email, userToken) => {
+  console.log("getUserByEmail", email);
+  console.log("getUserByEmail", userToken);
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/users/${email}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log("data.result", data.result)
+        resolve(data.result);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
+};
 
 // export const updateUser = (
 //   email,

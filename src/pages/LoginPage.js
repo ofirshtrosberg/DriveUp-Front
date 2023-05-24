@@ -18,10 +18,6 @@ export default function LoginPage({ navigation }) {
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //  deleteUserLocal("v@p.com")
-  // deleteUserLocal("pp@pp.com");
-  //   deleteUserLocal("p@new.com");
-  //   deleteUserLocal("d@new.com");
   useEffect(() => {
     AsyncStorage.getItem("userToken").then((value) => {
       if (value !== null && value !== "") {

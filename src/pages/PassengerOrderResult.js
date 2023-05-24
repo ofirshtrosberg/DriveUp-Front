@@ -14,7 +14,7 @@ export default function PassengerOrderResult() {
   const route = useRoute();
   const { orderId } = route.params;
   const { userToken, login, logout } = useContext(AuthContext);
-  const [driveId, setDriveId] = useState(null);
+  const [driveId, setDriveId] = useState("ggdgdfgrehdhdh");
   const checkDrive = async () => {
     try {
       const response = await getDriveByOrderId(orderId, userToken);
@@ -44,7 +44,7 @@ export default function PassengerOrderResult() {
   return (
     <View style={styles.container}>
       {driveId !== null ? (
-        <DriveMapPassengerMode />
+        <DriveMapPassengerMode driveId={driveId} />
       ) : (
         <ImageBackground
           source={require("../assets/backgroundDriveup.png")}
