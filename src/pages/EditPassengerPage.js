@@ -17,7 +17,8 @@ import colors from "../config/colors.js";
 import { IP, PORT } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
-import { BottomSheet } from "react-native-elements";
+import { BottomSheet } from "@rneui/themed";
+
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
   },
   user_icon: { marginLeft: 10 },
   bottomSheet: {
-    backgroundColor: "rgba(92, 162, 176, 0.6)",
+    backgroundColor: "#B5B6D8",
     height: 320,
     // justifyContent: "space-around",
     marginTop: 355,
@@ -381,8 +382,7 @@ const styles = StyleSheet.create({
   },
   bottomSheetsButton: {
     margin: 10,
-    backgroundColor: "grey",
-    fontSize: 50,
+    backgroundColor: "#7F7EB4",
     borderRadius: 20,
   },
   bottomSheetsText: {
@@ -402,6 +402,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   backdropStyle: {
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
