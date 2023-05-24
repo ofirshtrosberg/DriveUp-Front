@@ -27,7 +27,7 @@ export default function DriverRoutesOffersPage() {
     // let lat = location.coords.latitude;
     // setCurrLat(lat);
     // setCurrLon(lon);
-    console.log("hjvbhj")
+    console.log("hjvbhj");
     setCurrLat(32.0880503);
     setCurrLon(34.7148435);
   };
@@ -42,9 +42,9 @@ export default function DriverRoutesOffersPage() {
   }, [data]);
   const fetchSuggestions = async () => {
     try {
-      console.log("jfjf")
+      console.log("jfjf");
       await updateCurrentLocation();
-      console.log("@@@@@")
+      console.log("@@@@@");
       const response = await requestDrives(userToken, currLat, currLon);
       console.log(response);
       setData(response.solutions);
