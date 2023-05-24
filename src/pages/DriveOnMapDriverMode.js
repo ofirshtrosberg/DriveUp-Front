@@ -55,7 +55,7 @@ export default function DriveOnMapDriverMode() {
   console.log("driveid:", driveId);
   useEffect(() => {
     driveDetails(userToken,driveId);
-  });
+  },[]);
   const { latitudeDelta, longitudeDelta } =
     calculateLatLonDelta(orderLocations);
   let latitude = 0;

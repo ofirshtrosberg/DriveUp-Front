@@ -256,6 +256,9 @@ export const getDriveByOrderId = async (orderId, userToken) => {
 };
 export const requestDrives = async (userToken, currLat, currLon) => {
   console.log("token", userToken);
+  console.log("lt", currLat);
+  console.log("ln", currLon);
+  console.log(`http://${IP}:${PORT}/driver/request-drives`);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/request-drives`, {
       method: "POST",
@@ -270,7 +273,7 @@ export const requestDrives = async (userToken, currLat, currLon) => {
       }),
     })
       .then((response) => {
-        console.log(response);
+        console.log("hfghgh", response);
         return response.json();
       })
       .then((data) => {
