@@ -4,7 +4,11 @@ import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { TextInput, Button } from "react-native-paper";
-import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
+import {
+  updateUserLocal,
+  printUsersLocal,
+  deleteUserLocal,
+} from "../../AsyncStorageUsers";
 import {
   validatePassword,
   validateFullName,
@@ -15,6 +19,8 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { BottomSheet } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -22,13 +28,16 @@ export default function EditProfilePage({ navigation, route }) {
     });
   }, [navigation]);
   const { userToken, login, logout } = useContext(AuthContext);
-  const { fullName, email } = route.params;
+  const { fullName, email, imageProfile } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   // const [editedPassword, setEditedPassword] = useState(password);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [image, setImage] = useState(null);
+  const [newImageProfile, setNewImageProfile] = useState(imageProfile);
+  // const [imageUrl, setImageUrl] = useState(null);
+  // const [savedImageUri, setSavedImageUri] = useState(null);
+
   const handleUpdate = (email, editedName) => {
     console.log(userToken);
     setErrorMessage("");
@@ -64,17 +73,22 @@ export default function EditProfilePage({ navigation, route }) {
     const updatedUser = {
       email: email,
       full_name: editedName,
+      image_url: newImageProfile,
       // password: editedPassword,
     };
     await updateUserLocal(updatedUser);
-    setSuccessMessage("Update successful!");
+    // setSuccessMessage("Update successful!");
     printUsersLocal();
+
     console.log("User update successfully!");
     navigation.goBack();
   };
   const handleNameChange = (text) => {
     setEditedName(text);
   };
+  // const handleImageChange = (image) => {
+  //   setImageUrl(image);
+  // };
 
   // const handlePasswordChange = (text) => {
   //   setEditedPassword(text);
@@ -85,13 +99,61 @@ export default function EditProfilePage({ navigation, route }) {
     setIsBottomSheetVisible(false);
   };
 
-  // const handleImageChange = (image) => {
-  //   setImage(image);
-  // };
+  const getUserByEmail = async (email) => {
+    const url = "http://" + IP + ":" + PORT + "/users/" + email;
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+      const data = await response.json();
+      return data.result;
+    } catch (error) {
+      console.error("Error:", error.message);
+      return null;
+    }
+  };
+  const getImageById = async (imageId) => {
+    try {
+      const response = await fetch("http://" + IP + ":" + PORT + imageId);
+      // if (!response.ok) {
+      //   throw new Error("Image not found");
+      // }
 
-  async function takePhoto() {
+      console.log("Image saved:", response);
+      // Set the saved image URI in state to display it
+    } catch (error) {
+      console.log("Error fetching and saving image:", error);
+    }
+  };
+
+  async function getUserAndImageByEmail(email) {
+    try {
+      const user = await getUserByEmail(email);
+      console.log("jh" + user.imageUrl);
+
+      if (user && user.imageUrl) {
+        const imageBlob = await getImageById(user.imageUrl);
+        console.log("h" + imageBlob);
+        // const blobId = imageBlob._data.blobId;
+        // handleImageChange(blobId);
+      } else {
+        console.log("User not found or no image associated");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  }
+
+  const takePhoto = async () => {
     handleCloseBottomSheet();
-    let newImage = await ImagePicker.launchCameraAsync({
+    const newImage = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
@@ -99,40 +161,77 @@ export default function EditProfilePage({ navigation, route }) {
     });
 
     if (!newImage.canceled) {
-      if (newImage.assets && newImage.assets.length > 0) {
-        setImage(newImage.assets[0].uri);
-      } else {
-        setImage(newImage.uri);
-      }
+      uploadImage(newImage.assets[0]);
+      setNewImageProfile(newImage.assets[0].uri);
     }
-  }
+  };
 
-  async function pickImage() {
+  const pickImage = async () => {
     handleCloseBottomSheet();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permission denied!");
+      return;
+    }
 
-    let newImage = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const newImage = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!newImage.canceled) {
-      if (newImage.assets && newImage.assets.length > 0) {
-        setImage(newImage.assets[0].uri);
-      } else {
-        setImage(newImage.uri);
-      }
+      uploadImage(newImage.assets[0]);
+      setNewImageProfile(newImage.assets[0].uri);
+      // console.log("dddddddd", newImage);
     }
-  }
+  };
 
+  const uploadImage = async (imageData) => {
+    const formData = new FormData();
+    formData.append("image", {
+      uri: imageData.uri,
+      name: "image.jpg",
+      type: "image/jpg",
+    });
+    try {
+      const response = await fetch(
+        "http://" + IP + ":" + PORT + "/images/upload",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.ok) {
+        console.log("Image uploaded successfully! Response:");
+        printUsersLocal();
+      } else {
+        console.log("Failed to upload image. Response:");
+      }
+    } catch (error) {
+      console.log("Error occurred during image upload:", error);
+    }
+  };
+
+  const deleteImage = () => {
+    handleCloseBottomSheet();
+    setNewImageProfile(null);
+  };
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
-            {image ? (
-              <Image source={{ uri: image }} style={styles.profileImage} />
+            {newImageProfile ? (
+              <Image
+                source={{ uri: newImageProfile }}
+                style={styles.profileImage}
+              />
             ) : (
               <UserAvatar
                 size={110}
@@ -156,6 +255,9 @@ export default function EditProfilePage({ navigation, route }) {
         </Button>
         <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
           <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
+        </Button>
+        <Button onPress={() => deleteImage()} style={styles.bottomSheetsButton}>
+          <Text style={styles.bottomSheetsText}>Delete Image</Text>
         </Button>
         <Button
           onPress={() => handleCloseBottomSheet(true)}
@@ -197,6 +299,7 @@ export default function EditProfilePage({ navigation, route }) {
               setSuccessMessage("");
               setErrorMessage("");
               handleUpdate(email, editedName);
+              // getUserAndImageByEmail(email);
             }
           }}
         >
