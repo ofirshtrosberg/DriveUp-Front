@@ -14,8 +14,9 @@ import {
   validateCarColor,
   validatePlateNumber,
 } from "../helperFunctions/validationFunctions.js";
-import { BottomSheet } from "react-native-elements";
+import { BottomSheet } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function EditDriverPage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -134,8 +135,22 @@ export default function EditDriverPage({ navigation, route }) {
     });
 
     if (!newImage.canceled) {
-      uploadImage(newImage.assets[0]);
-      setNewImageProfile(newImage.assets[0].uri);
+      const imageUri = newImage.assets[0].uri; // Access the selected image URI
+      const { width, height } = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [
+          {
+            crop: getCircularCrop(
+              newImage.assets[0].width,
+              newImage.assets[0].height
+            ),
+          },
+        ],
+        { format: "png" }
+      );
+
+      uploadImage({ uri: imageUri, width, height });
+      setNewImageProfile(imageUri);
     }
   };
 
@@ -150,8 +165,9 @@ export default function EditDriverPage({ navigation, route }) {
     const newImage = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      // aspect: [4, 3],
       quality: 1,
+      cropperCircleOverlay: true,
     });
 
     if (!newImage.canceled) {
@@ -188,6 +204,19 @@ export default function EditDriverPage({ navigation, route }) {
     } catch (error) {
       console.log("Error occurred during image upload:", error);
     }
+  };
+
+  const getCircularCrop = (width, height) => {
+    const size = Math.min(width, height);
+    const xOffset = (width - size) / 2;
+    const yOffset = (height - size) / 2;
+
+    return {
+      originX: xOffset,
+      originY: yOffset,
+      width: size,
+      height: size,
+    };
   };
 
   const deleteImage = () => {
@@ -367,7 +396,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
   bottomSheet: {
-    backgroundColor: "rgba(92, 162, 176, 0.6)",
+    backgroundColor: "#B5B6D8",
     height: 320,
     // justifyContent: "space-around",
     marginTop: 355,
@@ -375,7 +404,7 @@ const styles = StyleSheet.create({
   },
   bottomSheetsButton: {
     margin: 10,
-    backgroundColor: "grey",
+    backgroundColor: "#7F7EB4",
     fontSize: 50,
     borderRadius: 20,
   },
@@ -396,7 +425,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   backdropStyle: {
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   profileImage: {
     width: 130,

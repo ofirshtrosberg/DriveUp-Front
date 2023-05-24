@@ -43,11 +43,18 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#BCBEFA",
+    marginTop: 450,
+    width: 400,
+    height: 50,
+    borderRadius: 5,
+    bottom: 50,
   },
   text: {
-    fontSize: 35,
-    lineHeight: 65,
+    fontSize: 20,
+    // lineHeight: 50,
+    marginTop: 100,
     textAlign: "center",
     fontWeight: "bold",
+    color: "#191774",
   },
 });
