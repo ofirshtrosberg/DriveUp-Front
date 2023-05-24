@@ -24,7 +24,8 @@ export default function EditDriverPage({ navigation, route }) {
     });
   }, [navigation]);
   const { userToken, login, logout } = useContext(AuthContext);
-  const { fullName, email, carModel, plateNumber, carColor } = route.params;
+  const { fullName, email, carModel, plateNumber, carColor, imageProfile } =
+    route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   const [editedCarModel, setEditedCarModel] = useState(carModel);
@@ -33,7 +34,7 @@ export default function EditDriverPage({ navigation, route }) {
   const [editedCarColor, setEditedCarColor] = useState(carColor);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [image, setImage] = useState(null);
+  const [newImageProfile, setNewImageProfile] = useState(imageProfile);
   const handleUpdate = (
     email,
     editedName,
@@ -61,7 +62,7 @@ export default function EditDriverPage({ navigation, route }) {
       }),
     })
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         if (!response.ok) {
           throw new Error("Update failed");
         }
@@ -88,6 +89,7 @@ export default function EditDriverPage({ navigation, route }) {
       car_model: editedCarModel,
       car_color: carColor,
       plate_number: editedPlateNumber,
+      image_url: newImageProfile,
       // password: editedPassword,
     };
     await updateUserLocal(updatedUser);
@@ -122,10 +124,9 @@ export default function EditDriverPage({ navigation, route }) {
   const handleCloseBottomSheet = () => {
     setIsBottomSheetVisible(false);
   };
-
-  async function takePhoto() {
+  const takePhoto = async () => {
     handleCloseBottomSheet();
-    let newImage = await ImagePicker.launchCameraAsync({
+    const newImage = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
@@ -133,39 +134,75 @@ export default function EditDriverPage({ navigation, route }) {
     });
 
     if (!newImage.canceled) {
-      if (newImage.assets && newImage.assets.length > 0) {
-        setImage(newImage.assets[0].uri);
-      } else {
-        setImage(newImage.uri);
-      }
+      uploadImage(newImage.assets[0]);
+      setNewImageProfile(newImage.assets[0].uri);
     }
-  }
+  };
 
-  async function pickImage() {
+  const pickImage = async () => {
     handleCloseBottomSheet();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permission denied!");
+      return;
+    }
 
-    let newImage = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const newImage = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!newImage.canceled) {
-      if (newImage.assets && newImage.assets.length > 0) {
-        setImage(newImage.assets[0].uri);
-      } else {
-        setImage(newImage.uri);
-      }
+      uploadImage(newImage.assets[0]);
+      setNewImageProfile(newImage.assets[0].uri);
+      // console.log("dddddddd", newImage);
     }
-  }
+  };
+  const uploadImage = async (imageData) => {
+    const formData = new FormData();
+    formData.append("image", {
+      uri: imageData.uri,
+      name: "image.jpg",
+      type: "image/jpg",
+    });
+    try {
+      const response = await fetch(
+        "http://" + IP + ":" + PORT + "/images/upload",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.ok) {
+        console.log("Image uploaded successfully! Response:", response);
+        printUsersLocal();
+      } else {
+        console.log("Failed to upload image. Response:", response);
+      }
+    } catch (error) {
+      console.log("Error occurred during image upload:", error);
+    }
+  };
 
+  const deleteImage = () => {
+    handleCloseBottomSheet();
+    setNewImageProfile(null);
+  };
   return (
     <ScrollView>
       <View style={styles.containerTop}>
         <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
-          {image ? (
-            <Image source={{ uri: image }} style={styles.profileImage} />
+          {newImageProfile ? (
+            <Image
+              source={{ uri: newImageProfile }}
+              style={styles.profileImage}
+            />
           ) : (
             <UserAvatar
               size={110}
@@ -188,6 +225,9 @@ export default function EditDriverPage({ navigation, route }) {
         </Button>
         <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
           <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
+        </Button>
+        <Button onPress={() => deleteImage()} style={styles.bottomSheetsButton}>
+          <Text style={styles.bottomSheetsText}>Delete Image</Text>
         </Button>
         <Button
           onPress={() => handleCloseBottomSheet(true)}

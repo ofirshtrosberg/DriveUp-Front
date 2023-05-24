@@ -6,7 +6,7 @@ export default function OrderDetailsPage() {
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Order Taxi",
+      headerTitle: "Order Details",
       headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);

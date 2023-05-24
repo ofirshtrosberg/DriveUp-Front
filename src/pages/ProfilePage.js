@@ -22,6 +22,7 @@ export default function ProfilePage({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [carColor, setCarColor] = useState("");
+  const [imageProfile, setImageProfile] = useState("");
 
   const [user, setUser] = useState("");
 
@@ -38,6 +39,7 @@ export default function ProfilePage({ navigation }) {
         setPhoneNumber(fetchedUser.phone_number);
         setPassword(fetchedUser.password);
         setCarColor(fetchedUser.car_color);
+        setImageProfile(fetchedUser.image_url);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -59,6 +61,7 @@ export default function ProfilePage({ navigation }) {
           fullName={fullName}
           phoneNumber={phoneNumber}
           password={password}
+          imageProfile={imageProfile}
         />
       ) : (
         <DriverProfile
@@ -70,6 +73,7 @@ export default function ProfilePage({ navigation }) {
           password={password}
           carColor={carColor}
           forOrder="false"
+          imageProfile={imageProfile}
         />
       )}
     </View>
