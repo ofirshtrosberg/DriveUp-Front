@@ -3,6 +3,7 @@ import { Text, View, Image, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import HeaderLogout from "../components/HeaderLogout";
 import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native-paper";
 export default function HomePage() {
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
@@ -25,6 +26,13 @@ export default function HomePage() {
             gas pollution from private cars will be reduced, which we hope can
             benefit our planet.
           </Text>
+          <Button
+            onPress={() => {
+              navigation.navigate("Opening");
+            }}
+          >
+            Move to open
+          </Button>
         </View>
       </View>
     </View>

@@ -2,12 +2,11 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 // import Icon from "react-native-vector-icons/Feather";
 
 import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
@@ -20,6 +19,7 @@ export default function DriverProfilePage(props) {
     password,
     carColor,
     forOrder,
+    imageProfile,
   } = props;
 
   return (
@@ -28,7 +28,13 @@ export default function DriverProfilePage(props) {
         <Text></Text>
       </View>
       <View style={{ alignItems: "center" }}>
-        <UserAvatar size={110} name={fullName} style={styles.avatar} />
+        <TouchableOpacity>
+          {imageProfile ? (
+            <Image source={{ uri: imageProfile }} style={styles.avatar} />
+          ) : (
+            <UserAvatar size={110} name={fullName} style={styles.avatar} />
+          )}
+        </TouchableOpacity>
         {forOrder === "false" && (
           <Icon
             name="edit"
@@ -43,6 +49,7 @@ export default function DriverProfilePage(props) {
                 plateNumber,
                 password,
                 carColor,
+                imageProfile,
               });
             }}
           ></Icon>
@@ -72,8 +79,7 @@ export default function DriverProfilePage(props) {
         My car : {carModel} , Car Number: {plateNumber}
       </Text>
       {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
-      <View style={styles.review_list}>
-      </View>
+      {/* <View style={styles.review_list}></View> */}
       <View>
         {forOrder === "false" && (
           <Button

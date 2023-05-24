@@ -218,15 +218,27 @@ export default function EditProfilePage({ navigation, route }) {
     }
   };
 
+  const deleteImage = () => {
+    handleCloseBottomSheet();
+    setNewImageProfile(null);
+  };
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
-            <Image
-              source={{ uri: newImageProfile }}
-              style={styles.profileImage}
-            />
+            {newImageProfile ? (
+              <Image
+                source={{ uri: newImageProfile }}
+                style={styles.profileImage}
+              />
+            ) : (
+              <UserAvatar
+                size={110}
+                name={editedName}
+                style={styles.profileImage}
+              />
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -243,6 +255,9 @@ export default function EditProfilePage({ navigation, route }) {
         </Button>
         <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
           <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
+        </Button>
+        <Button onPress={() => deleteImage()} style={styles.bottomSheetsButton}>
+          <Text style={styles.bottomSheetsText}>Delete Image</Text>
         </Button>
         <Button
           onPress={() => handleCloseBottomSheet(true)}
@@ -284,7 +299,7 @@ export default function EditProfilePage({ navigation, route }) {
               setSuccessMessage("");
               setErrorMessage("");
               handleUpdate(email, editedName);
-              getUserAndImageByEmail(email);
+              // getUserAndImageByEmail(email);
             }
           }}
         >

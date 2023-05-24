@@ -13,11 +13,7 @@ import UserAvatar from "react-native-user-avatar";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
-import {
-  updateUserLocal,
-  printUsersLocal,
-  deleteUserLocal,
-} from "../../AsyncStorageUsers";
+
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
@@ -67,12 +63,6 @@ export default function PassengerProfilePage(props) {
           ) : (
             <UserAvatar size={110} name={fullName} style={styles.avatar} />
           )}
-          {/* {imageProfile ? (
-            <Image source={{ uri: imageProfile }} style={styles.profileImage} />
-          ) : (
-            <UserAvatar size={110} name={fullName} style={styles.avatar} />
-          )} */}
-          {/* <UserAvatar size={110} name={fullName} style={styles.avatar} /> */}
         </TouchableOpacity>
         <Modal visible={isPopupVisible} onRequestClose={closePopup}>
           <View style={styles.popupContainer}>
@@ -201,7 +191,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "90%",
     backgroundColor: "#5F84A2",
-    height: 100,
+    height: 140,
     marginTop: 5,
     marginBottom: 10,
   },
