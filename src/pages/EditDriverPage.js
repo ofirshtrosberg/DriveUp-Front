@@ -206,22 +206,29 @@ export default function EditDriverPage({ navigation, route }) {
     }
   };
 
-  const getCircularCrop = (width, height) => {
-    const size = Math.min(width, height);
-    const xOffset = (width - size) / 2;
-    const yOffset = (height - size) / 2;
-
-    return {
-      originX: xOffset,
-      originY: yOffset,
-      width: size,
-      height: size,
-    };
-  };
-
-  const deleteImage = () => {
+  const deleteProfileImage = () => {
     handleCloseBottomSheet();
-    setNewImageProfile(null);
+    fetch("http://" + IP + ":" + PORT + "/images/", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error("Update failed");
+        }
+        console.log(response);
+        setSuccessMessage("Image delete successfully!");
+      })
+      .then((data) => {
+        setNewImageProfile("");
+      })
+      .catch((error) => {
+        setErrorMessage("Update failed!");
+      });
   };
   return (
     <ScrollView>
@@ -255,7 +262,10 @@ export default function EditDriverPage({ navigation, route }) {
         <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
           <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
         </Button>
-        <Button onPress={() => deleteImage()} style={styles.bottomSheetsButton}>
+        <Button
+          onPress={() => deleteProfileImage()}
+          style={styles.bottomSheetsButton}
+        >
           <Text style={styles.bottomSheetsText}>Delete Image</Text>
         </Button>
         <Button
