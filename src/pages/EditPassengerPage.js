@@ -100,58 +100,6 @@ export default function EditProfilePage({ navigation, route }) {
     setIsBottomSheetVisible(false);
   };
 
-  const getUserByEmail = async (email) => {
-    const url = "http://" + IP + ":" + PORT + "/users/" + email;
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-      const data = await response.json();
-      return data.result;
-    } catch (error) {
-      console.error("Error:", error.message);
-      return null;
-    }
-  };
-  const getImageById = async (imageId) => {
-    try {
-      const response = await fetch("http://" + IP + ":" + PORT + imageId);
-      // if (!response.ok) {
-      //   throw new Error("Image not found");
-      // }
-
-      console.log("Image saved:", response);
-      // Set the saved image URI in state to display it
-    } catch (error) {
-      console.log("Error fetching and saving image:", error);
-    }
-  };
-
-  async function getUserAndImageByEmail(email) {
-    try {
-      const user = await getUserByEmail(email);
-      console.log("jh" + user.imageUrl);
-
-      if (user && user.imageUrl) {
-        const imageBlob = await getImageById(user.imageUrl);
-        console.log("h" + imageBlob);
-        // const blobId = imageBlob._data.blobId;
-        // handleImageChange(blobId);
-      } else {
-        console.log("User not found or no image associated");
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  }
-
   const takePhoto = async () => {
     handleCloseBottomSheet();
     const newImage = await ImagePicker.launchCameraAsync({
@@ -218,11 +166,31 @@ export default function EditProfilePage({ navigation, route }) {
       console.log("Error occurred during image upload:", error);
     }
   };
-
-  const deleteImage = () => {
+  const deleteProfileImage = () => {
     handleCloseBottomSheet();
-    setNewImageProfile(null);
+    fetch("http://" + IP + ":" + PORT + "/images/", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error("Update failed");
+        }
+        console.log(response);
+        setSuccessMessage("Image delete successfully!")
+      })
+      .then((data) => {
+        setNewImageProfile("");
+      })
+      .catch((error) => {
+        setErrorMessage("Update failed!");
+      });
   };
+
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
@@ -257,7 +225,10 @@ export default function EditProfilePage({ navigation, route }) {
         <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
           <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
         </Button>
-        <Button onPress={() => deleteImage()} style={styles.bottomSheetsButton}>
+        <Button
+          onPress={() => deleteProfileImage()}
+          style={styles.bottomSheetsButton}
+        >
           <Text style={styles.bottomSheetsText}>Delete Image</Text>
         </Button>
         <Button
@@ -300,7 +271,6 @@ export default function EditProfilePage({ navigation, route }) {
               setSuccessMessage("");
               setErrorMessage("");
               handleUpdate(email, editedName);
-              // getUserAndImageByEmail(email);
             }
           }}
         >
