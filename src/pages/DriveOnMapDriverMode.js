@@ -144,7 +144,7 @@ export default function DriveOnMapDriverMode() {
           {orderLocations.map((location, index) => {
             if (location.isStartAddress && !location.isDriver) {
               return (
-                <View style={styles.passengerImgPrice}>
+                <View key={index} style={styles.passengerImgPrice}>
                   <Image
                     style={styles.img}
                     source={require("../assets/1761892.png")}

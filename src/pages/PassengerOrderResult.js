@@ -14,7 +14,7 @@ export default function PassengerOrderResult() {
   const route = useRoute();
   const { orderId } = route.params;
   const { userToken, login, logout } = useContext(AuthContext);
-  const [driveId, setDriveId] = useState("ggdgdfgrehdhdh");
+  const [driveId, setDriveId] = useState("");
   const checkDrive = async () => {
     try {
       const response = await getDriveByOrderId(orderId, userToken);
@@ -29,7 +29,7 @@ export default function PassengerOrderResult() {
     let interval;
 
     const checkDriveWithInterval = async () => {
-      if (driveId === null) {
+      if (driveId === null||driveId==="") {
         await checkDrive();
       } else {
         clearInterval(interval);

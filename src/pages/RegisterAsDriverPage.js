@@ -127,24 +127,6 @@ export default function RegisterAsDriverPage({ navigation }) {
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1, marginBottom: 3 }}>
-        {/* <View style={{ flex: 1 }}></View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#fff",
-            width: "35%",
-            display: "flex",
-            alignSelf: "center",
-          }}
-        >
-          <Button
-            mode="contained"
-            buttonColor="#111"
-            style={{ width: 120, alignSelf: "center", marginTop: 20 }}
-          >
-            Add Image
-          </Button>
-        </View> */}
       </View>
       <View style={{ flex: 4.3 }}>
         <TextInput

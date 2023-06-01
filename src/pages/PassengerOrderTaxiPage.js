@@ -253,7 +253,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             // }
           }}
         >
-          Invite now
+          Order now
         </Button>
 
         <Button

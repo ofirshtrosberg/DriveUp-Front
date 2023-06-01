@@ -5,6 +5,7 @@ import { AuthContext } from "../../AuthContext";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Slider from "@react-native-community/slider";
 import { requestDrives } from "../helperFunctions/accessToBackFunctions";
 
 export default function DriverRoutesOffersPage() {
@@ -13,6 +14,14 @@ export default function DriverRoutesOffersPage() {
   const [currLat, setCurrLat] = useState(0);
   const [currLon, setCurrLon] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [pickUpDistance, setPickUpDistance] = useState(0);
+  const [rideDistance, setRideDistance] = useState(0);
+  const handleChangePickUpDistance = (value) => {
+    setPickUpDistance(value);
+  };
+  const handleChangeRideDistance = (value) => {
+    setRideDistance(value);
+  };
   useEffect(() => {
     fetchSuggestions();
   }, []);
@@ -111,6 +120,38 @@ export default function DriverRoutesOffersPage() {
           >
             Load drive suggestions
           </Button>
+          <Slider
+            style={{
+              width: 200,
+              height: 40,
+              marginTop: 30,
+              alignSelf: "center",
+            }}
+            minimumValue={0}
+            maximumValue={100}
+            value={pickUpDistance}
+            onValueChange={handleChangePickUpDistance}
+            minimumTrackTintColor="#6CFDFA"
+            maximumTrackTintColor="#000000"
+            thumbTintColor="#40FCFB"
+          />
+          <Text>PickUpDistance: {pickUpDistance}</Text>
+          <Slider
+            style={{
+              width: 200,
+              height: 40,
+              marginTop: 30,
+              alignSelf: "center",
+            }}
+            minimumValue={0}
+            maximumValue={100}
+            value={rideDistance}
+            onValueChange={handleChangeRideDistance}
+            minimumTrackTintColor="#6CFDFA"
+            maximumTrackTintColor="#000000"
+            thumbTintColor="#40FCFB"
+          />
+          <Text>RideDistance: {rideDistance}</Text>
         </View>
       )}
     </View>

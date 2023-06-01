@@ -33,7 +33,7 @@ export const getUserByEmail = async (email, userToken) => {
         return response.json();
       })
       .then((data) => {
-        console.log("data.result", data.result)
+        console.log("data.result", data.result);
         resolve(data.result);
       })
       .catch((error) => {
@@ -217,7 +217,6 @@ export const passengerOrderDrive = async (
       },
       body: JSON.stringify({
         parameter: {
-          currentUserEmail: currentUserEmail,
           startLat: parseFloat(startLat),
           startLon: parseFloat(startLon),
           destinationLat: parseFloat(destinationLat),

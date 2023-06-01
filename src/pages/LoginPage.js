@@ -80,7 +80,7 @@ export default function LoginPage({ navigation }) {
     params.append("scope", "");
     params.append("client_id", "");
     params.append("client_secret", "");
-
+    console.log(`http://${IP}:${PORT}/login`);
     fetch(`http://${IP}:${PORT}/login`, {
       method: "POST",
       headers: {
