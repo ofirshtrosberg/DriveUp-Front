@@ -30,43 +30,6 @@ export const getUserByEmail = async (email, userToken, navigation) => {
   });
 };
 
-// export const addUser = (
-//   email,
-//   password,
-//   phone,
-//   fullName,
-//   carModel,
-//   carColor,
-//   plateNumber,
-// ) => {
-//   fetch(`http://${IP}:${PORT}/users/`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       parameter: {
-//         email: email,
-//         password: password,
-//         phone_number: phone,
-//         full_name: fullName,
-//         car_model: carModel,
-//         car_color: carColor,
-//         plate_number: plateNumber,
-//       },
-//     }),
-//   })
-//     .then((response) => {
-//       return response.json();
-//     })
-//     .then((data) => {
-//       console.log("User added:", data);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// };
-
 //  401 is checked
 export const createUserSubscription = (
   email,
@@ -111,28 +74,6 @@ export const createUserSubscription = (
       console.log(error);
     });
 };
-// export const getUsersSubscriptions = (userToken, navigation) => {
-//   fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
-//     method: "GET",
-//     headers: {
-//       Authorization: `Bearer 221122121221`,
-//       "Content-Type": "application/json",
-//     },
-//   })
-//     .then((response) => {
-//       if (response.status === 401) {
-//         navigation.navigate("Login");
-//         throw new Error("your token expired or invalid please login");
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       console.log(data);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// };
 
 //401 is checked
 export const isUserPremium = (email, userToken, navigation) => {
