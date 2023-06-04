@@ -52,7 +52,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`
     )
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => {
         if (data.status === "OK") {
           setCurrAddress(data.results[0].formatted_address);
@@ -75,7 +77,8 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         responseDest.results[0].geometry.location.lat,
         responseDest.results[0].geometry.location.lng,
         numberOfPassengers,
-        userToken
+        userToken,
+        navigation
       );
       setErrorMessage("");
       setShowErrorMessage(false);

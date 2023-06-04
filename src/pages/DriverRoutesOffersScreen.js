@@ -16,6 +16,7 @@ export default function DriverRoutesOffersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [pickUpDistance, setPickUpDistance] = useState(0);
   const [rideDistance, setRideDistance] = useState(0);
+  const navigation = useNavigation();
   const handleChangePickUpDistance = (value) => {
     setPickUpDistance(value);
   };
@@ -54,14 +55,18 @@ export default function DriverRoutesOffersPage() {
       console.log("jfjf");
       await updateCurrentLocation();
       console.log("@@@@@");
-      const response = await requestDrives(userToken, currLat, currLon);
+      const response = await requestDrives(
+        userToken,
+        currLat,
+        currLon,
+        navigation
+      );
       console.log(response);
       setData(response.solutions);
     } catch (error) {
       console.log(error);
     }
   };
-  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       {data === null ? (

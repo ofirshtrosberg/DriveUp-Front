@@ -23,7 +23,7 @@ export default function EditProfilePage({ navigation, route }) {
       headerTitle: "Edit",
     });
   }, [navigation]);
- const { userToken, login, logout } = useContext(AuthContext);
+  const { userToken, login, logout } = useContext(AuthContext);
   const { fullName, email } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
@@ -49,11 +49,14 @@ export default function EditProfilePage({ navigation, route }) {
       }),
     })
       .then((response) => {
-        console.log(response);
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         if (!response.ok) {
           throw new Error("Update failed");
         }
-        response.json();
+        return response.json();
       })
       .then((data) => {
         handleUpdateLocal(email, editedName);

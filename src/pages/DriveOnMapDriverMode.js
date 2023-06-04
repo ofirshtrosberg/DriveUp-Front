@@ -14,6 +14,7 @@ import MapViewDirections from "react-native-maps-directions";
 import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { driveDetails } from "../helperFunctions/accessToBackFunctions";
 function calculateLatLonDelta(orderLocations) {
   const latitudes = orderLocations.map((location) => location.address.latitude);
@@ -34,6 +35,7 @@ function calculateLatLonDelta(orderLocations) {
   return { latitudeDelta, longitudeDelta };
 }
 export default function DriveOnMapDriverMode() {
+  const navigation = useNavigation();
   const { userToken, login, logout } = useContext(AuthContext);
   const route = useRoute();
   const { driveId } = route.params;
@@ -42,7 +44,7 @@ export default function DriveOnMapDriverMode() {
   const [totalPrice, setTotalPrice] = useState(0);
   const getDriveDetails = async () => {
     try {
-      const response = await driveDetails(userToken, driveId);
+      const response = await driveDetails(userToken, driveId, navigation);
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);
       console.log(orderLocations);

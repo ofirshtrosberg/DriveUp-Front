@@ -62,11 +62,14 @@ export default function EditDriverPage({ navigation, route }) {
       }),
     })
       .then((response) => {
-        console.log(response);
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         if (!response.ok) {
           throw new Error("Update failed");
         }
-        response.json();
+        return response.json();
       })
       .then((data) => {
         handleUpdateLocal(
@@ -179,6 +182,10 @@ export default function EditDriverPage({ navigation, route }) {
           },
         }
       );
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
       if (response.ok) {
         console.log("Image uploaded successfully! Response:", response);
         printUsersLocal();

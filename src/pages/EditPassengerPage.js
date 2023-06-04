@@ -56,11 +56,14 @@ export default function EditProfilePage({ navigation, route }) {
       }),
     })
       .then((response) => {
-        console.log(response);
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         if (!response.ok) {
           throw new Error("Update failed");
         }
-        response.json();
+        return response.json();
       })
       .then((data) => {
         handleUpdateLocal(email, editedName);
@@ -109,6 +112,11 @@ export default function EditProfilePage({ navigation, route }) {
           "Content-Type": "application/json",
         },
       });
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
+
       if (!response.ok) {
         throw new Error("Request failed");
       }
@@ -125,7 +133,10 @@ export default function EditProfilePage({ navigation, route }) {
       // if (!response.ok) {
       //   throw new Error("Image not found");
       // }
-
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
       console.log("Image saved:", response);
       // Set the saved image URI in state to display it
     } catch (error) {
@@ -207,6 +218,10 @@ export default function EditProfilePage({ navigation, route }) {
           },
         }
       );
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
       if (response.ok) {
         console.log("Image uploaded successfully! Response:");
         printUsersLocal();

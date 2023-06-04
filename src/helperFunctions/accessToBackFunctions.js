@@ -1,24 +1,7 @@
 import { IP, PORT } from "@env";
-// export const getUsers = () => {
-//   fetch(`http://${IP}:${PORT}/users/`)
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log(data);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// };
 
-// export const deleteUser = (email) => {
-//   fetch(`http://${IP}:${PORT}/users/${email}`, {
-//     method: "DELETE",
-//   }).catch((error) => {
-//     console.error(error);
-//   });
-// };
-
-export const getUserByEmail = async (email, userToken) => {
+// !!!! check 401
+export const getUserByEmail = async (email, userToken, navigation) => {
   console.log("getUserByEmail", email);
   console.log("getUserByEmail", userToken);
   return new Promise((resolve, reject) => {
@@ -30,6 +13,10 @@ export const getUserByEmail = async (email, userToken) => {
       },
     })
       .then((response) => {
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         return response.json();
       })
       .then((data) => {
@@ -43,20 +30,25 @@ export const getUserByEmail = async (email, userToken) => {
   });
 };
 
-// export const updateUser = (
+// export const addUser = (
 //   email,
+//   password,
+//   phone,
 //   fullName,
 //   carModel,
 //   carColor,
-//   plateNumber
+//   plateNumber,
 // ) => {
-//   fetch(`http://${IP}:${PORT}/users/${email}`, {
-//     method: "PUT",
+//   fetch(`http://${IP}:${PORT}/users/`, {
+//     method: "POST",
 //     headers: {
 //       "Content-Type": "application/json",
 //     },
 //     body: JSON.stringify({
 //       parameter: {
+//         email: email,
+//         password: password,
+//         phone_number: phone,
 //         full_name: fullName,
 //         car_model: carModel,
 //         car_color: carColor,
@@ -64,49 +56,18 @@ export const getUserByEmail = async (email, userToken) => {
 //       },
 //     }),
 //   })
-//     .then((response) => response.json())
+//     .then((response) => {
+//       return response.json();
+//     })
 //     .then((data) => {
-//       console.log("Data updated:", data);
+//       console.log("User added:", data);
 //     })
 //     .catch((error) => {
 //       console.error(error);
 //     });
 // };
 
-export const addUser = (
-  email,
-  password,
-  phone,
-  fullName,
-  carModel,
-  carColor,
-  plateNumber
-) => {
-  fetch(`http://${IP}:${PORT}/users/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      parameter: {
-        email: email,
-        password: password,
-        phone_number: phone,
-        full_name: fullName,
-        car_model: carModel,
-        car_color: carColor,
-        plate_number: plateNumber,
-      },
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("User added:", data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+//  401 is checked
 export const createUserSubscription = (
   email,
   id,
@@ -114,7 +75,8 @@ export const createUserSubscription = (
   cvv,
   expMonth,
   expYear,
-  userToken
+  userToken,
+  navigation
 ) => {
   const date = new Date(expYear, expMonth, 1);
   fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
@@ -134,24 +96,45 @@ export const createUserSubscription = (
         expiration_date: date,
       },
     }),
-  });
-};
-export const getUsersSubscriptions = (userToken) => {
-  fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-      "Content-Type": "application/json",
-    },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
+      return response.json();
+    })
     .then((data) => {
       console.log(data);
     })
     .catch((error) => {
-      console.error(error);
+      console.log(error);
     });
 };
+// export const getUsersSubscriptions = (userToken, navigation) => {
+//   fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
+//     method: "GET",
+//     headers: {
+//       Authorization: `Bearer 221122121221`,
+//       "Content-Type": "application/json",
+//     },
+//   })
+//     .then((response) => {
+//       if (response.status === 401) {
+//         navigation.navigate("Login");
+//         throw new Error("your token expired or invalid please login");
+//       }
+//       return response.json();
+//     })
+//     .then((data) => {
+//       console.log(data);
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// };
+
+//401 is checked
 export const isUserPremium = (email, userToken, navigation) => {
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
@@ -162,10 +145,10 @@ export const isUserPremium = (email, userToken, navigation) => {
       },
     })
       .then((response) => {
-        // if (response.status === 401) {
-        //   console.log("401 error");
-        //   navigation.navigate("Login");
-        // }
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         return response.json();
       })
       .then((data) => {
@@ -180,24 +163,35 @@ export const isUserPremium = (email, userToken, navigation) => {
         resolve(false);
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
         reject(error);
       });
   });
 };
 
-export const deleteSubscription = (email, userToken) => {
+// 401 is checked
+export const deleteSubscription = (email, userToken, navigation) => {
   fetch(`http://${IP}:${PORT}/user_subscription_maps/${email}/Premium`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${userToken}`,
       "Content-Type": "application/json",
     },
-  }).catch((error) => {
-    console.error(error);
-  });
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
+      return response.json();
+    })
+    .then((data) => {})
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
+//  401 is checked
 export const passengerOrderDrive = async (
   currentUserEmail,
   startLat,
@@ -205,7 +199,8 @@ export const passengerOrderDrive = async (
   destinationLat,
   destinationLon,
   numberOfPassengers,
-  userToken
+  userToken,
+  navigation
 ) => {
   console.log(startLat, startLon, destinationLat, destinationLon);
   return new Promise((resolve, reject) => {
@@ -225,7 +220,13 @@ export const passengerOrderDrive = async (
         },
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.orderId) {
           console.log("passengerOrderDrive", data.orderId);
@@ -240,8 +241,8 @@ export const passengerOrderDrive = async (
       });
   });
 };
-
-export const getDriveByOrderId = async (orderId, userToken) => {
+//  401 is checked
+export const getDriveByOrderId = async (orderId, userToken, navigation) => {
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`, {
       method: "GET",
@@ -251,7 +252,10 @@ export const getDriveByOrderId = async (orderId, userToken) => {
       },
     })
       .then((response) => {
-        console.log(response);
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         return response.json();
       })
       .then((data) => {
@@ -262,12 +266,18 @@ export const getDriveByOrderId = async (orderId, userToken) => {
         }
       })
       .catch((error) => {
-        console.error("getDriveByOrderId", error);
+        console.error(error);
         reject(error);
       });
   });
 };
-export const requestDrives = async (userToken, currLat, currLon) => {
+// 401 is checked 
+export const requestDrives = async (
+  userToken,
+  currLat,
+  currLon,
+  navigation
+) => {
   console.log("token", userToken);
   console.log("lt", currLat);
   console.log("ln", currLon);
@@ -286,7 +296,10 @@ export const requestDrives = async (userToken, currLat, currLon) => {
       }),
     })
       .then((response) => {
-        console.log("hfghgh", response);
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         return response.json();
       })
       .then((data) => {
@@ -297,8 +310,8 @@ export const requestDrives = async (userToken, currLat, currLon) => {
       });
   });
 };
-
-export const acceptDrive = (orderId, currUserEmail, userToken) => {
+// !!!! need to check 401
+export const acceptDrive = (orderId, currUserEmail, userToken, navigation) => {
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -311,9 +324,21 @@ export const acceptDrive = (orderId, currUserEmail, userToken) => {
         email: currUserEmail,
       },
     }),
-  });
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
+      return response.json();
+    })
+    .then((data) => {})
+    .catch((error) => {
+      console.log(error);
+    });
 };
-export const rejectDrives = (currUserEmail, userToken) => {
+// !!!! need to check 401
+export const rejectDrives = (currUserEmail, userToken, navigation) => {
   fetch(`http://${IP}:${PORT}/driver/reject-drives`, {
     method: "POST",
     headers: {
@@ -325,10 +350,21 @@ export const rejectDrives = (currUserEmail, userToken) => {
         currUserEmail: currUserEmail,
       },
     }),
-  });
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
+      return response.json();
+    })
+    .then((data) => {})
+    .catch((error) => {
+      console.log(error);
+    });
 };
-
-export const driveDetails = async (userToken, driveId) => {
+// !!!! need to check 401
+export const driveDetails = async (userToken, driveId, navigation) => {
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/drive-details/${driveId}`, {
       method: "GET",
@@ -337,7 +373,13 @@ export const driveDetails = async (userToken, driveId) => {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log("driveDetails", data);
         resolve(data);

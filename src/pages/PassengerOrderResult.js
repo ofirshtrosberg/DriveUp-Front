@@ -10,14 +10,16 @@ import { AuthContext } from "../../AuthContext";
 import { getDriveByOrderId } from "../helperFunctions/accessToBackFunctions";
 import DriveMapPassengerMode from "../components/DriveMapPassengerMode";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 export default function PassengerOrderResult() {
+    const navigation = useNavigation();
   const route = useRoute();
   const { orderId } = route.params;
   const { userToken, login, logout } = useContext(AuthContext);
   const [driveId, setDriveId] = useState("");
   const checkDrive = async () => {
     try {
-      const response = await getDriveByOrderId(orderId, userToken);
+      const response = await getDriveByOrderId(orderId, userToken, navigation);
       console.log("drive id", response);
       setDriveId(response);
     } catch (error) {

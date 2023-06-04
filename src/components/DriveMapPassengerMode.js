@@ -13,6 +13,7 @@ import { AuthContext } from "../../AuthContext";
 import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import Modal from "react-native-modal";
+import { useNavigation } from "@react-navigation/native";
 import DriverProfilePage from "../pages/DriverProfilePage";
 import {
   driveDetails,
@@ -37,6 +38,7 @@ function calculateLatLonDelta(orderLocations) {
   return { latitudeDelta, longitudeDelta };
 }
 export default function DriveMapPassengerMode({ driveId }) {
+  const navigation = useNavigation();
   const { userToken, login, logout } = useContext(AuthContext);
   const [isModalVisibleProfile, setIsModalVisibleProfile] = useState(false);
   const [orderLocations, setOrderLocations] = useState(null);
@@ -51,11 +53,12 @@ export default function DriveMapPassengerMode({ driveId }) {
   const [driverImageUrl, setDriverImageUrl] = useState("");
   const getDriveDetails = async () => {
     try {
-      const response = await driveDetails(userToken, driveId);
+      const response = await driveDetails(userToken, driveId, navigation);
       setDriverEmail(response.orderLocations[0].userEmail);
       const driver = await getUserByEmail(
         response.orderLocations[0].userEmail,
-        userToken
+        userToken,
+        navigation
       );
       setDriverCarColor(driver.carColor);
       setDriverFullName(driver.fullName);
