@@ -21,7 +21,7 @@ export default function RegisterAsDriverPage({ navigation }) {
     carColor,
     plateNumber
   ) => {
-    fetch("http://" + IP + ":"+PORT+"/users/", {
+    fetch("http://" + IP + ":" + PORT + "/users/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export default function RegisterAsDriverPage({ navigation }) {
       car_model: carModel,
       car_color: carColor,
       plate_number: plateNumber,
-      image_url:"",
+      image_url: "",
     };
     await addUserLocal(user);
     await printUsersLocal();
@@ -104,26 +104,7 @@ export default function RegisterAsDriverPage({ navigation }) {
       source={require("../assets/register.jpg")}
       style={{ flex: 1 }}
     >
-      <View style={{ flex: 1, marginBottom: 3 }}>
-        {/* <View style={{ flex: 1 }}></View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#fff",
-            width: "35%",
-            display: "flex",
-            alignSelf: "center",
-          }}
-        >
-          <Button
-            mode="contained"
-            buttonColor="#111"
-            style={{ width: 120, alignSelf: "center", marginTop: 20 }}
-          >
-            Add Image
-          </Button>
-        </View> */}
-      </View>
+      <View style={{ flex: 1, marginBottom: 3 }}></View>
       <View style={{ flex: 3 }}>
         <TextInput
           mode="outlined"

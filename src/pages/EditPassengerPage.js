@@ -57,11 +57,14 @@ export default function EditProfilePage({ navigation, route }) {
       }),
     })
       .then((response) => {
-        console.log(response);
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
         if (!response.ok) {
           throw new Error("Update failed");
         }
-        response.json();
+        return response.json();
       })
       .then((data) => {
         handleUpdateLocal(email, editedName);
@@ -156,6 +159,10 @@ export default function EditProfilePage({ navigation, route }) {
           },
         }
       );
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        throw new Error("your token expired or invalid please login");
+      }
       if (response.ok) {
         console.log("Image uploaded successfully! Response:");
         printUsersLocal();
@@ -181,7 +188,7 @@ export default function EditProfilePage({ navigation, route }) {
           throw new Error("Update failed");
         }
         console.log(response);
-        setSuccessMessage("Image delete successfully!")
+        setSuccessMessage("Image delete successfully!");
       })
       .then((data) => {
         setNewImageProfile("");

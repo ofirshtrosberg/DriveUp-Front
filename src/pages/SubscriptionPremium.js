@@ -14,7 +14,7 @@ export default function SubscriptionPremium() {
      try {
        const value = await AsyncStorage.getItem("currentUserEmail");
        if (value !== null && value !== "") {
-         deleteSubscription(value, userToken);
+         deleteSubscription(value, userToken, navigation);
          navigation.goBack();
        }
      } catch (error) {

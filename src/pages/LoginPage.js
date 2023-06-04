@@ -6,7 +6,11 @@ import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 import { IP, PORT } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { isUserExistLocal, addUserLocal } from "../../AsyncStorageUsers";
+import {
+  isUserExistLocal,
+  addUserLocal,
+  deleteUserLocal,
+} from "../../AsyncStorageUsers";
 import { printUsersLocal } from "../../AsyncStorageUsers";
 export default function LoginPage({ navigation }) {
   const { userToken, login, logout } = useContext(AuthContext);
@@ -17,14 +21,19 @@ export default function LoginPage({ navigation }) {
   useEffect(() => {
     AsyncStorage.getItem("userToken").then((value) => {
       if (value !== null && value !== "") {
+        login(value);
         navigation.navigate("Main");
       }
     });
   }, []);
+  useEffect(() => {
+    console.log(userToken);
+  }, [userToken]);
 
   const handleLoginLocal = async () => {
     const isUserExist = await isUserExistLocal(email);
     console.log(isUserExist);
+    // console.log(",handleLoginLocal email", userToken);
     if (!isUserExist) {
       fetch("http://" + IP + ":" + PORT + "/users/" + email, {
         method: "GET",
@@ -33,20 +42,36 @@ export default function LoginPage({ navigation }) {
           "Content-Type": "application/json",
         },
       })
-        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
         .then((data) => {
           const user = data.result;
+          console.log("fetched user", user);
           addLocal(user);
         })
         .catch((error) => {
-          console.error(error);
+          console.error("handleLoginLocal", error);
         });
     }
   };
   const addLocal = async (user) => {
-    await addUserLocal(user);
-    await printUsersLocal();
+    if (!user.hasOwnProperty("car_model")) {
+      const newUser = {
+        ...user,
+        car_model: "",
+        car_color: "",
+        plate_number: "",
+      };
+      await addUserLocal(newUser);
+      await printUsersLocal();
+    } else {
+      await addUserLocal(user);
+      await printUsersLocal();
+    }
   };
+
   const loginBackend = () => {
     const params = new URLSearchParams();
     params.append("grant_type", "");
@@ -55,7 +80,7 @@ export default function LoginPage({ navigation }) {
     params.append("scope", "");
     params.append("client_id", "");
     params.append("client_secret", "");
-
+    console.log(`http://${IP}:${PORT}/login`);
     fetch(`http://${IP}:${PORT}/login`, {
       method: "POST",
       headers: {
@@ -72,9 +97,9 @@ export default function LoginPage({ navigation }) {
           else setLoginResponse("Field missing");
         } else {
           setLoginResponse("");
-          handleLoginLocal();
           AsyncStorage.setItem("currentUserEmail", email);
           login(data.access_token);
+          handleLoginLocal();
           setEmail("");
           setPassword("");
           navigation.navigate("Main");

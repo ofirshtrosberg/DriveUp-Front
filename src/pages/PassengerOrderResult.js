@@ -1,13 +1,69 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
-import HeaderLogout from "../components/HeaderLogout";
-import { useNavigation } from "@react-navigation/native";
-import { GOOGLE_MAPS_API_KEY } from "@env";
+import React, { useEffect, useState, useContext } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  ImageBackground,
+} from "react-native";
+import { AuthContext } from "../../AuthContext";
+import { getDriveByOrderId } from "../helperFunctions/accessToBackFunctions";
 import DriveMapPassengerMode from "../components/DriveMapPassengerMode";
+import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 export default function PassengerOrderResult() {
+    const navigation = useNavigation();
+  const route = useRoute();
+  const { orderId } = route.params;
+  const { userToken, login, logout } = useContext(AuthContext);
+  const [driveId, setDriveId] = useState("");
+  const checkDrive = async () => {
+    try {
+      const response = await getDriveByOrderId(orderId, userToken, navigation);
+      console.log("drive id", response);
+      setDriveId(response);
+    } catch (error) {
+      console.log("checkDrive ", error);
+    }
+  };
+
+  useEffect(() => {
+    let interval;
+
+    const checkDriveWithInterval = async () => {
+      if (driveId === null||driveId==="") {
+        await checkDrive();
+      } else {
+        clearInterval(interval);
+      }
+    };
+
+    interval = setInterval(checkDriveWithInterval, 5000);
+    checkDriveWithInterval();
+
+    return () => clearInterval(interval);
+  }, [driveId]);
   return (
     <View style={styles.container}>
-      <DriveMapPassengerMode />
+      {driveId !== null ? (
+        <DriveMapPassengerMode driveId={driveId} />
+      ) : (
+        <ImageBackground
+          source={require("../assets/backgroundDriveup.png")}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View>
+            <Text style={{ color: "#fff", fontSize: 30 }}>
+              Finding you a drive
+            </Text>
+            <ActivityIndicator
+              size="large"
+              color="#fff"
+              style={{marginTop:10}}
+            />
+          </View>
+        </ImageBackground>
+      )}
     </View>
   );
 }

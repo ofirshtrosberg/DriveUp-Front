@@ -25,7 +25,6 @@ export default function SubscriptionPage({ navigation }) {
           setIsPremium(result);
         })
         .catch((error) => {
-          console.error(error);
           setIsPremium(false);
         });
     }

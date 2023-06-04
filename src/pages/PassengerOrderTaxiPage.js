@@ -52,7 +52,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`
     )
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => {
         if (data.status === "OK") {
           setCurrAddress(data.results[0].formatted_address);
@@ -68,18 +70,23 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     try {
       const responseStart = await Geocoder.from(startLocation);
       const responseDest = await Geocoder.from(destinationLocation);
-      const response = passengerOrderDrive(
+      const response = await passengerOrderDrive(
         currentUserEmail,
         responseStart.results[0].geometry.location.lat,
         responseStart.results[0].geometry.location.lng,
         responseDest.results[0].geometry.location.lat,
         responseDest.results[0].geometry.location.lng,
         numberOfPassengers,
-        userToken
+        userToken,
+        navigation
       );
-      navigation.navigate("OrderResult");
+      setErrorMessage("");
+      setShowErrorMessage(false);
+      navigation.navigate("OrderResult", { orderId: response });
     } catch (error) {
       console.log(error);
+      setErrorMessage("Order Failed");
+      setShowErrorMessage(true);
     }
   };
   const checkIfLocationsAreFine = async (
@@ -111,7 +118,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log(destinationLon);
   }, [destinationLon]);
   useEffect(() => {
-    console.log("start change");
+    console.log("start change", startLat, startLon);
   }, [startAddress]);
   useEffect(() => {
     Geocoder.init(GOOGLE_MAPS_API_KEY);
@@ -249,7 +256,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             // }
           }}
         >
-          Invite now
+          Order now
         </Button>
 
         <Button
