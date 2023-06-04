@@ -103,69 +103,6 @@ export default function EditProfilePage({ navigation, route }) {
     setIsBottomSheetVisible(false);
   };
 
-// <<<<<<< HEAD
-//   const getUserByEmail = async (email) => {
-//     const url = "http://" + IP + ":" + PORT + "/users/" + email;
-//     try {
-//       const response = await fetch(url, {
-//         method: "GET",
-//         headers: {
-//           Authorization: `Bearer ${userToken}`,
-//           "Content-Type": "application/json",
-//         },
-//       });
-//       if (response.status === 401) {
-//         navigation.navigate("Login");
-//         throw new Error("your token expired or invalid please login");
-//       }
-
-//       if (!response.ok) {
-//         throw new Error("Request failed");
-//       }
-//       const data = await response.json();
-//       return data.result;
-//     } catch (error) {
-//       console.error("Error:", error.message);
-//       return null;
-//     }
-//   };
-//   const getImageById = async (imageId) => {
-//     try {
-//       const response = await fetch("http://" + IP + ":" + PORT + imageId);
-//       // if (!response.ok) {
-//       //   throw new Error("Image not found");
-//       // }
-//       if (response.status === 401) {
-//         navigation.navigate("Login");
-//         throw new Error("your token expired or invalid please login");
-//       }
-//       console.log("Image saved:", response);
-//       // Set the saved image URI in state to display it
-//     } catch (error) {
-//       console.log("Error fetching and saving image:", error);
-//     }
-//   };
-
-//   async function getUserAndImageByEmail(email) {
-//     try {
-//       const user = await getUserByEmail(email);
-//       console.log("jh" + user.imageUrl);
-
-//       if (user && user.imageUrl) {
-//         const imageBlob = await getImageById(user.imageUrl);
-//         console.log("h" + imageBlob);
-//         // const blobId = imageBlob._data.blobId;
-//         // handleImageChange(blobId);
-//       } else {
-//         console.log("User not found or no image associated");
-//       }
-//     } catch (error) {
-//       console.error("Error:", error.message);
-//     }
-//   }
-
-// =======
-// >>>>>>> master
   const takePhoto = async () => {
     handleCloseBottomSheet();
     const newImage = await ImagePicker.launchCameraAsync({
@@ -251,7 +188,7 @@ export default function EditProfilePage({ navigation, route }) {
           throw new Error("Update failed");
         }
         console.log(response);
-        setSuccessMessage("Image delete successfully!")
+        setSuccessMessage("Image delete successfully!");
       })
       .then((data) => {
         setNewImageProfile("");
