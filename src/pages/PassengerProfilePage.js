@@ -1,5 +1,5 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   FlatList,
   Text,
@@ -15,21 +15,79 @@ import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
 import { IP, PORT } from "@env";
 import { AuthContext } from "../../AuthContext";
+import { format } from "date-fns";
 
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
   const { userToken, login, logout } = useContext(AuthContext);
-  const handleButtonPress = async () => {
+  const [orders, setOrders] = useState([]);
+  const myLat = 32.0853;
+  const myLon = 34.781769;
+  const destLat = 32.794044;
+  const destLon = 34.989571;
+  const num = 2;
+
+  useEffect(() => {
+    getOrderHistory();
+  }, []);
+
+  const passengerOrderDrive = async (
+    currentUserEmail,
+    startLat,
+    startLon,
+    destinationLat,
+    destinationLon,
+    numberOfPassengers,
+    userToken
+  ) => {
     try {
-      const orderHistory = await getOrderHistory();
-      // Do something with the retrieved order history data
-      console.log("blblbl",orderHistory);
+      const response = await fetch(
+        "http://" + IP + ":" + PORT + "/passenger/order-drive",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            parameter: {
+              currentUserEmail: currentUserEmail,
+              startLat: parseFloat(startLat),
+              startLon: parseFloat(startLon),
+              destinationLat: parseFloat(destinationLat),
+              destinationLon: parseFloat(destinationLon),
+              numberOfPassengers: parseInt(numberOfPassengers),
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to add order!");
+      }
+      const data = await response.json();
+      if (data.orderId) {
+        console.log(data.orderId);
+        getOrderHistory();
+        return data.orderId;
+      } else {
+        console.error("Failed to add order:", data);
+      }
     } catch (error) {
-      // Handle any errors that occurred during the fetch
       console.error(error);
     }
   };
+
+  // const ButtonPress = async () => {
+  //   try {
+  //     const orderDrive = passengerOrderDrive();
+  //     // Do something with the retrieved order history data
+  //     console.log("ttytyt", orderDrive);
+  //   } catch (error) {
+  //     // Handle any errors that occurred during the fetch
+  //     console.error(error);
+  //   }
+  // };
 
   const getOrderHistory = async (page = 1, size = 20) => {
     try {
@@ -50,27 +108,18 @@ export default function PassengerProfilePage(props) {
           },
         }
       );
-
       if (!response.ok) {
         throw new Error("Failed to retrieve order history");
       }
-
       const orderHistory = await response.json();
+      setOrders(orderHistory);
+      console.log("orders: ", orders);
       return orderHistory;
     } catch (error) {
       console.error(error);
     }
   };
 
-  // const [orders, setOrders] = useState([
-  //   { id: "1", date: "2023-05-07", time: "10:00am" },
-  //   { id: "2", date: "2023-04-08", time: "2:00pm" },
-  //   { id: "4", date: "2023-03-12", time: "11:00am" },
-  //   { id: "5", date: "2023-03-12", time: "11:00am" },
-  //   { id: "6", date: "2023-03-12", time: "11:00am" },
-  //   { id: "7", date: "2023-03-12", time: "11:00am" },
-  //   { id: "8", date: "2023-03-12", time: "12:00am" },
-  // ]);
   const handlePressOrder = (order) => {
     navigation.navigate("OrderDetails");
   };
@@ -84,18 +133,24 @@ export default function PassengerProfilePage(props) {
     setIsPopupVisible(false);
   };
 
-  // const renderItem = ({ item }) => (
-  //   <View style={styles.listContainer}>
-  //     <View style={styles.info}>
-  //       <Text style={styles.date}>
-  //         {item.date} - {item.time}
-  //       </Text>
-  //     </View>
-  //     <TouchableOpacity style={styles.Button} onPress={handlePressOrder}>
-  //       <Text style={styles.textButton}>WATCH ORDER DETAILS</Text>
-  //     </TouchableOpacity>
-  //   </View>
-  // );
+  const renderItem = ({ item }) => {
+    const formattedTime = format(new Date(item.time), "HH:mm");
+    const formattedDate = format(new Date(item.time), "dd-MM-yyyy");
+
+    return (
+      <View style={styles.listContainer}>
+        <View style={styles.info}>
+          <Text style={styles.date}>
+            {formattedDate} - {formattedTime}
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.Button} onPress={handlePressOrder}>
+          <Text style={styles.textButton}>WATCH ORDER DETAILS</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.color}>
@@ -155,17 +210,32 @@ export default function PassengerProfilePage(props) {
       <Text style={styles.orders_title}>History Orders </Text>
       <Button
         onPress={() => {
-          handleButtonPress();
+          passengerOrderDrive(
+            email,
+            myLat,
+            myLon,
+            destLat,
+            destLon,
+            num,
+            userToken
+          );
+        }}
+      >
+        order drive !!
+      </Button>
+      {/* <Button
+        onPress={() => {
+          getOrderHistory();
         }}
       >
         the irders
-      </Button>
+      </Button> */}
       <View style={styles.orders_list}>
-        {/* <FlatList
+        <FlatList
           data={orders}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-        /> */}
+          keyExtractor={(item) => item.orderId.toString()}
+        />
       </View>
       {/* <Text>hello</Text>
           <Button
