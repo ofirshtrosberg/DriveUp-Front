@@ -40,32 +40,39 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     setIsModalVisible(!isModalVisible);
   };
   const updateCurrentLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      console.log("Permission to access location was denied");
-      return;
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      console.log(status);
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      let lon = location.coords.longitude;
+      let lat = location.coords.latitude;
+      // Reverse geocoding
+      fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.status === "OK") {
+            setCurrAddress(data.results[0].formatted_address);
+            console.log(currAddress);
+          } else {
+            console.log("Geocoding failed:", data.status);
+          }
+        })
+        .catch((error) => {
+          console.log("Geocoding error:", error);
+        });
+    } catch (error) {
+      console.log("Error in updateCurrentLocation:", error);
     }
-    let location = await Location.getCurrentPositionAsync({});
-    let lon = location.coords.longitude;
-    let lat = location.coords.latitude;
-    // Reverse geocoding
-    fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        if (data.status === "OK") {
-          setCurrAddress(data.results[0].formatted_address);
-        } else {
-          console.log("Geocoding failed:", data.status);
-        }
-      })
-      .catch((error) => {
-        console.log("Geocoding error:", error);
-      });
   };
+
   const handleAddOrder = async (startLocation, destinationLocation) => {
     try {
       const responseStart = await Geocoder.from(startLocation);
@@ -118,11 +125,14 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log(destinationLon);
   }, [destinationLon]);
   useEffect(() => {
+    console.log(currAddress);
+  }, [currAddress]);
+  useEffect(() => {
     console.log("start change", startLat, startLon);
   }, [startAddress]);
   useEffect(() => {
-    Geocoder.init(GOOGLE_MAPS_API_KEY);
     updateCurrentLocation();
+    Geocoder.init(GOOGLE_MAPS_API_KEY);
   }, []);
   const handleDestinationAddressChange = (text) => {
     setDestinationAddress(text);

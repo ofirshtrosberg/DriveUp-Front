@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Text, View, StyleSheet } from "react-native";
+import Modal from "react-native-modal";
+import { Checkbox } from "react-native-paper";
 import { Button } from "react-native-paper";
 import { AuthContext } from "../../AuthContext";
 import * as Location from "expo-location";
@@ -17,6 +19,7 @@ export default function DriverRoutesOffersPage() {
   const [pickUpDistance, setPickUpDistance] = useState(0);
   const [rideDistance, setRideDistance] = useState(0);
   const navigation = useNavigation();
+  const [useLimits, setUseLimits] = useState(false);
   const handleChangePickUpDistance = (value) => {
     setPickUpDistance(value);
   };
@@ -67,6 +70,9 @@ export default function DriverRoutesOffersPage() {
       console.log(error);
     }
   };
+  const toggleModal = () => {
+    setUseLimits(!useLimits);
+  };
   return (
     <View style={styles.container}>
       {data === null ? (
@@ -115,6 +121,19 @@ export default function DriverRoutesOffersPage() {
               </View>
             </View>
           ))}
+
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent:"center" }}>
+            <Checkbox.Android
+              status={useLimits ? "checked" : "unchecked"}
+              onPress={() => setUseLimits(!useLimits)}
+            />
+            <Text>Use limits</Text>
+          </View>
+          <Modal isVisible={useLimits} onBackdropPress={toggleModal}>
+            <View style={{ flex: 1, backgroundColor: "#061848" }}>
+              <Text>This is the modal content.</Text>
+            </View>
+          </Modal>
           <Button
             mode="contained"
             buttonColor="#111"
@@ -125,38 +144,6 @@ export default function DriverRoutesOffersPage() {
           >
             Load drive suggestions
           </Button>
-          <Slider
-            style={{
-              width: 200,
-              height: 40,
-              marginTop: 30,
-              alignSelf: "center",
-            }}
-            minimumValue={0}
-            maximumValue={100}
-            value={pickUpDistance}
-            onValueChange={handleChangePickUpDistance}
-            minimumTrackTintColor="#6CFDFA"
-            maximumTrackTintColor="#000000"
-            thumbTintColor="#40FCFB"
-          />
-          <Text>PickUpDistance: {pickUpDistance}</Text>
-          <Slider
-            style={{
-              width: 200,
-              height: 40,
-              marginTop: 30,
-              alignSelf: "center",
-            }}
-            minimumValue={0}
-            maximumValue={100}
-            value={rideDistance}
-            onValueChange={handleChangeRideDistance}
-            minimumTrackTintColor="#6CFDFA"
-            maximumTrackTintColor="#000000"
-            thumbTintColor="#40FCFB"
-          />
-          <Text>RideDistance: {rideDistance}</Text>
         </View>
       )}
     </View>
