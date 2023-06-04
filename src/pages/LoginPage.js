@@ -118,7 +118,7 @@ export default function LoginPage({ navigation }) {
   };
   return (
     <ImageBackground
-      source={require("../assets/backgroundLogin.jpg")}
+      source={require("../assets/loginNew.png")}
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1 }}></View>
@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignSelf: "center",
     fontSize: 18,
+    color: "#fff",
   },
   login_button: {
     width: 100,
@@ -199,6 +200,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
-    color: colors.blue1,
+    color: "#fff",
   },
 });
