@@ -17,7 +17,8 @@ import colors from "../config/colors.js";
 import { IP, PORT } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
-import { BottomSheet } from "react-native-elements";
+import { BottomSheet } from "@rneui/themed";
+
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
@@ -102,66 +103,69 @@ export default function EditProfilePage({ navigation, route }) {
     setIsBottomSheetVisible(false);
   };
 
-  const getUserByEmail = async (email) => {
-    const url = "http://" + IP + ":" + PORT + "/users/" + email;
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status === 401) {
-        navigation.navigate("Login");
-        throw new Error("your token expired or invalid please login");
-      }
+// <<<<<<< HEAD
+//   const getUserByEmail = async (email) => {
+//     const url = "http://" + IP + ":" + PORT + "/users/" + email;
+//     try {
+//       const response = await fetch(url, {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${userToken}`,
+//           "Content-Type": "application/json",
+//         },
+//       });
+//       if (response.status === 401) {
+//         navigation.navigate("Login");
+//         throw new Error("your token expired or invalid please login");
+//       }
 
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-      const data = await response.json();
-      return data.result;
-    } catch (error) {
-      console.error("Error:", error.message);
-      return null;
-    }
-  };
-  const getImageById = async (imageId) => {
-    try {
-      const response = await fetch("http://" + IP + ":" + PORT + imageId);
-      // if (!response.ok) {
-      //   throw new Error("Image not found");
-      // }
-      if (response.status === 401) {
-        navigation.navigate("Login");
-        throw new Error("your token expired or invalid please login");
-      }
-      console.log("Image saved:", response);
-      // Set the saved image URI in state to display it
-    } catch (error) {
-      console.log("Error fetching and saving image:", error);
-    }
-  };
+//       if (!response.ok) {
+//         throw new Error("Request failed");
+//       }
+//       const data = await response.json();
+//       return data.result;
+//     } catch (error) {
+//       console.error("Error:", error.message);
+//       return null;
+//     }
+//   };
+//   const getImageById = async (imageId) => {
+//     try {
+//       const response = await fetch("http://" + IP + ":" + PORT + imageId);
+//       // if (!response.ok) {
+//       //   throw new Error("Image not found");
+//       // }
+//       if (response.status === 401) {
+//         navigation.navigate("Login");
+//         throw new Error("your token expired or invalid please login");
+//       }
+//       console.log("Image saved:", response);
+//       // Set the saved image URI in state to display it
+//     } catch (error) {
+//       console.log("Error fetching and saving image:", error);
+//     }
+//   };
 
-  async function getUserAndImageByEmail(email) {
-    try {
-      const user = await getUserByEmail(email);
-      console.log("jh" + user.imageUrl);
+//   async function getUserAndImageByEmail(email) {
+//     try {
+//       const user = await getUserByEmail(email);
+//       console.log("jh" + user.imageUrl);
 
-      if (user && user.imageUrl) {
-        const imageBlob = await getImageById(user.imageUrl);
-        console.log("h" + imageBlob);
-        // const blobId = imageBlob._data.blobId;
-        // handleImageChange(blobId);
-      } else {
-        console.log("User not found or no image associated");
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  }
+//       if (user && user.imageUrl) {
+//         const imageBlob = await getImageById(user.imageUrl);
+//         console.log("h" + imageBlob);
+//         // const blobId = imageBlob._data.blobId;
+//         // handleImageChange(blobId);
+//       } else {
+//         console.log("User not found or no image associated");
+//       }
+//     } catch (error) {
+//       console.error("Error:", error.message);
+//     }
+//   }
 
+// =======
+// >>>>>>> master
   const takePhoto = async () => {
     handleCloseBottomSheet();
     const newImage = await ImagePicker.launchCameraAsync({
@@ -232,11 +236,31 @@ export default function EditProfilePage({ navigation, route }) {
       console.log("Error occurred during image upload:", error);
     }
   };
-
-  const deleteImage = () => {
+  const deleteProfileImage = () => {
     handleCloseBottomSheet();
-    setNewImageProfile(null);
+    fetch("http://" + IP + ":" + PORT + "/images/", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error("Update failed");
+        }
+        console.log(response);
+        setSuccessMessage("Image delete successfully!")
+      })
+      .then((data) => {
+        setNewImageProfile("");
+      })
+      .catch((error) => {
+        setErrorMessage("Update failed!");
+      });
   };
+
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
@@ -271,7 +295,10 @@ export default function EditProfilePage({ navigation, route }) {
         <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
           <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
         </Button>
-        <Button onPress={() => deleteImage()} style={styles.bottomSheetsButton}>
+        <Button
+          onPress={() => deleteProfileImage()}
+          style={styles.bottomSheetsButton}
+        >
           <Text style={styles.bottomSheetsText}>Delete Image</Text>
         </Button>
         <Button
@@ -314,7 +341,6 @@ export default function EditProfilePage({ navigation, route }) {
               setSuccessMessage("");
               setErrorMessage("");
               handleUpdate(email, editedName);
-              // getUserAndImageByEmail(email);
             }
           }}
         >
@@ -388,7 +414,7 @@ const styles = StyleSheet.create({
   },
   user_icon: { marginLeft: 10 },
   bottomSheet: {
-    backgroundColor: "rgba(92, 162, 176, 0.6)",
+    backgroundColor: "#B5B6D8",
     height: 320,
     // justifyContent: "space-around",
     marginTop: 355,
@@ -396,8 +422,7 @@ const styles = StyleSheet.create({
   },
   bottomSheetsButton: {
     margin: 10,
-    backgroundColor: "grey",
-    fontSize: 50,
+    backgroundColor: "#7F7EB4",
     borderRadius: 20,
   },
   bottomSheetsText: {
@@ -417,6 +442,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   backdropStyle: {
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });

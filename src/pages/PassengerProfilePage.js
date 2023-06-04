@@ -1,5 +1,5 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   FlatList,
   Text,
@@ -10,22 +10,67 @@ import {
   Modal,
 } from "react-native";
 import UserAvatar from "react-native-user-avatar";
-import { ScrollView } from "react-native-gesture-handler";
+// import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
+import { IP, PORT } from "@env";
+import { AuthContext } from "../../AuthContext";
 
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
-  const [orders, setOrders] = useState([
-    { id: "1", date: "2023-05-07", time: "10:00am" },
-    { id: "2", date: "2023-04-08", time: "2:00pm" },
-    { id: "4", date: "2023-03-12", time: "11:00am" },
-    { id: "5", date: "2023-03-12", time: "11:00am" },
-    { id: "6", date: "2023-03-12", time: "11:00am" },
-    { id: "7", date: "2023-03-12", time: "11:00am" },
-    { id: "8", date: "2023-03-12", time: "12:00am" },
-  ]);
+  const { userToken, login, logout } = useContext(AuthContext);
+  const handleButtonPress = async () => {
+    try {
+      const orderHistory = await getOrderHistory();
+      // Do something with the retrieved order history data
+      console.log("blblbl",orderHistory);
+    } catch (error) {
+      // Handle any errors that occurred during the fetch
+      console.error(error);
+    }
+  };
+
+  const getOrderHistory = async (page = 1, size = 20) => {
+    try {
+      const response = await fetch(
+        "http://" +
+          IP +
+          ":" +
+          PORT +
+          "/passenger/order-history/?page=" +
+          page +
+          "&size=" +
+          size,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to retrieve order history");
+      }
+
+      const orderHistory = await response.json();
+      return orderHistory;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const [orders, setOrders] = useState([
+  //   { id: "1", date: "2023-05-07", time: "10:00am" },
+  //   { id: "2", date: "2023-04-08", time: "2:00pm" },
+  //   { id: "4", date: "2023-03-12", time: "11:00am" },
+  //   { id: "5", date: "2023-03-12", time: "11:00am" },
+  //   { id: "6", date: "2023-03-12", time: "11:00am" },
+  //   { id: "7", date: "2023-03-12", time: "11:00am" },
+  //   { id: "8", date: "2023-03-12", time: "12:00am" },
+  // ]);
   const handlePressOrder = (order) => {
     navigation.navigate("OrderDetails");
   };
@@ -39,18 +84,18 @@ export default function PassengerProfilePage(props) {
     setIsPopupVisible(false);
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.listContainer}>
-      <View style={styles.info}>
-        <Text style={styles.date}>
-          {item.date} - {item.time}
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.Button} onPress={handlePressOrder}>
-        <Text style={styles.textButton}>WATCH ORDER DETAILS</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  // const renderItem = ({ item }) => (
+  //   <View style={styles.listContainer}>
+  //     <View style={styles.info}>
+  //       <Text style={styles.date}>
+  //         {item.date} - {item.time}
+  //       </Text>
+  //     </View>
+  //     <TouchableOpacity style={styles.Button} onPress={handlePressOrder}>
+  //       <Text style={styles.textButton}>WATCH ORDER DETAILS</Text>
+  //     </TouchableOpacity>
+  //   </View>
+  // );
   return (
     <View style={styles.container}>
       <View style={styles.color}>
@@ -108,12 +153,19 @@ export default function PassengerProfilePage(props) {
         <Text style={styles.passenger_phone}>{phoneNumber} </Text>
       </View>
       <Text style={styles.orders_title}>History Orders </Text>
+      <Button
+        onPress={() => {
+          handleButtonPress();
+        }}
+      >
+        the irders
+      </Button>
       <View style={styles.orders_list}>
-        <FlatList
+        {/* <FlatList
           data={orders}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-        />
+        /> */}
       </View>
       {/* <Text>hello</Text>
           <Button
