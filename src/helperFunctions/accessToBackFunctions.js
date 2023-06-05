@@ -310,7 +310,7 @@ export const rejectDrives = (currUserEmail, userToken, navigation) => {
 };
 // !!!! need to check 401
 export const driveDetails = async (userToken, driveId, navigation) => {
-  console.log("drive details")
+  console.log("drive details");
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/drive-details/${driveId}`, {
       method: "GET",
