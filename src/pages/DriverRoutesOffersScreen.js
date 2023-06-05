@@ -1,13 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
+import Modal from "react-native-modal";
+import { Checkbox, Provider as PaperProvider } from "react-native-paper";
 import { AuthContext } from "../../AuthContext";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Slider from "@react-native-community/slider";
 import { requestDrives } from "../helperFunctions/accessToBackFunctions";
-
+import theme from "../config/theme";
+import { TextInput, Button } from "react-native-paper";
 export default function DriverRoutesOffersPage() {
   const { userToken, login, logout } = useContext(AuthContext);
   const [data, setData] = useState(null);
@@ -17,14 +25,12 @@ export default function DriverRoutesOffersPage() {
   const [pickUpDistance, setPickUpDistance] = useState(0);
   const [rideDistance, setRideDistance] = useState(0);
   const navigation = useNavigation();
-  const handleChangePickUpDistance = (value) => {
-    setPickUpDistance(value);
-  };
-  const handleChangeRideDistance = (value) => {
-    setRideDistance(value);
-  };
+  const [useLimits, setUseLimits] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [limits, setLimits] = useState({});
   useEffect(() => {
-    fetchSuggestions();
+    // fetchSuggestions();
+    console.log("hfhfhfh");
   }, []);
   const updateCurrentLocation = async () => {
     // let { status } = await Location.requestForegroundPermissionsAsync();
@@ -38,8 +44,8 @@ export default function DriverRoutesOffersPage() {
     // setCurrLat(lat);
     // setCurrLon(lon);
     console.log("hjvbhj");
-    setCurrLat(32.0880503);
-    setCurrLon(34.7148435);
+    setCurrLat(32.0672504);
+    setCurrLon(34.7663349);
   };
   useEffect(() => {
     console.log(currLat);
@@ -52,119 +58,255 @@ export default function DriverRoutesOffersPage() {
   }, [data]);
   const fetchSuggestions = async () => {
     try {
-      console.log("jfjf");
       await updateCurrentLocation();
-      console.log("@@@@@");
       const response = await requestDrives(
         userToken,
-        currLat,
-        currLon,
+        32.0672504,
+        34.7663349,
+        limits,
         navigation
       );
-      console.log(response);
+      console.log("response fetchSuggestions", response);
       setData(response.solutions);
     } catch (error) {
-      console.log(error);
+      console.log("error fetchSuggestions", error);
     }
   };
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+  const handlePickUpDistanceChange = (text) => {
+    setPickUpDistance(parseInt(text));
+  };
+  const handleRideDistanceChange = (text) => {
+    setRideDistance(parseInt(text));
+  };
   return (
-    <View style={styles.container}>
-      {data === null ? (
-        <Button
-          mode="contained"
-          buttonColor="#111"
-          style={styles.loadBtn}
-          onPress={() => {
-            fetchSuggestions();
-          }}
-        >
-          Load drive suggestions
-        </Button>
-      ) : (
-        <View>
-          {Object.keys(data).map((key) => (
+    <PaperProvider theme={theme}>
+      <View style={styles.container}>
+        {data === null ? (
+          <View>
             <View
-              key={key}
               style={{
-                borderBottomWidth: 1,
-                padding: 10,
                 flexDirection: "row",
                 alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <View style={{ flex: 1, justifyContent: "space-between" }}>
-                {/* <Text style={{ marginBottom: 2 }}>Order number:{key}</Text> */}
-                <Text style={{ marginBottom: 2 }}>
-                  Number of passengers:{data[key].totalVolume}
-                </Text>
-                <Text style={{ marginBottom: 2 }}>
-                  Estimated Profit:{data[key].totalValue}$
-                </Text>
-              </View>
-              <View>
+              <Checkbox.Android
+                status={useLimits ? "checked" : "unchecked"}
+                onPress={() => {
+                  if (!useLimits) toggleModal();
+                  setUseLimits(!useLimits);
+                }}
+                color="#fff"
+              />
+              <Text style={{ color: "#fff", fontSize: 16 }}>Use limits</Text>
+            </View>
+            <Modal isVisible={showModal} onBackdropPress={toggleModal}>
+              <View style={{ flex: 1, backgroundColor: "#061848" }}>
+                <TextInput
+                  mode="outlined"
+                  label="Pickup Distance"
+                  style={styles.input}
+                  value={pickUpDistance}
+                  keyboardType="numeric"
+                  onChangeText={handlePickUpDistanceChange}
+                />
+                <TextInput
+                  mode="outlined"
+                  label="Ride Distance"
+                  style={styles.input}
+                  value={rideDistance}
+                  keyboardType="numeric"
+                  onChangeText={handleRideDistanceChange}
+                />
                 <Button
                   mode="contained"
                   buttonColor="#111"
-                  style={styles.watchDetailsBtn}
                   onPress={() => {
-                    navigation.navigate("DriveDriverMode", { driveId: key });
+                    setLimits({
+                      pick_up_distance: {
+                        min: 0,
+                        max: parseInt(pickUpDistance),
+                      },
+                      ride_distance: { min: 0, max: parseInt(rideDistance) },
+                    });
+                    setShowModal(false);
                   }}
+                  style={styles.save_button}
                 >
-                  Watch details
+                  Save
                 </Button>
               </View>
+            </Modal>
+            <TouchableOpacity
+              onPress={() => {
+                fetchSuggestions();
+              }}
+              style={{
+                width: 200,
+                height: 50,
+                alignSelf: "center",
+                borderRadius: 20,
+                overflow: "hidden",
+                marginTop: 20,
+              }}
+            >
+              <ImageBackground
+                source={require("../assets/buttonBack.jpeg")}
+                style={{ width: "100%", height: "100%" }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    lineHeight: 50,
+                    fontSize: 16,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Load drive suggestions
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View>
+            {Object.keys(data).map((key) => (
+              <View
+                key={key}
+                style={{
+                  borderBottomWidth: 1,
+                  padding: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  borderBottomColor: "#fff",
+                }}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {/* <Text style={{ marginBottom: 2 }}>Order number:{key}</Text> */}
+                  <Text style={{ marginBottom: 2, color: "#fff" }}>
+                    Number of passengers:{data[key].totalVolume}
+                  </Text>
+                  <Text style={{ marginBottom: 2, color: "#fff" }}>
+                    Estimated Profit:{data[key].totalValue}$
+                  </Text>
+                </View>
+                <View>
+                  <Button
+                    mode="contained"
+                    buttonColor="#6DD4F4"
+                    style={styles.watchDetailsBtn}
+                    onPress={() => {
+                      navigation.navigate("DriveDriverMode", { driveId: key });
+                    }}
+                  >
+                    Watch details
+                  </Button>
+                </View>
+              </View>
+            ))}
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Checkbox.Android
+                status={useLimits ? "checked" : "unchecked"}
+                onPress={() => {
+                  if (!useLimits) toggleModal();
+                  setUseLimits(!useLimits);
+                }}
+                color="#fff"
+              />
+              <Text style={{ color: "#fff", fontSize: 16 }}>Use limits</Text>
             </View>
-          ))}
-          <Button
-            mode="contained"
-            buttonColor="#111"
-            style={styles.loadBtn}
-            onPress={() => {
-              fetchSuggestions();
-            }}
-          >
-            Load drive suggestions
-          </Button>
-          <Slider
-            style={{
-              width: 200,
-              height: 40,
-              marginTop: 30,
-              alignSelf: "center",
-            }}
-            minimumValue={0}
-            maximumValue={100}
-            value={pickUpDistance}
-            onValueChange={handleChangePickUpDistance}
-            minimumTrackTintColor="#6CFDFA"
-            maximumTrackTintColor="#000000"
-            thumbTintColor="#40FCFB"
-          />
-          <Text>PickUpDistance: {pickUpDistance}</Text>
-          <Slider
-            style={{
-              width: 200,
-              height: 40,
-              marginTop: 30,
-              alignSelf: "center",
-            }}
-            minimumValue={0}
-            maximumValue={100}
-            value={rideDistance}
-            onValueChange={handleChangeRideDistance}
-            minimumTrackTintColor="#6CFDFA"
-            maximumTrackTintColor="#000000"
-            thumbTintColor="#40FCFB"
-          />
-          <Text>RideDistance: {rideDistance}</Text>
-        </View>
-      )}
-    </View>
+            <Modal isVisible={showModal} onBackdropPress={toggleModal}>
+              <View style={{ flex: 1, backgroundColor: "#061848" }}>
+                <TextInput
+                  mode="outlined"
+                  label="Pickup Distance"
+                  style={styles.input}
+                  value={pickUpDistance}
+                  keyboardType="numeric"
+                  onChangeText={handlePickUpDistanceChange}
+                />
+                <TextInput
+                  mode="outlined"
+                  label="Ride Distance"
+                  style={styles.input}
+                  value={rideDistance}
+                  keyboardType="numeric"
+                  onChangeText={handleRideDistanceChange}
+                />
+                <Button
+                  mode="contained"
+                  buttonColor="#111"
+                  onPress={() => {
+                    setLimits({
+                      pick_up_distance: {
+                        min: 0,
+                        max: parseInt(pickUpDistance),
+                      },
+                      ride_distance: { min: 0, max: parseInt(rideDistance) },
+                    });
+                    setShowModal(false);
+                  }}
+                  style={styles.save_button}
+                >
+                  Save
+                </Button>
+              </View>
+            </Modal>
+            <TouchableOpacity
+              onPress={() => {
+                fetchSuggestions();
+              }}
+              style={{
+                width: 200,
+                height: 50,
+                alignSelf: "center",
+                borderRadius: 20,
+                overflow: "hidden",
+                marginTop: 20,
+              }}
+            >
+              <ImageBackground
+                source={require("../assets/buttonBack.jpeg")}
+                style={{ width: "100%", height: "100%" }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    lineHeight: 50,
+                    fontSize: 16,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Load drive suggestions
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </PaperProvider>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#061848",
   },
   watchDetailsBtn: {
     width: 150,
@@ -172,5 +314,14 @@ const styles = StyleSheet.create({
   loadBtn: {
     marginTop: 15,
     marginHorizontal: 90,
+  },
+  input: {
+    marginBottom: 7,
+    marginHorizontal: 20,
+  },
+  save_button: {
+    width: 100,
+    alignSelf: "center",
+    marginTop: 14,
   },
 });

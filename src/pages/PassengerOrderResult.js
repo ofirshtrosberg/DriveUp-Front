@@ -45,7 +45,7 @@ export default function PassengerOrderResult() {
   }, [driveId]);
   return (
     <View style={styles.container}>
-      {driveId !== null ? (
+      {driveId !== null&&driveId!=="" ? (
         <DriveMapPassengerMode driveId={driveId} />
       ) : (
         <ImageBackground

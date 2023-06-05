@@ -212,13 +212,15 @@ export const getDriveByOrderId = async (orderId, userToken, navigation) => {
       });
   });
 };
-// 401 is checked 
+// 401 is checked
 export const requestDrives = async (
   userToken,
   currLat,
   currLon,
+  limits,
   navigation
 ) => {
+  console.log("limits:", limits);
   console.log("token", userToken);
   console.log("lt", currLat);
   console.log("ln", currLon);
@@ -233,7 +235,7 @@ export const requestDrives = async (
       body: JSON.stringify({
         currentLat: currLat,
         currentLon: currLon,
-        limits: {},
+        limits: limits,
       }),
     })
       .then((response) => {
@@ -241,9 +243,11 @@ export const requestDrives = async (
           navigation.navigate("Login");
           throw new Error("your token expired or invalid please login");
         }
+        console.log("response in requestDrives", response);
         return response.json();
       })
       .then((data) => {
+        console.log("data in requestDrives", data);
         resolve(data);
       })
       .catch((error) => {
@@ -306,6 +310,7 @@ export const rejectDrives = (currUserEmail, userToken, navigation) => {
 };
 // !!!! need to check 401
 export const driveDetails = async (userToken, driveId, navigation) => {
+  console.log("drive details");
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/drive-details/${driveId}`, {
       method: "GET",
@@ -319,15 +324,16 @@ export const driveDetails = async (userToken, driveId, navigation) => {
           navigation.navigate("Login");
           throw new Error("your token expired or invalid please login");
         }
+        console.log("drive details response", response);
         return response.json();
       })
       .then((data) => {
-        console.log("driveDetails", data);
+        console.log("driveDetails data", data);
         resolve(data);
       })
       .catch((error) => {
-        console.error(error);
-        reject(error);
+        console.error("drive details error", error);
+        reject("drive details error", error);
       });
   });
 };

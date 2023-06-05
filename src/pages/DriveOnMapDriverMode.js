@@ -39,9 +39,10 @@ export default function DriveOnMapDriverMode() {
   const { userToken, login, logout } = useContext(AuthContext);
   const route = useRoute();
   const { driveId } = route.params;
-  console.log("driveid:", driveId);
+  console.log("driveid in DriveOnMapDriverMode:", driveId);
   const [orderLocations, setOrderLocations] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isDriveAccepted, setIsDriveAccepted] = useState(false);
   const getDriveDetails = async () => {
     try {
       const response = await driveDetails(userToken, driveId, navigation);
@@ -161,14 +162,31 @@ export default function DriveOnMapDriverMode() {
         </View>
         <View style={{ flex: 2, marginTop: 20 }}>
           <Text style={styles.boldText}>Profit: {totalPrice}$</Text>
-          <Button
-            mode="contained"
-            buttonColor="#111"
-            style={{ marginHorizontal: 70, marginTop: 10 }}
-            onPress={() => {}}
-          >
-            Accept Order
-          </Button>
+          {!isDriveAccepted && (
+            <Button
+              mode="contained"
+              buttonColor="#111"
+              style={{ marginHorizontal: 70, marginTop: 10 }}
+              onPress={() => {
+                setIsDriveAccepted(true);
+              }}
+            >
+              Accept Order
+            </Button>
+          )}
+          {isDriveAccepted && (
+            <Button
+              mode="contained"
+              buttonColor="#111"
+              style={{ marginHorizontal: 70, marginTop: 10 }}
+              onPress={() => {
+                setIsDriveAccepted(true);
+                navigation.goBack();
+              }}
+            >
+              Finish order
+            </Button>
+          )}
         </View>
       </View>
     </View>

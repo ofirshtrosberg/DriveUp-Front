@@ -4,6 +4,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import HomePage from "./HomePage";
 import TaxiPage from "./TaxiPage";
 import ProfilePage from "./ProfilePage";
+import { ImageBackground } from "react-native";
 
 export default function MainPages() {
   const Tab = createBottomTabNavigator();
@@ -21,8 +22,18 @@ export default function MainPages() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#5F84A2",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#061848",
+        tabBarInactiveTintColor: "white",
+        tabBarStyle: {
+          backgroundColor: "transparent", // Set background color as transparent
+          borderTopWidth: 0, // Remove top border
+        },
+        tabBarBackground: () => (
+          <ImageBackground
+            source={require("../assets/linearBluePurple.png")} // Replace with your desired image
+            style={{ flex: 1, resizeMode: "cover" }}
+          />
+        ),
       })}
     >
       <Tab.Screen name="Home" component={HomePage} />

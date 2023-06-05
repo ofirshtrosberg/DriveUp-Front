@@ -30,20 +30,21 @@ export default function LoginPage({ navigation }) {
     console.log(userToken);
   }, [userToken]);
 
-  const handleLoginLocal = async () => {
+  const handleLoginLocal = async (token) => {
     const isUserExist = await isUserExistLocal(email);
-    console.log(isUserExist);
+    console.log("isUserExist", isUserExist);
     // console.log(",handleLoginLocal email", userToken);
     if (!isUserExist) {
+      console.log("token in handleLoginLocal", token);
       fetch("http://" + IP + ":" + PORT + "/users/" + email, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       })
         .then((response) => {
-          console.log(response);
+          console.log("response in handleLoginLocal", response);
           return response.json();
         })
         .then((data) => {
@@ -99,7 +100,7 @@ export default function LoginPage({ navigation }) {
           setLoginResponse("");
           AsyncStorage.setItem("currentUserEmail", email);
           login(data.access_token);
-          handleLoginLocal();
+          handleLoginLocal(data.access_token);
           setEmail("");
           setPassword("");
           navigation.navigate("Main");
@@ -118,7 +119,7 @@ export default function LoginPage({ navigation }) {
   };
   return (
     <ImageBackground
-      source={require("../assets/backgroundLogin.jpg")}
+      source={require("../assets/loginNew.png")}
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1 }}></View>
@@ -184,6 +185,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignSelf: "center",
     fontSize: 18,
+    color: "#fff",
   },
   login_button: {
     width: 100,
@@ -199,6 +201,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
-    color: colors.blue1,
+    color: "#fff",
   },
 });
