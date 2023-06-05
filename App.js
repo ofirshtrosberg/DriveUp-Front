@@ -19,7 +19,7 @@ import PassengerOrderOnMap from "./src/pages/PassengerOrderOnMap";
 import PassengerOrderResult from "./src/pages/PassengerOrderResult";
 import DriveOnMapDriverMode from "./src/pages/DriveOnMapDriverMode";
 import { AuthProvider } from "./AuthContext";
-import OpeningPage from "./src/pages/OpeningPage";
+import LandingPage from "./src/pages/LandingPage";
 const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function App() {
               name="DriveDriverMode"
               component={DriveOnMapDriverMode}
             />
-            <Stack.Screen name="Opening" component={OpeningPage} />
+            <Stack.Screen name="Landing" component={LandingPage} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

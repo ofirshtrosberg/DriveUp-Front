@@ -11,13 +11,13 @@ import colors from "../config/colors";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
-export default function HomePage() {
+export default function LandingPage() {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/open.png")}
+        source={require("../assets/landingPage.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -42,19 +42,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    backgroundColor: "#BCBEFA",
-    marginTop: 450,
-    width: 400,
+    marginTop: 610,
+    marginRight:250,
+    width: 200,
     height: 50,
     borderRadius: 5,
     bottom: 50,
   },
   text: {
     fontSize: 20,
-    // lineHeight: 50,
     marginTop: 100,
     textAlign: "center",
     fontWeight: "bold",
-    color: "#191774",
+    color: "#061042",
   },
 });
