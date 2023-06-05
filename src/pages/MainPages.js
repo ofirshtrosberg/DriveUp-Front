@@ -25,20 +25,41 @@ export default function MainPages() {
         tabBarActiveTintColor: "#061848",
         tabBarInactiveTintColor: "white",
         tabBarStyle: {
-          backgroundColor: "transparent", // Set background color as transparent
-          borderTopWidth: 0, // Remove top border
+          backgroundColor: "transparent",
+          borderTopWidth: 0,
         },
         tabBarBackground: () => (
           <ImageBackground
-            source={require("../assets/linearBluePurple.png")} // Replace with your desired image
+            source={require("../assets/linearBluePurple.png")}
             style={{ flex: 1, resizeMode: "cover" }}
           />
         ),
       })}
     >
-      <Tab.Screen name="Home" component={HomePage} />
-      <Tab.Screen name="TaxiPage" component={TaxiPage} />
-      <Tab.Screen name="Profile" component={ProfilePage} />
+      <Tab.Screen
+        name="Home"
+        component={HomePage}
+        options={{
+          headerStyle: { backgroundColor: "#020C26" },
+          headerTintColor: "white",
+        }}
+      />
+      <Tab.Screen
+        name="TaxiPage"
+        component={TaxiPage}
+        options={{
+          headerStyle: { backgroundColor: "#020C26" },
+          headerTintColor: "white",
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfilePage}
+        options={{
+          headerStyle: { backgroundColor: "#020C26" },
+          headerTintColor: "white",
+        }}
+      />
     </Tab.Navigator>
   );
 }

@@ -33,7 +33,13 @@ export default function App() {
     <AuthProvider>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: "#020C26" },
+              headerTintColor: "white",
+            }}
+          >
+            <Stack.Screen name="Landing" component={LandingPage} />
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen
               name="RegisterAsDriver"
@@ -47,6 +53,7 @@ export default function App() {
               name="Main"
               component={MainPages}
               options={{ headerShown: false }}
+             
             />
             <Stack.Screen name="Subscription" component={SubscriptionPage} />
             <Stack.Screen name="Profile" component={ProfilePage} />
@@ -60,7 +67,6 @@ export default function App() {
               name="DriveDriverMode"
               component={DriveOnMapDriverMode}
             />
-            <Stack.Screen name="Landing" component={LandingPage} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
