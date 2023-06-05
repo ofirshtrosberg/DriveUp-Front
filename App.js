@@ -53,7 +53,6 @@ export default function App() {
               name="Main"
               component={MainPages}
               options={{ headerShown: false }}
-             
             />
             <Stack.Screen name="Subscription" component={SubscriptionPage} />
             <Stack.Screen name="Profile" component={ProfilePage} />
