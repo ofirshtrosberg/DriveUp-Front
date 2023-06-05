@@ -39,7 +39,7 @@ export default function DriveOnMapDriverMode() {
   const { userToken, login, logout } = useContext(AuthContext);
   const route = useRoute();
   const { driveId } = route.params;
-  console.log("driveid:", driveId);
+  console.log("driveid in DriveOnMapDriverMode:", driveId);
   const [orderLocations, setOrderLocations] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isDriveAccepted, setIsDriveAccepted] = useState(false);
