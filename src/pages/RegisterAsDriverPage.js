@@ -56,36 +56,17 @@ export default function RegisterAsDriverPage({ navigation }) {
       .then((data) => {
         handleRegisterLocal(
           email,
-          password,
-          phone,
-          fullName,
-          carModel,
-          carColor,
-          plateNumber
+          true
         );
       })
       .catch((error) => {
         setErrorMessage("Registration failed!");
       });
   };
-  const handleRegisterLocal = async (
-    email,
-    password,
-    phone,
-    fullName,
-    carModel,
-    carColor,
-    plateNumber
-  ) => {
+  const handleRegisterLocal = async (email, isDriver) => {
     const user = {
       email: email,
-      password: password,
-      phone_number: phone,
-      full_name: fullName,
-      car_model: carModel,
-      car_color: carColor,
-      plate_number: plateNumber,
-      image_url: "",
+      isDriver: isDriver,
     };
     await addUserLocal(user);
     await printUsersLocal();
@@ -99,7 +80,6 @@ export default function RegisterAsDriverPage({ navigation }) {
   const [carModel, setCarModel] = useState("");
   const [carColor, setCarColor] = useState("");
   const [plateNumber, setPlateNumber] = useState("");
-
   const handleEmailChange = (text) => {
     setEmail(text);
   };

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
 import { View, StyleSheet } from "react-native";
 import HeaderLogout from "../components/HeaderLogout";
 import DriverProfile from "./DriverProfilePage";
 import PassengerProfile from "./PassengerProfilePage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { getUserByEmail } from "../../AsyncStorageUsers";
-
+import { getUserByEmail } from "../helperFunctions/accessToBackFunctions";
+import { useEffect } from "react";
 export default function ProfilePage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -14,7 +15,7 @@ export default function ProfilePage({ navigation }) {
       headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);
-
+  const { userToken, login, logout } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [plateNumber, setPlateNumber] = useState("");
@@ -25,21 +26,21 @@ export default function ProfilePage({ navigation }) {
   const [imageProfile, setImageProfile] = useState("");
 
   const [user, setUser] = useState("");
-
   const fetchUser = async () => {
     try {
       const value = await AsyncStorage.getItem("currentUserEmail");
       if (value !== null && value !== "") {
-        const fetchedUser = await getUserByEmail(value);
+        // !!!!! fetch from back
+        const fetchedUser = await getUserByEmail(value, userToken, navigation);
         setEmail(value);
         setUser(fetchedUser);
-        setFullName(fetchedUser.full_name);
-        setPlateNumber(fetchedUser.plate_number);
-        setCarModel(fetchedUser.car_model);
-        setPhoneNumber(fetchedUser.phone_number);
+        setFullName(fetchedUser.fullName);
+        setPlateNumber(fetchedUser.plateNumber);
+        setCarModel(fetchedUser.carModel);
+        setPhoneNumber(fetchedUser.phoneNumber);
         setPassword(fetchedUser.password);
-        setCarColor(fetchedUser.car_color);
-        setImageProfile(fetchedUser.image_url);
+        setCarColor(fetchedUser.carColor);
+        setImageProfile(fetchedUser.imageUrl);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -55,7 +56,9 @@ export default function ProfilePage({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {plateNumber === "" ? (
+      {plateNumber === "" ||
+      plateNumber === null ||
+      plateNumber === undefined ? (
         <PassengerProfile
           email={email}
           fullName={fullName}

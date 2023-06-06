@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import {
   Text,
   View,
@@ -12,6 +12,7 @@ import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { printUsersLocal, deleteUserLocal } from "../../AsyncStorageUsers";
 export default function LandingPage() {
   const navigation = useNavigation();
   const { login } = useContext(AuthContext);

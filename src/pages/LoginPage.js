@@ -18,14 +18,6 @@ export default function LoginPage({ navigation }) {
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // useEffect(() => {
-  //   AsyncStorage.getItem("userToken").then((value) => {
-  //     if (value !== null && value !== "") {
-  //       login(value);
-  //       navigation.navigate("Main");
-  //     }
-  //   });
-  // }, []);
   useEffect(() => {
     console.log(userToken);
   }, [userToken]);
@@ -50,7 +42,12 @@ export default function LoginPage({ navigation }) {
         .then((data) => {
           const user = data.result;
           console.log("fetched user", user);
-          addLocal(user);
+          // !!!!!!!!!!
+          if (user.plateNumber !== "" && user.plateNumber !== null) {
+            addLocal({ email: user.email, isDriver: true });
+          } else {
+            addLocal({ email: user.email, isDriver: false });
+          }
         })
         .catch((error) => {
           console.error("handleLoginLocal", error);
@@ -58,19 +55,9 @@ export default function LoginPage({ navigation }) {
     }
   };
   const addLocal = async (user) => {
-    if (!user.hasOwnProperty("car_model")) {
-      const newUser = {
-        ...user,
-        car_model: "",
-        car_color: "",
-        plate_number: "",
-      };
-      await addUserLocal(newUser);
-      await printUsersLocal();
-    } else {
-      await addUserLocal(user);
-      await printUsersLocal();
-    }
+    console.log(user);
+    await addUserLocal(user);
+    await printUsersLocal();
   };
 
   const loginBackend = () => {

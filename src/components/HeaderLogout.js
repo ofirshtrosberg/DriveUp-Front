@@ -10,7 +10,7 @@ const Header = ({ title }) => {
   const handleLogout = async () => {
     AsyncStorage.setItem("currentUserEmail", "");
     logout();
-    navigation.navigate("Login");
+    navigation.navigate("Landing");
   };
 
   return (
