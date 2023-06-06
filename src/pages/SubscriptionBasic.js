@@ -63,7 +63,8 @@ export default function SubscriptionBasic() {
         expMonth,
         expYear,
         userToken,
-        navigation
+        navigation,
+        logout
       );
       navigation.goBack();
     });

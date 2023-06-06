@@ -49,7 +49,8 @@ export default function DriveOnMapDriverMode() {
       const response = await driveDetailsPreview(
         userToken,
         driveId,
-        navigation
+        navigation,
+        logout
       );
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);

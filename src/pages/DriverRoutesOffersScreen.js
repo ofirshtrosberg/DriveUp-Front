@@ -64,7 +64,8 @@ export default function DriverRoutesOffersPage() {
         32.0672504,
         34.7663349,
         limits,
-        navigation
+        navigation,
+        logout
       );
       console.log("response fetchSuggestions", response);
       setData(response.solutions);

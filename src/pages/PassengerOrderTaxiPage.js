@@ -92,7 +92,8 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         responseDest.results[0].geometry.location.lng,
         numberOfPassengers,
         userToken,
-        navigation
+        navigation,
+        logout
       );
       setErrorMessage("");
       setShowErrorMessage(false);

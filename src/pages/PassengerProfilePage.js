@@ -43,7 +43,7 @@ export default function PassengerProfilePage(props) {
             },
           }
         );
-
+        console.log("get image res", response);
         if (!response.ok) {
           throw new Error("Get image failed");
         }
@@ -60,7 +60,9 @@ export default function PassengerProfilePage(props) {
     getImage();
     getOrderHistory();
   }, []);
-
+  useEffect(() => {
+    console.log("uri", imageUri);
+  }, [imageUri]);
   const passengerOrderDrive = async (
     currentUserEmail,
     startLat,

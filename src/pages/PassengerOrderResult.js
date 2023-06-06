@@ -19,7 +19,12 @@ export default function PassengerOrderResult() {
   const [driveId, setDriveId] = useState("");
   const checkDrive = async () => {
     try {
-      const response = await getDriveByOrderId(orderId, userToken, navigation);
+      const response = await getDriveByOrderId(
+        orderId,
+        userToken,
+        navigation,
+        logout
+      );
       console.log("drive id", response);
       setDriveId(response);
     } catch (error) {

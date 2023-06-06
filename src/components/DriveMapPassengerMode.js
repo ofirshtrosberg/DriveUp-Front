@@ -53,12 +53,13 @@ export default function DriveMapPassengerMode({ driveId }) {
   const [driverImageUrl, setDriverImageUrl] = useState("");
   const getDriveDetails = async () => {
     try {
-      const response = await driveDetails(userToken, driveId, navigation);
+      const response = await driveDetails(userToken, driveId, navigation, logout);
       setDriverEmail(response.orderLocations[0].userEmail);
       const driver = await getUserByEmail(
         response.orderLocations[0].userEmail,
         userToken,
-        navigation
+        navigation,
+        logout
       );
       setDriverCarColor(driver.carColor);
       setDriverFullName(driver.fullName);

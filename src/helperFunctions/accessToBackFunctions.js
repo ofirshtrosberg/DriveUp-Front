@@ -1,7 +1,7 @@
 import { IP, PORT } from "@env";
 
 // !!!! check 401
-export const getUserByEmail = async (email, userToken, navigation) => {
+export const getUserByEmail = async (email, userToken, navigation, logout) => {
   console.log("getUserByEmail email", email);
   console.log("getUserByEmail token", userToken);
   return new Promise((resolve, reject) => {
@@ -15,6 +15,7 @@ export const getUserByEmail = async (email, userToken, navigation) => {
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -39,7 +40,8 @@ export const createUserSubscription = (
   expMonth,
   expYear,
   userToken,
-  navigation
+  navigation,
+  logout
 ) => {
   const date = new Date(expYear, expMonth, 1);
   fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
@@ -63,6 +65,7 @@ export const createUserSubscription = (
     .then((response) => {
       if (response.status === 401) {
         navigation.navigate("Login");
+        logout();
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -76,7 +79,7 @@ export const createUserSubscription = (
 };
 
 //401 is checked
-export const isUserPremium = (email, userToken, navigation) => {
+export const isUserPremium = (email, userToken, navigation, logout) => {
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/user_subscription_maps/`, {
       method: "GET",
@@ -88,6 +91,7 @@ export const isUserPremium = (email, userToken, navigation) => {
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -111,7 +115,7 @@ export const isUserPremium = (email, userToken, navigation) => {
 };
 
 // 401 is checked
-export const deleteSubscription = (email, userToken, navigation) => {
+export const deleteSubscription = (email, userToken, navigation, logout) => {
   fetch(`http://${IP}:${PORT}/user_subscription_maps/${email}/Premium`, {
     method: "DELETE",
     headers: {
@@ -122,6 +126,7 @@ export const deleteSubscription = (email, userToken, navigation) => {
     .then((response) => {
       if (response.status === 401) {
         navigation.navigate("Login");
+        logout();
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -141,7 +146,8 @@ export const passengerOrderDrive = async (
   destinationLon,
   numberOfPassengers,
   userToken,
-  navigation
+  navigation,
+  logout
 ) => {
   console.log(startLat, startLon, destinationLat, destinationLon);
   return new Promise((resolve, reject) => {
@@ -164,6 +170,7 @@ export const passengerOrderDrive = async (
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -183,7 +190,12 @@ export const passengerOrderDrive = async (
   });
 };
 //  401 is checked
-export const getDriveByOrderId = async (orderId, userToken, navigation) => {
+export const getDriveByOrderId = async (
+  orderId,
+  userToken,
+  navigation,
+  logout
+) => {
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`, {
       method: "GET",
@@ -195,6 +207,7 @@ export const getDriveByOrderId = async (orderId, userToken, navigation) => {
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -218,7 +231,8 @@ export const requestDrives = async (
   currLat,
   currLon,
   limits,
-  navigation
+  navigation,
+  logout
 ) => {
   console.log("limits:", limits);
   console.log("token", userToken);
@@ -241,6 +255,7 @@ export const requestDrives = async (
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         console.log("response in requestDrives", response);
@@ -256,7 +271,13 @@ export const requestDrives = async (
   });
 };
 // !!!! need to check 401
-export const acceptDrive = (orderId, currUserEmail, userToken, navigation) => {
+export const acceptDrive = (
+  orderId,
+  currUserEmail,
+  userToken,
+  navigation,
+  logout
+) => {
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -273,6 +294,7 @@ export const acceptDrive = (orderId, currUserEmail, userToken, navigation) => {
       console.log("accept drive res", response);
       if (response.status === 401) {
         navigation.navigate("Login");
+        logout();
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -283,7 +305,7 @@ export const acceptDrive = (orderId, currUserEmail, userToken, navigation) => {
     });
 };
 // !!!! need to check 401
-export const rejectDrives = (currUserEmail, userToken, navigation) => {
+export const rejectDrives = (currUserEmail, userToken, navigation, logout) => {
   fetch(`http://${IP}:${PORT}/driver/reject-drives`, {
     method: "POST",
     headers: {
@@ -299,6 +321,7 @@ export const rejectDrives = (currUserEmail, userToken, navigation) => {
     .then((response) => {
       if (response.status === 401) {
         navigation.navigate("Login");
+        logout();
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -309,7 +332,7 @@ export const rejectDrives = (currUserEmail, userToken, navigation) => {
     });
 };
 // !!!! need to check 401
-export const driveDetails = async (userToken, driveId, navigation) => {
+export const driveDetails = async (userToken, driveId, navigation, logout) => {
   console.log("drive details");
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/drive-details/${driveId}`, {
@@ -322,6 +345,7 @@ export const driveDetails = async (userToken, driveId, navigation) => {
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         console.log("drive details response", response);
@@ -337,7 +361,12 @@ export const driveDetails = async (userToken, driveId, navigation) => {
       });
   });
 };
-export const driveDetailsPreview = async (userToken, driveId, navigation) => {
+export const driveDetailsPreview = async (
+  userToken,
+  driveId,
+  navigation,
+  logout
+) => {
   console.log("drive details");
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/drive-details-preview/${driveId}`, {
@@ -350,6 +379,7 @@ export const driveDetailsPreview = async (userToken, driveId, navigation) => {
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         console.log("drive details response", response);
