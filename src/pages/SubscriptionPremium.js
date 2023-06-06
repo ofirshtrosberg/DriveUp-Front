@@ -39,9 +39,7 @@ export default function SubscriptionPremium() {
       >
         <Button
           style={styles.subscriptionBtn}
-          onPress={() => {
-            handleCancelSubscription;
-          }}
+          onPress={handleCancelSubscription}
         >
           <Text style={styles.textBtn}>Cancel subscription</Text>
         </Button>

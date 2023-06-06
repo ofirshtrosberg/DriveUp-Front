@@ -265,12 +265,12 @@ export const acceptDrive = (orderId, currUserEmail, userToken, navigation) => {
     },
     body: JSON.stringify({
       parameter: {
-        order_id: orderId,
-        email: currUserEmail,
+        orderId: orderId,
       },
     }),
   })
     .then((response) => {
+      console.log("accept drive res", response);
       if (response.status === 401) {
         navigation.navigate("Login");
         throw new Error("your token expired or invalid please login");
