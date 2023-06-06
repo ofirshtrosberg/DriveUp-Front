@@ -12,7 +12,12 @@ export default function FinishDriveScreen() {
         resizeMode="cover"
         style={styles.image}
       >
-        <Button style={styles.button} onPress={() => {}}>
+        <Button
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("TaxiPage");
+          }}
+        >
           <Text style={styles.text}>New Drive</Text>
         </Button>
       </ImageBackground>

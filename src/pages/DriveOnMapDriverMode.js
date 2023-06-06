@@ -157,7 +157,9 @@ export default function DriveOnMapDriverMode() {
                     style={styles.img}
                     source={require("../assets/1761892.png")}
                   ></Image>
-                  <Text>{location.price}$</Text>
+                  <Text style={{ color: "#8569F6", fontSize: 16 }}>
+                    {location.price}$
+                  </Text>
                 </View>
               );
             } else {
@@ -170,7 +172,7 @@ export default function DriveOnMapDriverMode() {
           {!isDriveAccepted && (
             <Button
               mode="contained"
-              buttonColor="#111"
+              buttonColor="#76A6ED"
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
@@ -183,7 +185,7 @@ export default function DriveOnMapDriverMode() {
           {isDriveAccepted && (
             <Button
               mode="contained"
-              buttonColor="#111"
+              buttonColor="#6FC7E9"
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
@@ -203,6 +205,7 @@ export default function DriveOnMapDriverMode() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#061848",
   },
   map: {
     flex: 1,
@@ -223,21 +226,25 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 5,
     fontSize: 20,
+    color: "#fff",
   },
   boldText: {
     marginTop: 5,
     fontSize: 20,
     fontWeight: "bold",
     alignSelf: "center",
+    color: "#fff",
   },
   driverName: {
     marginTop: 10,
     fontSize: 20,
     fontWeight: "bold",
+    color: "#fff",
   },
   passengerImgPrice: {
     flexDirection: "column",
     flex: 1,
     alignItems: "center",
+    color: "#8569F6",
   },
 });
