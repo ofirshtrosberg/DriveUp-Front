@@ -201,7 +201,7 @@ export default function DriverRoutesOffersPage() {
                 <View>
                   <Button
                     mode="contained"
-                    buttonColor="##76A6ED"
+                    buttonColor="#76A6ED"
                     style={styles.watchDetailsBtn}
                     onPress={() => {
                       navigation.navigate("DriveDriverMode", { driveId: key });
