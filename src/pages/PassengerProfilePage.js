@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  ImageBackground,
 } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 // import { ScrollView } from "react-native-gesture-handler";
@@ -153,99 +154,97 @@ export default function PassengerProfilePage(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.color}>
-        <Text></Text>
-      </View>
-      <View style={{ alignItems: "center" }}>
-        <TouchableOpacity>
-          {imageProfile ? (
-            <Image source={{ uri: imageProfile }} style={styles.avatar} />
-          ) : (
-            <UserAvatar size={110} name={fullName} style={styles.avatar} />
-          )}
-        </TouchableOpacity>
-        <Modal visible={isPopupVisible} onRequestClose={closePopup}>
-          <View style={styles.popupContainer}>
-            <Image
-              // source={require("path/to/profile/image")}
-              style={styles.popupImage}
-            />
-            {/* Add any additional content for the popup */}
-          </View>
-        </Modal>
-        <Icon
-          name="edit"
-          size={20}
-          style={styles.edit_icon}
-          onPress={() => {
-            navigation.navigate("EditPassenger", {
-              fullName,
-              email,
-              imageProfile,
-              password,
-            });
-          }}
-        ></Icon>
-      </View>
-      <Text style={styles.passenger_name}>{fullName} </Text>
-      <View style={styles.data_icons_Container}>
-        <Icon
-          name="envelope"
-          size={30}
-          color="#608cd7"
-          style={styles.email_icon}
-        />
-        <Text style={styles.passenger_email}>{email} </Text>
-        {/* <Text>{imageProfile}</Text> */}
-      </View>
-      <View style={styles.data_icons_Container}>
-        <Icon
-          name="phone"
-          size={20}
-          color="#608cd7"
-          style={styles.phone_icon}
-        />
-        <Text style={styles.passenger_phone}>{phoneNumber} </Text>
-      </View>
-      <Text style={styles.orders_title}>History Orders </Text>
-      <Button
-        onPress={() => {
-          passengerOrderDrive(
-            email,
-            myLat,
-            myLon,
-            destLat,
-            destLon,
-            num,
-            userToken
-          );
-        }}
+      <ImageBackground
+        source={require("../assets/profilePage.png")}
+        resizeMode="cover"
+        style={styles.image}
       >
-        order drive !!
-      </Button>
-      {/* <Button
+        {/* <View style={styles.color}>
+          <Text></Text>
+        </View> */}
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity>
+            {imageProfile ? (
+              <Image source={{ uri: imageProfile }} style={styles.avatar} />
+            ) : (
+              <UserAvatar size={110} name={fullName} style={styles.avatar} />
+            )}
+          </TouchableOpacity>
+          <Modal visible={isPopupVisible} onRequestClose={closePopup}>
+            <View style={styles.popupContainer}>
+              <Image
+                // source={require("path/to/profile/image")}
+                style={styles.popupImage}
+              />
+              {/* Add any additional content for the popup */}
+            </View>
+          </Modal>
+          <Icon
+            name="edit"
+            size={20}
+            style={styles.edit_icon}
+            onPress={() => {
+              navigation.navigate("EditPassenger", {
+                fullName,
+                email,
+                imageProfile,
+                password,
+              });
+            }}
+          ></Icon>
+        </View>
+        <Text style={styles.passenger_name}>{fullName} </Text>
+        <View style={styles.data_icons_Container}>
+          <Icon
+            name="envelope"
+            size={30}
+            color="#608cd7"
+            style={styles.email_icon}
+          />
+          <Text style={styles.passenger_email}>{email} </Text>
+          {/* <Text>{imageProfile}</Text> */}
+        </View>
+        <View style={styles.data_icons_Container}>
+          <Icon
+            name="phone"
+            size={20}
+            color="#608cd7"
+            style={styles.phone_icon}
+          />
+          <Text style={styles.passenger_phone}>{phoneNumber} </Text>
+        </View>
+        <Text style={styles.orders_title}>History Orders </Text>
+        <Button
+          onPress={() => {
+            passengerOrderDrive(
+              email,
+              myLat,
+              myLon,
+              destLat,
+              destLon,
+              num,
+              userToken
+            );
+          }}
+        >
+          order drive !!
+        </Button>
+        {/* <Button
         onPress={() => {
           getOrderHistory();
         }}
       >
         the irders
       </Button> */}
-      <View style={styles.orders_list}>
-        <FlatList
-          data={orders}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.orderId.toString()}
-        />
-      </View>
-      {/* <Text>hello</Text>
-          <Button
-            onPress={() => {
-              handlePressOrder;
-            }}
-            style={styles.Button}
-          >
-            <Text style={styles.passenger_name}>WATCH ORDER DETAILS </Text>
-          </Button> */}
+        <View style={styles.orders_list}>
+          <FlatList
+            data={orders}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.orderId.toString()}
+          />
+        </View>
+
+      </ImageBackground>
     </View>
   );
 }
@@ -266,7 +265,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 100,
     marginTop: -70,
-    backgroundColor: "#91AEC4",
+    backgroundColor: "white",
   },
   passenger_name: {
     color: "black",

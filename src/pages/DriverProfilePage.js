@@ -2,7 +2,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 // import Icon from "react-native-vector-icons/Feather";
 
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity,ImageBackground } from "react-native";
 import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 100,
     marginTop: -70,
-    backgroundColor: "#91AEC4",
+    backgroundColor: "white",
   },
   driver_name: {
     color: "black",

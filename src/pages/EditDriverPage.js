@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, Image,ImageBackground } from "react-native";
 import { IP, PORT } from "@env";
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
