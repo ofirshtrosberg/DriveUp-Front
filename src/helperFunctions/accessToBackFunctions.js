@@ -2,8 +2,8 @@ import { IP, PORT } from "@env";
 
 // !!!! check 401
 export const getUserByEmail = async (email, userToken, navigation) => {
-  console.log("getUserByEmail", email);
-  console.log("getUserByEmail", userToken);
+  console.log("getUserByEmail email", email);
+  console.log("getUserByEmail token", userToken);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/users/${email}`, {
       method: "GET",

@@ -10,6 +10,7 @@ import {
 } from "../helperFunctions/validationFunctions.js";
 import { IP, PORT } from "@env";
 import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
+import { is } from "date-fns/locale";
 export default function RegisterAsDriverPage({ navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
   const handleRegister = (
@@ -45,38 +46,16 @@ export default function RegisterAsDriverPage({ navigation }) {
         response.json();
       })
       .then((data) => {
-        handleRegisterLocal(
-          email,
-          password,
-          phone,
-          fullName,
-          carModel,
-          carColor,
-          plateNumber
-        );
+        handleRegisterLocal(email, false);
       })
       .catch((error) => {
         setErrorMessage("Registration failed!");
       });
   };
-  const handleRegisterLocal = async (
-    email,
-    password,
-    phone,
-    fullName,
-    carModel,
-    carColor,
-    plateNumber
-  ) => {
+  const handleRegisterLocal = async (email, isDriver) => {
     const user = {
       email: email,
-      password: password,
-      phone_number: phone,
-      full_name: fullName,
-      car_model: carModel,
-      car_color: carColor,
-      plate_number: plateNumber,
-      image_url: "",
+      isDriver: isDriver
     };
     await addUserLocal(user);
     await printUsersLocal();

@@ -8,12 +8,11 @@ import { Provider as PaperProvider } from "react-native-paper";
 import RegisterAsDriverPage from "./src/pages/RegisterAsDriverPage";
 import RegisterAsPassengerPage from "./src/pages/RegisterAsPassengerPage";
 import ProfilePage from "./src/pages/ProfilePage";
-import { printUsersLocal } from "./AsyncStorageUsers";
 import SubscriptionPage from "./src/pages/SubscriptionPage";
 import EditPassengerPage from "./src/pages/EditPassengerPage";
 import EditDriverPage from "./src/pages/EditDriverPage";
 import OrderDetailsPage from "./src/pages/OrderDetailsPage";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PassengerOrderOnMap from "./src/pages/PassengerOrderOnMap";
 import PassengerOrderResult from "./src/pages/PassengerOrderResult";
@@ -33,7 +32,13 @@ export default function App() {
     <AuthProvider>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: "#020C26" },
+              headerTintColor: "white",
+            }}
+          >
+            <Stack.Screen name="Landing" component={LandingPage} />
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen
               name="RegisterAsDriver"
@@ -60,7 +65,6 @@ export default function App() {
               name="DriveDriverMode"
               component={DriveOnMapDriverMode}
             />
-            <Stack.Screen name="Landing" component={LandingPage} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

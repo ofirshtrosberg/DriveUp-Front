@@ -5,10 +5,7 @@ import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { TextInput, Button } from "react-native-paper";
 import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
-import {
-  validatePassword,
-  validateFullName,
-} from "../helperFunctions/validationFunctions.js";
+import { validateFullName, validatePassword } from "./validationFunctions";
 import colors from "../config/colors.js";
 import { IP, PORT } from "@env";
 import { useNavigation } from "@react-navigation/native";
@@ -59,24 +56,14 @@ export default function EditProfilePage({ navigation, route }) {
         return response.json();
       })
       .then((data) => {
-        handleUpdateLocal(email, editedName);
+        console.log("User update successfully!");
+        navigation.goBack();
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
       });
   };
-  const handleUpdateLocal = async () => {
-    const updatedUser = {
-      email: email,
-      full_name: editedName,
-      // password: editedPassword,
-    };
-    await updateUserLocal(updatedUser);
-    setSuccessMessage("Update successful!");
-    printUsersLocal();
-    console.log("User update successfully!");
-    navigation.goBack();
-  };
+
   const handleNameChange = (text) => {
     setEditedName(text);
   };

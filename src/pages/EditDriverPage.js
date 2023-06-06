@@ -4,7 +4,7 @@ import { View, TouchableOpacity, StyleSheet, Text, Image,ImageBackground } from 
 import { IP, PORT } from "@env";
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
-import { updateUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
+import { printUsersLocal } from "../../AsyncStorageUsers";
 import colors from "../config/colors.js";
 import { ScrollView } from "react-native-gesture-handler";
 import {
@@ -73,35 +73,12 @@ export default function EditDriverPage({ navigation, route }) {
         return response.json();
       })
       .then((data) => {
-        handleUpdateLocal(
-          email,
-          editedName,
-          editedCarModel,
-          editedCarColor,
-          editedPlateNumber
-          // editedPassword
-        );
+        console.log("User update successfully!");
+        navigation.goBack();
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
       });
-  };
-  const handleUpdateLocal = async () => {
-    const updatedUser = {
-      email: email,
-      full_name: editedName,
-      car_model: editedCarModel,
-      car_color: carColor,
-      plate_number: editedPlateNumber,
-      image_url: newImageProfile,
-      // password: editedPassword,
-    };
-    await updateUserLocal(updatedUser);
-    printUsersLocal();
-    //     ge("Update successful!");
-    // console.log("User update successfully!");
-    console.log("User update successfully!");
-    navigation.goBack();
   };
 
   const handleNameChange = (text) => {
