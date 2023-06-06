@@ -15,7 +15,7 @@ import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import { driveDetails } from "../helperFunctions/accessToBackFunctions";
+import { driveDetailsPreview } from "../helperFunctions/accessToBackFunctions";
 function calculateLatLonDelta(orderLocations) {
   const latitudes = orderLocations.map((location) => location.address.latitude);
   const longitudes = orderLocations.map(
@@ -45,7 +45,11 @@ export default function DriveOnMapDriverMode() {
   const [isDriveAccepted, setIsDriveAccepted] = useState(false);
   const getDriveDetails = async () => {
     try {
-      const response = await driveDetails(userToken, driveId, navigation);
+      const response = await driveDetailsPreview(
+        userToken,
+        driveId,
+        navigation
+      );
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);
       console.log(orderLocations);
@@ -169,6 +173,7 @@ export default function DriveOnMapDriverMode() {
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
+                // !!!! call accept drive
               }}
             >
               Accept Order
@@ -181,10 +186,11 @@ export default function DriveOnMapDriverMode() {
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
-                navigation.goBack();
+                // !!! call finish drive
+                navigation.navigate("FinishDrive");
               }}
             >
-              Finish order
+              Finish drive
             </Button>
           )}
         </View>

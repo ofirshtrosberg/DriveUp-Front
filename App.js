@@ -19,6 +19,7 @@ import PassengerOrderResult from "./src/pages/PassengerOrderResult";
 import DriveOnMapDriverMode from "./src/pages/DriveOnMapDriverMode";
 import { AuthProvider } from "./AuthContext";
 import LandingPage from "./src/pages/LandingPage";
+import FinishDriveScreen from "./src/pages/FinishDriveScreen";
 const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {
@@ -65,6 +66,7 @@ export default function App() {
               name="DriveDriverMode"
               component={DriveOnMapDriverMode}
             />
+            <Stack.Screen name="FinishDrive" component={FinishDriveScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

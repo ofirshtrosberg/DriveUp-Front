@@ -337,3 +337,31 @@ export const driveDetails = async (userToken, driveId, navigation) => {
       });
   });
 };
+export const driveDetailsPreview = async (userToken, driveId, navigation) => {
+  console.log("drive details");
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/driver/drive-details-preview/${driveId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          throw new Error("your token expired or invalid please login");
+        }
+        console.log("drive details response", response);
+        return response.json();
+      })
+      .then((data) => {
+        console.log("driveDetails data", data);
+        resolve(data);
+      })
+      .catch((error) => {
+        console.error("drive details error", error);
+        reject("drive details error", error);
+      });
+  });
+};
