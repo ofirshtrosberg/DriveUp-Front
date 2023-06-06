@@ -8,6 +8,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserByEmail } from "../../AsyncStorageUsers";
 import { useState } from "react";
+import { useEffect } from "react";
 export default function TaxiPage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -16,7 +17,7 @@ export default function TaxiPage({ navigation }) {
     });
   }, [navigation]);
 
-  const [plateNumber, setPlateNumber] = useState("");
+  const [isDriver, setIsDriver] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserEmail, setCurrentUserEmail] = useState("");
   const fetchUser = async () => {
@@ -25,8 +26,9 @@ export default function TaxiPage({ navigation }) {
       const value = await AsyncStorage.getItem("currentUserEmail");
       if (value !== null && value !== "") {
         const fetchedUser = await getUserByEmail(value);
-        setPlateNumber(fetchedUser.plate_number);
+        setIsDriver(fetchedUser.isDriver);
         setCurrentUserEmail(value);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -48,7 +50,7 @@ export default function TaxiPage({ navigation }) {
     <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator size="large" color="#000" />
-      ) : plateNumber === "" ? (
+      ) : isDriver === false ? (
         <PassengerOrderTaxiPage currentUserEmail={currentUserEmail} />
       ) : (
         <DriverRoutesOffersPage />

@@ -67,26 +67,14 @@ export default function EditProfilePage({ navigation, route }) {
         return response.json();
       })
       .then((data) => {
-        handleUpdateLocal(email, editedName);
+        console.log("User update successfully!");
+        navigation.goBack();
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
       });
   };
-  const handleUpdateLocal = async () => {
-    const updatedUser = {
-      email: email,
-      full_name: editedName,
-      image_url: newImageProfile,
-      // password: editedPassword,
-    };
-    await updateUserLocal(updatedUser);
-    // setSuccessMessage("Update successful!");
-    printUsersLocal();
 
-    console.log("User update successfully!");
-    navigation.goBack();
-  };
   const handleNameChange = (text) => {
     setEditedName(text);
   };
@@ -165,7 +153,6 @@ export default function EditProfilePage({ navigation, route }) {
       }
       if (response.ok) {
         console.log("Image uploaded successfully! Response:");
-        printUsersLocal();
       } else {
         console.log("Failed to upload image. Response:");
       }
