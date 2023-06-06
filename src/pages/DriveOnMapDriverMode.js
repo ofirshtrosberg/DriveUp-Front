@@ -16,7 +16,10 @@ import { GOOGLE_MAPS_API_KEY } from "@env";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { driveDetailsPreview } from "../helperFunctions/accessToBackFunctions";
-import { acceptDrive } from "../helperFunctions/accessToBackFunctions";
+import {
+  acceptDrive,
+  finishDrive,
+} from "../helperFunctions/accessToBackFunctions";
 function calculateLatLonDelta(orderLocations) {
   const latitudes = orderLocations.map((location) => location.address.latitude);
   const longitudes = orderLocations.map(
@@ -190,7 +193,7 @@ export default function DriveOnMapDriverMode() {
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
-                // !!! call finish drive
+                finishDrive(driveId, userToken, navigation, logout);
                 navigation.navigate("FinishDrive");
               }}
             >
