@@ -24,7 +24,7 @@ export default function ProfilePage({ navigation }) {
   const [password, setPassword] = useState("");
   const [carColor, setCarColor] = useState("");
   const [imageProfile, setImageProfile] = useState("");
-
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState("");
   const fetchUser = async () => {
     try {
@@ -32,6 +32,7 @@ export default function ProfilePage({ navigation }) {
       if (value !== null && value !== "") {
         // !!!!! fetch from back
         const fetchedUser = await getUserByEmail(value, userToken, navigation);
+        console.log("fetch user", fetchedUser);
         setEmail(value);
         setUser(fetchedUser);
         setFullName(fetchedUser.fullName);
@@ -41,6 +42,7 @@ export default function ProfilePage({ navigation }) {
         setPassword(fetchedUser.password);
         setCarColor(fetchedUser.carColor);
         setImageProfile(fetchedUser.imageUrl);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -53,31 +55,40 @@ export default function ProfilePage({ navigation }) {
       return () => {};
     }, [])
   );
-
+  useEffect(() => {
+    console.log("image profile in use effect", imageProfile);
+    // setIsLoading(false);
+  }, [imageProfile]);
   return (
-    <View style={styles.container}>
-      {plateNumber === "" ||
-      plateNumber === null ||
-      plateNumber === undefined ? (
-        <PassengerProfile
-          email={email}
-          fullName={fullName}
-          phoneNumber={phoneNumber}
-          password={password}
-          imageProfile={imageProfile}
-        />
+    <View>
+      {isLoading ? (
+        <View></View>
       ) : (
-        <DriverProfile
-          email={email}
-          fullName={fullName}
-          plateNumber={plateNumber}
-          phoneNumber={phoneNumber}
-          carModel={carModel}
-          password={password}
-          carColor={carColor}
-          forOrder="false"
-          imageProfile={imageProfile}
-        />
+        <View style={styles.container}>
+          {plateNumber === "" ||
+          plateNumber === null ||
+          plateNumber === undefined ? (
+            <PassengerProfile
+              email={email}
+              fullName={fullName}
+              phoneNumber={phoneNumber}
+              password={password}
+              imageProfile={imageProfile}
+            />
+          ) : (
+            <DriverProfile
+              email={email}
+              fullName={fullName}
+              plateNumber={plateNumber}
+              phoneNumber={phoneNumber}
+              carModel={carModel}
+              password={password}
+              carColor={carColor}
+              forOrder="false"
+              imageProfile={imageProfile}
+            />
+          )}
+        </View>
       )}
     </View>
   );
