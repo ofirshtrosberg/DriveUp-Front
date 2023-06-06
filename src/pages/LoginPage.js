@@ -18,14 +18,14 @@ export default function LoginPage({ navigation }) {
   const [navigateNow, setNavigateNow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  useEffect(() => {
-    AsyncStorage.getItem("userToken").then((value) => {
-      if (value !== null && value !== "") {
-        login(value);
-        navigation.navigate("Main");
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   AsyncStorage.getItem("userToken").then((value) => {
+  //     if (value !== null && value !== "") {
+  //       login(value);
+  //       navigation.navigate("Main");
+  //     }
+  //   });
+  // }, []);
   useEffect(() => {
     console.log(userToken);
   }, [userToken]);

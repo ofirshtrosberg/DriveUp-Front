@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {
   Text,
   View,
@@ -10,10 +10,11 @@ import {
 import colors from "../config/colors";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-
+import { AuthContext } from "../../AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LandingPage() {
   const navigation = useNavigation();
-
+  const { login } = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -24,7 +25,14 @@ export default function LandingPage() {
         <Button
           style={styles.button}
           onPress={() => {
-            navigation.navigate("Login");
+            AsyncStorage.getItem("userToken").then((value) => {
+              if (value !== null && value !== "") {
+                login(value);
+                navigation.navigate("Main");
+              } else {
+                navigation.navigate("Login");
+              }
+            });
           }}
         >
           <Text style={styles.text}>Get Started</Text>

@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../../AuthContext";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Header = ({ title }) => {
   const { userToken, login, logout } = useContext(AuthContext);
   const navigation = useNavigation();
-  const handleLogout =async () => {
+  const handleLogout = async () => {
     AsyncStorage.setItem("currentUserEmail", "");
     logout();
     navigation.navigate("Login");
