@@ -36,8 +36,7 @@ export default function EditProfilePage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageProfile);
-  // const [imageUrl, setImageUrl] = useState(null);
-  // const [savedImageUri, setSavedImageUri] = useState(null);
+ 
 
   const handleUpdate = (email, editedName) => {
     console.log(userToken);

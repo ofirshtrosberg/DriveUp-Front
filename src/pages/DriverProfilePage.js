@@ -2,7 +2,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 // import Icon from "react-native-vector-icons/Feather";
 
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity,ImageBackground } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
@@ -32,7 +32,12 @@ export default function DriverProfilePage(props) {
           {imageProfile ? (
             <Image source={{ uri: imageProfile }} style={styles.avatar} />
           ) : (
-            <UserAvatar size={110} name={fullName} style={styles.avatar} />
+            <UserAvatar
+              size={110}
+              name={fullName}
+              style={styles.avatar}
+              textColor={"#061848"}
+            />
           )}
         </TouchableOpacity>
         {forOrder === "false" && (
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 100,
     marginTop: -70,
-    backgroundColor: "white",
+    backgroundColor: "#91AEC4",
   },
   driver_name: {
     color: "black",
