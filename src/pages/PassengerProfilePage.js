@@ -27,8 +27,37 @@ export default function PassengerProfilePage(props) {
   const destLat = 32.794044;
   const destLon = 34.989571;
   const num = 2;
+  const [imageUri, setImageUri] = useState(null);
 
   useEffect(() => {
+    const getImage = async () => {
+      console.log("inside get image", imageProfile);
+      try {
+        const response = await fetch(
+          "http://" + IP + ":" + PORT + imageProfile,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Get image failed");
+        }
+
+        const blob = await response.blob(); // Convert the response to a Blob object
+        const uri = blob._data.blobId; // Create a URI for the Blob object
+        setImageUri(uri);
+        console.log("uri", imageUri);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getImage();
     getOrderHistory();
   }, []);
 
@@ -158,8 +187,8 @@ export default function PassengerProfilePage(props) {
       </View>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity>
-          {imageProfile ? (
-            <Image source={{ uri: imageProfile }} style={styles.avatar} />
+          {imageUri ? (
+            <Image source={{ uri: imageUri }} style={styles.avatar} />
           ) : (
             <UserAvatar size={110} name={fullName} style={styles.avatar} />
           )}
