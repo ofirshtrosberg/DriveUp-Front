@@ -32,7 +32,12 @@ export default function DriverProfilePage(props) {
           {imageProfile ? (
             <Image source={{ uri: imageProfile }} style={styles.avatar} />
           ) : (
-            <UserAvatar size={110} name={fullName} style={styles.avatar} />
+            <UserAvatar
+              size={110}
+              name={fullName}
+              style={styles.avatar}
+              textColor={"#061848"}
+            />
           )}
         </TouchableOpacity>
         {forOrder === "false" && (
