@@ -395,3 +395,30 @@ export const driveDetailsPreview = async (
       });
   });
 };
+export const finishDrive = (driveId, userToken, navigation, logout) => {
+  fetch(`http://${IP}:${PORT}/driver/finish-drive/${driveId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parameter: {
+        orderId: orderId,
+      },
+    }),
+  })
+    .then((response) => {
+      console.log("accept drive res", response);
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        logout();
+        throw new Error("your token expired or invalid please login");
+      }
+      return response.json();
+    })
+    .then((data) => {})
+    .catch((error) => {
+      console.log(error);
+    });
+};
