@@ -271,13 +271,7 @@ export const requestDrives = async (
   });
 };
 // !!!! need to check 401
-export const acceptDrive = (
-  orderId,
-  currUserEmail,
-  userToken,
-  navigation,
-  logout
-) => {
+export const acceptDrive = (orderId, userToken, navigation, logout) => {
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -285,9 +279,7 @@ export const acceptDrive = (
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      parameter: {
-        orderId: orderId,
-      },
+      orderId: orderId,
     }),
   })
     .then((response) => {
@@ -299,8 +291,14 @@ export const acceptDrive = (
       }
       return response.json();
     })
-    .then((data) => {})
+    .then((data) => {
+      console.log("data accept drive", data);
+      if (data.success !== true) {
+        navigation.goBack();
+      }
+    })
     .catch((error) => {
+      navigation.goBack();
       console.log(error);
     });
 };
@@ -401,12 +399,7 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
     headers: {
       Authorization: `Bearer ${userToken}`,
       "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      parameter: {
-        orderId: orderId,
-      },
-    }),
+    }
   })
     .then((response) => {
       console.log("accept drive res", response);

@@ -180,7 +180,7 @@ export default function DriveOnMapDriverMode() {
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
-                // !!!! call accept drive
+                acceptDrive(driveId, userToken, navigation, logout);
               }}
             >
               Accept Order
