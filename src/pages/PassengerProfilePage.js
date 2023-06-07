@@ -18,7 +18,8 @@ import { Button } from "react-native-paper";
 import { IP, PORT } from "@env";
 import { AuthContext } from "../../AuthContext";
 import { format } from "date-fns";
-
+import * as FileSystem from "expo-file-system";
+import axios from "axios";
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
@@ -29,6 +30,37 @@ export default function PassengerProfilePage(props) {
   const destLat = 32.794044;
   const destLon = 34.989571;
   const num = 2;
+  const [imageUri, setImageUri] = useState(null);
+  useEffect(() => {
+    console.log("file system:::", FileSystem.documentDirectory);
+    downloadImage();
+    getOrderHistory();
+  }, []);
+
+  const downloadImage = async () => {
+    try {
+      const response = await fetch("http://driveup.cs.colman.ac.il/images/29", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to download image");
+      }
+
+      const imageUri = `${FileSystem.documentDirectory}image.png`;
+      await FileSystem.downloadAsync(response.url, imageUri);
+
+      setImageUri(imageUri);
+      console.log("uri====", imageUri);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    console.log("image uri");
+  }, [imageUri]);
 
   const passengerOrderDrive = async (
     currentUserEmail,

@@ -19,7 +19,7 @@ export default function SubscriptionPage({ navigation }) {
   const getCurrentSubscription = async () => {
     const value = await AsyncStorage.getItem("currentUserEmail");
     if (value !== null && value !== "") {
-      isUserPremium(value, userToken, navigation)
+      isUserPremium(value, userToken, navigation, logout)
         .then((result) => {
           console.log("is premium", result);
           setIsPremium(result);

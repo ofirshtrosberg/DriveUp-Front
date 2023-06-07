@@ -34,7 +34,12 @@ export default function ProfilePage({ navigation }) {
       const value = await AsyncStorage.getItem("currentUserEmail");
       if (value !== null && value !== "") {
         // !!!!! fetch from back
-        const fetchedUser = await getUserByEmail(value, userToken, navigation);
+        const fetchedUser = await getUserByEmail(
+          value,
+          userToken,
+          navigation,
+          logout
+        );
         console.log("fetch user", fetchedUser);
         setEmail(value);
         setUser(fetchedUser);

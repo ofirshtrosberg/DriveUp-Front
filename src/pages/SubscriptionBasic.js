@@ -2,7 +2,13 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthContext";
 import { useFonts } from "expo-font";
 import { Lobster_400Regular } from "@expo-google-fonts/lobster";
-import { Text, View, StyleSheet, Dimensions } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
@@ -57,7 +63,8 @@ export default function SubscriptionBasic() {
         expMonth,
         expYear,
         userToken,
-        navigation
+        navigation,
+        logout
       );
       navigation.goBack();
     });
@@ -79,104 +86,119 @@ export default function SubscriptionBasic() {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Subscription</Text>
-      <Text style={styles.text}>Your current Subscription:</Text>
-      <Text style={styles.subscription}>Basic</Text>
-      <View style={{ backgroundColor: "#fff", borderRadius: 10 }}>
-        <Picker
-          selectedValue={cardType}
-          onValueChange={(value, index) => setCardType(value)}
-          style={{ width: 220 }}
-        >
-          <Picker.Item label="Visa" value="visa" />
-          <Picker.Item label="MasterCard" value="masterCard" />
-          <Picker.Item label="Discover" value="discover" />
-          <Picker.Item label="Diners" value="diners" />
-          <Picker.Item label="AmericanExpress" value="americanExpress" />
-        </Picker>
-      </View>
-      <TextInput
-        mode="outlined"
-        label="Card owner id"
-        style={styles.input}
-        onChangeText={handleIdChange}
-      />
-      <TextInput
-        mode="outlined"
-        label="Card number"
-        style={styles.input}
-        onChangeText={handleCardNumberChange}
-      />
-      <TextInput
-        mode="outlined"
-        label="CVV"
-        style={styles.input}
-        onChangeText={handleCvvChange}
-      />
-      <View
+      <ImageBackground
+        source={require("../assets/basic.png")}
         style={{
-          flex: 1,
-          flexDirection: "row",
-          flexWrap: "wrap",
-          maxHeight: windowWidth / 5,
+          width: "100%",
+          height: undefined,
+          aspectRatio: 42 / 62.4,
         }}
       >
         <View
-          style={{ backgroundColor: "#fff", borderRadius: 10, marginRight: 3 }}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Picker
-            selectedValue={expMonth}
-            onValueChange={(value, index) => setExpMonth(value)}
-            style={{ width: 100 }}
+          <View
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: 10,
+              marginTop: 170,
+            }}
           >
-            <Picker.Item label="01" value="1" />
-            <Picker.Item label="02" value="2" />
-            <Picker.Item label="03" value="3" />
-            <Picker.Item label="04" value="4" />
-            <Picker.Item label="05" value="5" />
-            <Picker.Item label="06" value="6" />
-            <Picker.Item label="07" value="7" />
-            <Picker.Item label="08" value="8" />
-            <Picker.Item label="09" value="9" />
-            <Picker.Item label="10" value="10" />
-            <Picker.Item label="11" value="11" />
-            <Picker.Item label="12" value="12" />
-          </Picker>
-        </View>
-        <View
-          style={{
-            backgroundColor: "#fff",
-            borderRadius: 10,
-            borderColor: colors.blue1,
-            borderWidth: 3,
-          }}
-        >
-          <Picker
-            selectedValue={expYear}
-            onValueChange={(value, index) => setExpYear(value)}
-            style={{ width: 150 }}
+            <Picker
+              selectedValue={cardType}
+              onValueChange={(value, index) => setCardType(value)}
+              style={{ width: 220 }}
+            >
+              <Picker.Item label="Visa" value="visa" />
+              <Picker.Item label="MasterCard" value="masterCard" />
+              <Picker.Item label="Discover" value="discover" />
+              <Picker.Item label="Diners" value="diners" />
+              <Picker.Item label="AmericanExpress" value="americanExpress" />
+            </Picker>
+          </View>
+          <TextInput
+            mode="outlined"
+            label="Card owner id"
+            style={styles.input}
+            onChangeText={handleIdChange}
+          />
+          <TextInput
+            mode="outlined"
+            label="Card number"
+            style={styles.input}
+            onChangeText={handleCardNumberChange}
+          />
+          <TextInput
+            mode="outlined"
+            label="CVV"
+            style={styles.input}
+            onChangeText={handleCvvChange}
+          />
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              flexWrap: "wrap",
+              // maxHeight: windowWidth / 5,
+            }}
           >
-            <Picker.Item label="2021" value="2021" />
-            <Picker.Item label="2022" value="2022" />
-            <Picker.Item label="2023" value="2023" />
-            <Picker.Item label="2024" value="2024" />
-            <Picker.Item label="2025" value="2025" />
-            <Picker.Item label="2026" value="2026" />
-            <Picker.Item label="2027" value="2027" />
-            <Picker.Item label="2028" value="2028" />
-          </Picker>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                marginRight: 3,
+              }}
+            >
+              <Picker
+                selectedValue={expMonth}
+                onValueChange={(value, index) => setExpMonth(value)}
+                style={{ width: 100 }}
+              >
+                <Picker.Item label="01" value="1" />
+                <Picker.Item label="02" value="2" />
+                <Picker.Item label="03" value="3" />
+                <Picker.Item label="04" value="4" />
+                <Picker.Item label="05" value="5" />
+                <Picker.Item label="06" value="6" />
+                <Picker.Item label="07" value="7" />
+                <Picker.Item label="08" value="8" />
+                <Picker.Item label="09" value="9" />
+                <Picker.Item label="10" value="10" />
+                <Picker.Item label="11" value="11" />
+                <Picker.Item label="12" value="12" />
+              </Picker>
+            </View>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                borderWidth: 3,
+              }}
+            >
+              <Picker
+                selectedValue={expYear}
+                onValueChange={(value, index) => setExpYear(value)}
+                style={{ width: 150 }}
+              >
+                <Picker.Item label="2021" value="2021" />
+                <Picker.Item label="2022" value="2022" />
+                <Picker.Item label="2023" value="2023" />
+                <Picker.Item label="2024" value="2024" />
+                <Picker.Item label="2025" value="2025" />
+                <Picker.Item label="2026" value="2026" />
+                <Picker.Item label="2027" value="2027" />
+                <Picker.Item label="2028" value="2028" />
+              </Picker>
+            </View>
+          </View>
+          <Button style={styles.upgradeBtn} onPress={() => handleUpgrade()}>
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>
+              Upgrade to premium
+            </Text>
+          </Button>
+          <Text style={styles.errorText}>{error}</Text>
         </View>
-      </View>
-      {/* <TextInput mode="outlined" label="Expiration date" style={styles.input} /> */}
-      <Button
-        style={styles.upgradeBtn}
-        mode="contained"
-        buttonColor="#111"
-        onPress={() => handleUpgrade()}
-      >
-        Upgrade to premium
-      </Button>
-      <Text style={styles.errorText}>{error}</Text>
+      </ImageBackground>
     </View>
   );
 }
@@ -185,20 +207,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    // backgroundColor: "#061848",
   },
   title: {
     fontFamily: "Lobster_400Regular",
     fontSize: 50,
     fontWeight: "normal",
+    color: "#fff",
   },
   text: {
     fontSize: 19,
+    color: "#fff",
   },
   subscription: {
     marginTop: 4,
     fontFamily: "Lobster_400Regular",
     fontSize: 30,
     fontWeight: "normal",
+    color: "#fff",
   },
   input: {
     marginBottom: 7,
@@ -206,14 +232,18 @@ const styles = StyleSheet.create({
     width: (4 / 5) * windowWidth,
   },
   upgradeBtn: {
-    // marginTop: 20,
+    position: "absolute",
+    top: 500,
+    left: 120,
+    width: 170,
     // width: (2 / 3) * windowWidth,
   },
   errorText: {
-    marginTop: 10,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
-    color: colors.blue1,
+    color: "#fff",
+    position: "absolute",
+    top: 557,
   },
 });

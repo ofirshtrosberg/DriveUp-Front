@@ -65,6 +65,7 @@ export default function EditDriverPage({ navigation, route }) {
       .then((response) => {
         if (response.status === 401) {
           navigation.navigate("Login");
+          logout();
           throw new Error("your token expired or invalid please login");
         }
         if (!response.ok) {
@@ -177,6 +178,7 @@ export default function EditDriverPage({ navigation, route }) {
       );
       if (response.status === 401) {
         navigation.navigate("Login");
+        logout();
         throw new Error("your token expired or invalid please login");
       }
       if (response.ok) {

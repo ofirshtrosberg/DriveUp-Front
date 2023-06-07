@@ -53,12 +53,18 @@ export default function DriveMapPassengerMode({ driveId }) {
   const [driverImageUrl, setDriverImageUrl] = useState("");
   const getDriveDetails = async () => {
     try {
-      const response = await driveDetails(userToken, driveId, navigation);
+      const response = await driveDetails(
+        userToken,
+        driveId,
+        navigation,
+        logout
+      );
       setDriverEmail(response.orderLocations[0].userEmail);
       const driver = await getUserByEmail(
         response.orderLocations[0].userEmail,
         userToken,
-        navigation
+        navigation,
+        logout
       );
       setDriverCarColor(driver.carColor);
       setDriverFullName(driver.fullName);
@@ -184,7 +190,7 @@ export default function DriveMapPassengerMode({ driveId }) {
             <Text style={styles.text}>{driverPhoneNumber}</Text>
             <Button
               mode="contained"
-              buttonColor="#111"
+              buttonColor="#76A6ED"
               style={{ marginTop: 10 }}
               onPress={() => {
                 setIsModalVisibleProfile(true);
@@ -199,7 +205,7 @@ export default function DriveMapPassengerMode({ driveId }) {
           <Text style={styles.boldText}>Driver will arrive at: 17:43</Text>
           <Button
             mode="contained"
-            buttonColor="#111"
+            buttonColor="#8569F6"
             style={{ marginHorizontal: 70, marginTop: 10 }}
             onPress={() => {}}
           >
@@ -232,6 +238,7 @@ export default function DriveMapPassengerMode({ driveId }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#061848",
   },
   map: {
     flex: 1,
@@ -250,16 +257,19 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 5,
     fontSize: 20,
+    color: "#fff",
   },
   boldText: {
     marginTop: 5,
     fontSize: 20,
     fontWeight: "bold",
     alignSelf: "center",
+    color: "#fff",
   },
   driverName: {
     marginTop: 10,
     fontSize: 20,
     fontWeight: "bold",
+    color: "#fff",
   },
 });
