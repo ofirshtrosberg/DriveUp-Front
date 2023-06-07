@@ -213,6 +213,7 @@ export default function EditProfilePage({ navigation, route }) {
                   size={110}
                   name={editedName}
                   style={styles.profileImage}
+                  textColor={"#061848"}
                 />
               )}
             </TouchableOpacity>
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     width: "35%",
     marginTop: 55,
-    backgroundColor:"#061848"
+    // backgroundColor:"#061848"
   },
   save_text: {
     color: "white",
