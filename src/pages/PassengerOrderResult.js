@@ -7,16 +7,21 @@ import {
   ImageBackground,
 } from "react-native";
 import { AuthContext } from "../../AuthContext";
-import { getDriveByOrderId } from "../helperFunctions/accessToBackFunctions";
+import {
+  getDriveByOrderId,
+  cancelOrder,
+} from "../helperFunctions/accessToBackFunctions";
 import DriveMapPassengerMode from "../components/DriveMapPassengerMode";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import { Button } from "react-native-paper";
 export default function PassengerOrderResult() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const route = useRoute();
   const { orderId } = route.params;
   const { userToken, login, logout } = useContext(AuthContext);
   const [driveId, setDriveId] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const checkDrive = async () => {
     try {
       const response = await getDriveByOrderId(
@@ -31,12 +36,27 @@ export default function PassengerOrderResult() {
       console.log("checkDrive ", error);
     }
   };
-
+  const cancelOrderCheck = async () => {
+    try {
+      const response = await cancelOrder(
+        orderId,
+        userToken,
+        navigation,
+        logout
+      );
+      if (response===false) {
+        setErrorMessage("Cancel order failed!");
+      }
+    } catch (error) {
+      setErrorMessage("Cancel order failed!");
+      console.log(error);
+    }
+  };
   useEffect(() => {
     let interval;
 
     const checkDriveWithInterval = async () => {
-      if (driveId === null||driveId==="") {
+      if (driveId === null || driveId === "") {
         await checkDrive();
       } else {
         clearInterval(interval);
@@ -50,8 +70,8 @@ export default function PassengerOrderResult() {
   }, [driveId]);
   return (
     <View style={styles.container}>
-      {driveId !== null&&driveId!=="" ? (
-        <DriveMapPassengerMode driveId={driveId} />
+      {driveId !== null && driveId !== "" ? (
+        <DriveMapPassengerMode driveId={driveId} orderId={orderId} />
       ) : (
         <ImageBackground
           source={require("../assets/backgroundDriveup.png")}
@@ -64,9 +84,20 @@ export default function PassengerOrderResult() {
             <ActivityIndicator
               size="large"
               color="#fff"
-              style={{marginTop:10}}
+              style={{ marginTop: 10 }}
             />
           </View>
+          <Button
+            mode="contained"
+            buttonColor="#8569F6"
+            style={{ marginHorizontal: 70, marginTop: 20 }}
+            onPress={() => {
+              cancelOrderCheck();
+            }}
+          >
+            Cancel Order
+          </Button>
+          <Text style={{ marginTop: 10, color: "#fff" }}>{errorMessage}</Text>
         </ImageBackground>
       )}
     </View>

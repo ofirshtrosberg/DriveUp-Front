@@ -11,8 +11,8 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import UserAvatar from "react-native-user-avatar";
-// import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
 import { IP, PORT } from "@env";
@@ -29,17 +29,14 @@ export default function PassengerProfilePage(props) {
   const [imageUri, setImageUri] = useState(null);
   useEffect(() => {
     console.log("file system:::", FileSystem.documentDirectory);
+    console.log(imageProfile);
     downloadImage();
     getOrderHistory();
   }, []);
 
   const downloadImage = async () => {
     try {
-      const response = await fetch("http://driveup.cs.colman.ac.il/images/29", {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      });
+      const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
 
       if (!response.ok) {
         throw new Error("Failed to download image");
@@ -57,7 +54,6 @@ export default function PassengerProfilePage(props) {
   useEffect(() => {
     console.log("image uri");
   }, [imageUri]);
-
 
   const getOrderHistory = async (page = 1, size = 20) => {
     try {
@@ -133,14 +129,8 @@ export default function PassengerProfilePage(props) {
         <View style={styles.container}>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity>
-              {/* {imageProfile && (
-                <Image
-                  source={{ uri: imageProfile }}
-                  style={{ width: 200, height: 200 }}
-                />
-              )} */}
-              {imageProfile ? (
-                <Image source={{ uri: imageProfile }} style={styles.avatar} />
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.avatar} />
               ) : (
                 <UserAvatar
                   size={110}
@@ -152,11 +142,7 @@ export default function PassengerProfilePage(props) {
             </TouchableOpacity>
             <Modal visible={isPopupVisible} onRequestClose={closePopup}>
               <View style={styles.popupContainer}>
-                <Image
-                  // source={require("path/to/profile/image")}
-                  style={styles.popupImage}
-                />
-                {/* Add any additional content for the popup */}
+                <Image style={styles.popupImage} />
               </View>
             </Modal>
             <Icon
@@ -169,6 +155,7 @@ export default function PassengerProfilePage(props) {
                   email,
                   imageProfile,
                   password,
+                  imageUri,
                 });
               }}
             ></Icon>
@@ -247,7 +234,6 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 1,
     marginBottom: 5,
-    // textDecorationLine: "underline",
   },
   email_icon: { marginLeft: -10, marginRight: 20 },
   phone_icon: { transform: [{ rotate: "95deg" }], marginTop: -5 },
