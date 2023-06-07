@@ -8,6 +8,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { getUserByEmail } from "../helperFunctions/accessToBackFunctions";
 import { useEffect } from "react";
+import { IP, PORT } from "@env";
+
 export default function ProfilePage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,8 +26,11 @@ export default function ProfilePage({ navigation }) {
   const [password, setPassword] = useState("");
   const [carColor, setCarColor] = useState("");
   const [imageProfile, setImageProfile] = useState("");
+  const [imageId, setImageId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState("");
+
+ 
   const fetchUser = async () => {
     try {
       const value = await AsyncStorage.getItem("currentUserEmail");
@@ -41,7 +46,7 @@ export default function ProfilePage({ navigation }) {
         setPhoneNumber(fetchedUser.phoneNumber);
         setPassword(fetchedUser.password);
         setCarColor(fetchedUser.carColor);
-        setImageProfile(fetchedUser.imageUrl);
+        setImageId(fetchedUser.imageUrl);
         setIsLoading(false);
       }
     } catch (error) {
@@ -49,16 +54,15 @@ export default function ProfilePage({ navigation }) {
     }
   };
 
+  
+
   useFocusEffect(
     React.useCallback(() => {
       fetchUser();
       return () => {};
     }, [])
   );
-  useEffect(() => {
-    console.log("image profile in use effect", imageProfile);
-    // setIsLoading(false);
-  }, [imageProfile]);
+
   return (
     <View>
       {isLoading ? (
@@ -73,7 +77,7 @@ export default function ProfilePage({ navigation }) {
               fullName={fullName}
               phoneNumber={phoneNumber}
               password={password}
-              imageProfile={imageProfile}
+              imageProfile={imageId}
             />
           ) : (
             <DriverProfile
@@ -85,7 +89,7 @@ export default function ProfilePage({ navigation }) {
               password={password}
               carColor={carColor}
               forOrder="false"
-              imageProfile={imageProfile}
+              imageProfile={imageId}
             />
           )}
         </View>
