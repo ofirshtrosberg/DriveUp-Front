@@ -360,12 +360,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#061848",
     borderRadius: 20,
     width: 180,
+    marginRight: -10,
+    height: 25,
   },
   textButton: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize:15,
+    fontSize: 14,
+    marginTop: 3,
   },
-  date: { color: "#061848",fontSize: 16.5, fontWeight: "bold" },
+  date: {
+    color: "#061848",
+    fontSize: 16.5,
+    fontWeight: "bold",
+    marginLeft: -10,
+  },
 });
