@@ -8,6 +8,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { getUserByEmail } from "../helperFunctions/accessToBackFunctions";
 import { useEffect } from "react";
+import { IP, PORT } from "@env";
+
 export default function ProfilePage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,9 +25,10 @@ export default function ProfilePage({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [carColor, setCarColor] = useState("");
-  const [imageProfile, setImageProfile] = useState("");
+  const [imageId, setImageId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState("");
+
   const fetchUser = async () => {
     try {
       const value = await AsyncStorage.getItem("currentUserEmail");
@@ -46,8 +49,16 @@ export default function ProfilePage({ navigation }) {
         setPhoneNumber(fetchedUser.phoneNumber);
         setPassword(fetchedUser.password);
         setCarColor(fetchedUser.carColor);
-        setImageProfile(fetchedUser.imageUrl);
+        setImageId(fetchedUser.imageUrl);
         setIsLoading(false);
+        // if (fetchedUser && fetchedUser.imageUrl) {
+        //   const imageBlob = await getImageById(fetchedUser.imageUrl);
+        //   console.log("h" + imageBlob);
+        //   // const blobId = imageBlob._data.blobId;
+        //   setImageProfile(imageBlob);
+        // } else {
+        //   console.log("User not found or no image associated");
+        // }
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -60,10 +71,28 @@ export default function ProfilePage({ navigation }) {
       return () => {};
     }, [])
   );
-  useEffect(() => {
-    console.log("image profile in use effect", imageProfile);
-    // setIsLoading(false);
-  }, [imageProfile]);
+
+  // const getImageById = async (imageId) => {
+  //   fetch("http://" + IP + ":" + PORT + imageId, {
+  //     method: "GET",
+  //   })
+  //     .then((response) => response.blob())
+  //     .then((blob) => {
+  //       const imagePath = RNFS.DocumentDirectoryPath + "/image.png";
+
+  //       RNFS.writeFile(imagePath, blob, "base64")
+  //         .then(() => {
+  //           setImageProfile(imagePath);
+  //         })
+  //         .catch((error) => {
+  //           console.log("errpr", error);
+  //         });
+  //     });
+  // };
+
+  const [imageProfile, setImageProfile] = useState("");
+
+
   return (
     <View>
       {isLoading ? (
