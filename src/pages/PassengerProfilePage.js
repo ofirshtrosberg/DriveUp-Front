@@ -29,39 +29,6 @@ export default function PassengerProfilePage(props) {
   const destLat = 32.794044;
   const destLon = 34.989571;
   const num = 2;
-  const [imageUri, setImageUri] = useState(null);
-
-  useEffect(() => {
-    const getImage = async () => {
-      console.log("inside get image", imageProfile);
-      try {
-        const response = await fetch(
-          "http://" + IP + ":" + PORT + imageProfile,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userToken}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Get image failed");
-        }
-
-        const blob = await response.blob(); // Convert the response to a Blob object
-        const uri = blob._data.blobId; // Create a URI for the Blob object
-        setImageUri(uri);
-        console.log("uri", imageUri);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getImage();
-    getOrderHistory();
-  }, []);
 
   const passengerOrderDrive = async (
     currentUserEmail,
@@ -143,16 +110,15 @@ export default function PassengerProfilePage(props) {
         throw new Error("Failed to retrieve order history");
       }
       const orderHistory = await response.json();
+      // const filteredOrders = orderHistory.filter(
+      //   (order) => order.driverId !== null
+      // );
       setOrders(orderHistory);
-      console.log("orders: ", orders);
+      // console.log("orders: ", filteredOrders);
       return orderHistory;
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handlePressOrder = (order) => {
-    navigation.navigate("OrderDetails");
   };
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -167,6 +133,9 @@ export default function PassengerProfilePage(props) {
   const renderItem = ({ item }) => {
     const formattedTime = format(new Date(item.time), "HH:mm");
     const formattedDate = format(new Date(item.time), "dd-MM-yyyy");
+    const handlePressOrder = () => {
+      navigation.navigate("OrderDetails", { order: item });
+    };
 
     return (
       <View style={styles.listContainer}>
@@ -184,7 +153,6 @@ export default function PassengerProfilePage(props) {
 
   return (
     <View style={styles.container}>
-
       <ImageBackground
         source={require("../assets/profilePage.png")}
         resizeMode="cover"
@@ -193,6 +161,12 @@ export default function PassengerProfilePage(props) {
         <View style={styles.container}>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity>
+              {/* {imageProfile && (
+                <Image
+                  source={{ uri: imageProfile }}
+                  style={{ width: 200, height: 200 }}
+                />
+              )} */}
               {imageProfile ? (
                 <Image source={{ uri: imageProfile }} style={styles.avatar} />
               ) : (
@@ -308,7 +282,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   passenger_name: {
-    color: "#626FB4",
+    color: "white",
     fontSize: 24,
     marginLeft: 10,
     marginTop: 70,
@@ -317,14 +291,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   passenger_email: {
-    color: "#626FB4",
+    color: "white",
     fontSize: 20,
     marginLeft: 0,
     marginTop: 4,
     marginBottom: 7,
   },
   passenger_phone: {
-    color: "black",
+    color: "white",
     fontSize: 20,
     marginLeft: 15,
     marginTop: 1,
@@ -346,6 +320,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     textDecorationLine: "underline",
     fontWeight: "400",
+    color: "white",
   },
   orders_list: {
     backgroundColor: "#000",
