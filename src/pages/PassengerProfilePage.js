@@ -61,6 +61,7 @@ export default function PassengerProfilePage(props) {
   useEffect(() => {
     console.log("image uri");
   }, [imageUri]);
+
   const passengerOrderDrive = async (
     currentUserEmail,
     startLat,
@@ -141,16 +142,15 @@ export default function PassengerProfilePage(props) {
         throw new Error("Failed to retrieve order history");
       }
       const orderHistory = await response.json();
-      setOrders(orderHistory);
-      console.log("orders: ", orders);
-      return orderHistory;
+      const filteredOrders = orderHistory.filter(
+        (order) => order.driverId !== null
+      );
+      setOrders(filteredOrders);
+      console.log("orders: ", filteredOrders);
+      return filteredOrders;
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handlePressOrder = (order) => {
-    navigation.navigate("OrderDetails");
   };
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -165,6 +165,9 @@ export default function PassengerProfilePage(props) {
   const renderItem = ({ item }) => {
     const formattedTime = format(new Date(item.time), "HH:mm");
     const formattedDate = format(new Date(item.time), "dd-MM-yyyy");
+    const handlePressOrder = () => {
+      navigation.navigate("OrderDetails", { order: item });
+    };
 
     return (
       <View style={styles.listContainer}>
@@ -190,6 +193,12 @@ export default function PassengerProfilePage(props) {
         <View style={styles.container}>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity>
+              {/* {imageProfile && (
+                <Image
+                  source={{ uri: imageProfile }}
+                  style={{ width: 200, height: 200 }}
+                />
+              )} */}
               {imageProfile ? (
                 <Image source={{ uri: imageProfile }} style={styles.avatar} />
               ) : (
@@ -229,44 +238,22 @@ export default function PassengerProfilePage(props) {
             <Icon
               name="envelope"
               size={30}
-              color="#608cd7"
+              color="#76A6ED"
               style={styles.email_icon}
             />
             <Text style={styles.passenger_email}>{email} </Text>
-            {/* <Text>{imageProfile}</Text> */}
           </View>
           <View style={styles.data_icons_Container}>
             <Icon
               name="phone"
               size={20}
-              color="#608cd7"
+              color="#76A6ED"
               style={styles.phone_icon}
             />
             <Text style={styles.passenger_phone}>{phoneNumber} </Text>
           </View>
-          <Text style={styles.orders_title}>History Orders </Text>
-          <Button
-            onPress={() => {
-              passengerOrderDrive(
-                email,
-                myLat,
-                myLon,
-                destLat,
-                destLon,
-                num,
-                userToken
-              );
-            }}
-          >
-            order drive !!
-          </Button>
-          {/* <Button
-        onPress={() => {
-          getOrderHistory();
-        }}
-      >
-        the irders
-      </Button> */}
+          <Text style={styles.orders_title}>Orders History </Text>
+
           <View style={styles.orders_list}>
             <FlatList
               data={orders}
@@ -305,7 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   passenger_name: {
-    color: "#626FB4",
+    color: "white",
     fontSize: 24,
     marginLeft: 10,
     marginTop: 70,
@@ -314,14 +301,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   passenger_email: {
-    color: "#626FB4",
+    color: "white",
     fontSize: 20,
     marginLeft: 0,
     marginTop: 4,
     marginBottom: 7,
   },
   passenger_phone: {
-    color: "black",
+    color: "white",
     fontSize: 20,
     marginLeft: 15,
     marginTop: 1,
@@ -343,12 +330,12 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     textDecorationLine: "underline",
     fontWeight: "400",
+    color: "white",
   },
   orders_list: {
-    backgroundColor: "#000",
     padding: 10,
     width: "90%",
-    backgroundColor: "#5F84A2",
+    backgroundColor: "#76A6ED",
     height: 140,
     marginTop: 5,
     marginBottom: 10,
@@ -357,7 +344,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginLeft: 370,
     marginTop: -90,
-    color: "white",
+    color: "#76A6ED",
   },
   listContainer: {
     flexDirection: "row",
@@ -370,13 +357,23 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   Button: {
-    backgroundColor: "black",
+    backgroundColor: "#061848",
     borderRadius: 20,
-    width: 170,
+    width: 180,
+    marginRight: -10,
+    height: 25,
   },
   textButton: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+    fontSize: 14,
+    marginTop: 3,
+  },
+  date: {
+    color: "#061848",
+    fontSize: 16.5,
+    fontWeight: "bold",
+    marginLeft: -10,
   },
 });
