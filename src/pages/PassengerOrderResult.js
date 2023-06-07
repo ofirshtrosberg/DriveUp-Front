@@ -51,7 +51,7 @@ export default function PassengerOrderResult() {
   return (
     <View style={styles.container}>
       {driveId !== null&&driveId!=="" ? (
-        <DriveMapPassengerMode driveId={driveId} />
+        <DriveMapPassengerMode driveId={driveId} orderId={orderId} />
       ) : (
         <ImageBackground
           source={require("../assets/backgroundDriveup.png")}

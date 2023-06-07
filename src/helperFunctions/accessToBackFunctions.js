@@ -225,6 +225,41 @@ export const getDriveByOrderId = async (
       });
   });
 };
+export const getEstimatedTime = async (
+  orderId,
+  userToken,
+  navigation,
+  logout
+) => {
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/passenger/get-drive/${orderId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          navigation.navigate("Login");
+          logout();
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.estimatedDriverArrival !== undefined) {
+          resolve(data.estimatedDriverArrival);
+        } else {
+          reject(new Error("Drive check failed"));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
+};
 // 401 is checked
 export const requestDrives = async (
   userToken,
@@ -399,7 +434,7 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
     headers: {
       Authorization: `Bearer ${userToken}`,
       "Content-Type": "application/json",
-    }
+    },
   })
     .then((response) => {
       console.log("accept drive res", response);

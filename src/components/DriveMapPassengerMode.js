@@ -18,6 +18,7 @@ import DriverProfilePage from "../pages/DriverProfilePage";
 import {
   driveDetails,
   getUserByEmail,
+  getEstimatedTime,
 } from "../helperFunctions/accessToBackFunctions";
 function calculateLatLonDelta(orderLocations) {
   const latitudes = orderLocations.map((location) => location.address.latitude);
@@ -37,7 +38,7 @@ function calculateLatLonDelta(orderLocations) {
   const longitudeDelta = longitudeRange * 2;
   return { latitudeDelta, longitudeDelta };
 }
-export default function DriveMapPassengerMode({ driveId }) {
+export default function DriveMapPassengerMode({ driveId, orderId }) {
   const navigation = useNavigation();
   const { userToken, login, logout } = useContext(AuthContext);
   const [isModalVisibleProfile, setIsModalVisibleProfile] = useState(false);
@@ -54,6 +55,18 @@ export default function DriveMapPassengerMode({ driveId }) {
   const [estimatedTime, setEstimatedTime] = useState("");
   const getDriveDetails = async () => {
     try {
+      // const driveEstimatedTime = await getEstimatedTime(
+      //   orderId,
+      //   userToken,
+      //   navigation,
+      //   logout
+      // );
+      // const dateObject = new Date(driveEstimatedTime);
+      // const time = dateObject.toLocaleTimeString([], {
+      //   hour: "2-digit",
+      //   minute: "2-digit",
+      // });
+      // setEstimatedTime(time.toString());
       const response = await driveDetails(
         userToken,
         driveId,
@@ -174,17 +187,17 @@ export default function DriveMapPassengerMode({ driveId }) {
       </MapView>
       <View style={styles.bottomView}>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          {driverImageUrl !== "" && driverImageUrl !== null ? (
+          {/* {driverImageUrl !== "" && driverImageUrl !== null ? (
             <Image
               style={styles.driverImage}
               source={{ uri: { driverImageUrl } }}
             ></Image>
-          ) : (
-            <Image
-              style={styles.driverImage}
-              source={require("../assets/blankProfilePicture.jpg")}
-            ></Image>
-          )}
+          ) : ( */}
+          <Image
+            style={styles.driverImage}
+            source={require("../assets/blankProfilePicture.jpg")}
+          ></Image>
+          {/* )} */}
 
           <View>
             <Text style={styles.driverName}>{driverFullName}</Text>
@@ -203,7 +216,7 @@ export default function DriveMapPassengerMode({ driveId }) {
         </View>
         <View style={{ flex: 1, marginTop: 20 }}>
           <Text style={styles.boldText}>You need to pay: 10$</Text>
-          <Text style={styles.boldText}>Driver will arrive at: 17:43</Text>
+          <Text style={styles.boldText}>Driver will arrive at: 21:00</Text>
           <Button
             mode="contained"
             buttonColor="#8569F6"
