@@ -51,6 +51,7 @@ export default function DriveMapPassengerMode({ driveId }) {
   const [driverPhoneNumber, setDriverPhoneNumber] = useState("");
   const [driverPlateNumber, setDriverPlateNumber] = useState("");
   const [driverImageUrl, setDriverImageUrl] = useState("");
+  const [estimatedTime, setEstimatedTime] = useState("");
   const getDriveDetails = async () => {
     try {
       const response = await driveDetails(
@@ -203,14 +204,14 @@ export default function DriveMapPassengerMode({ driveId }) {
         <View style={{ flex: 1, marginTop: 20 }}>
           <Text style={styles.boldText}>You need to pay: 10$</Text>
           <Text style={styles.boldText}>Driver will arrive at: 17:43</Text>
-          <Button
+          {/* <Button
             mode="contained"
             buttonColor="#8569F6"
             style={{ marginHorizontal: 70, marginTop: 10 }}
             onPress={() => {}}
           >
             Cancel Order
-          </Button>
+          </Button> */}
         </View>
       </View>
       <Modal
