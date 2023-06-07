@@ -1,6 +1,14 @@
 import React, { useState, useRef, useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { View, TouchableOpacity, StyleSheet, Text, Image,ImageBackground } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  Image,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { TextInput, Button } from "react-native-paper";
@@ -36,7 +44,6 @@ export default function EditProfilePage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageProfile);
- 
 
   const handleUpdate = (email, editedName) => {
     console.log(userToken);
@@ -188,96 +195,103 @@ export default function EditProfilePage({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View style={{ margin: 20 }}>
-        <View style={{ alignItems: "center" }}>
-          <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
-            {newImageProfile ? (
-              <Image
-                source={{ uri: newImageProfile }}
-                style={styles.profileImage}
-              />
-            ) : (
-              <UserAvatar
-                size={110}
-                name={editedName}
-                style={styles.profileImage}
-              />
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
-      <BottomSheet
-        isVisible={isBottomSheetVisible}
-        style={styles.bottomSheet}
-        backdropStyle={styles.backdropStyle}
+      <ImageBackground
+        source={require("../assets/editPage.png")}
+        resizeMode="cover"
+        style={styles.image}
       >
-        <Text style={styles.bottomSheetsTitle}>
-          Choose Youe Profile Picture
-        </Text>
-        <Button onPress={() => takePhoto()} style={styles.bottomSheetsButton}>
-          <Text style={styles.bottomSheetsText}>Take a Photo</Text>
-        </Button>
-        <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
-          <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
-        </Button>
-        <Button
-          onPress={() => deleteProfileImage()}
-          style={styles.bottomSheetsButton}
-        >
-          <Text style={styles.bottomSheetsText}>Delete Image</Text>
-        </Button>
-        <Button
-          onPress={() => handleCloseBottomSheet(true)}
-          style={styles.bottomSheetsButton}
-        >
-          <Text style={styles.bottomSheetsText}>CANCEL</Text>
-        </Button>
-      </BottomSheet>
-      <View style={styles.user_details}>
-        <View style={styles.data_icons_Container}>
-          <FontAwesome name="user-o" size={20} style={styles.user_icon} />
-          <TextInput
-            value={editedName}
-            mode="outlined"
-            label="Name"
-            style={styles.input}
-            onChangeText={handleNameChange}
-          />
+        <View style={{ margin: 20 }}>
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
+              {newImageProfile ? (
+                <Image
+                  source={{ uri: newImageProfile }}
+                  style={styles.profileImage}
+                />
+              ) : (
+                <UserAvatar
+                  size={110}
+                  name={editedName}
+                  style={styles.profileImage}
+                  textColor={"#061848"}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
-        {/* <TextInput
+        <BottomSheet
+          isVisible={isBottomSheetVisible}
+          style={styles.bottomSheet}
+          backdropStyle={styles.backdropStyle}
+        >
+          <Text style={styles.bottomSheetsTitle}>
+            Choose Youe Profile Picture
+          </Text>
+          <Button onPress={() => takePhoto()} style={styles.bottomSheetsButton}>
+            <Text style={styles.bottomSheetsText}>Take a Photo</Text>
+          </Button>
+          <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
+            <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
+          </Button>
+          <Button
+            onPress={() => deleteProfileImage()}
+            style={styles.bottomSheetsButton}
+          >
+            <Text style={styles.bottomSheetsText}>Delete Image</Text>
+          </Button>
+          <Button
+            onPress={() => handleCloseBottomSheet(true)}
+            style={styles.bottomSheetsButton}
+          >
+            <Text style={styles.bottomSheetsText}>CANCEL</Text>
+          </Button>
+        </BottomSheet>
+        <View style={styles.user_details}>
+          <View style={styles.data_icons_Container}>
+            <FontAwesome name="user-o" size={20} style={styles.user_icon} />
+            <TextInput
+              value={editedName}
+              mode="outlined"
+              label="Name"
+              style={styles.input}
+              onChangeText={handleNameChange}
+            />
+          </View>
+          {/* <TextInput
           mode="outlined"
           value={editedPassword}
           label="Password"
           style={styles.input}
           onChangeText={handlePasswordChange}
         /> */}
-        <Button
-          style={styles.save_btn}
-          mode="contained"
-          onPress={() => {
-            // if (!validatePassword(editedPassword)) {
-            //   setErrorMessage("Invalid password");
-            //   setSuccessMessage("");
-            // } else
-            if (!validateFullName(editedName)) {
-              setErrorMessage("Invalid full name");
-              setSuccessMessage("");
-            } else {
-              setSuccessMessage("");
-              setErrorMessage("");
-              handleUpdate(email, editedName);
-            }
-          }}
-        >
-          Save
-        </Button>
-        {errorMessage !== "" && (
-          <Text style={styles.message}>{errorMessage}</Text>
-        )}
-        {successMessage !== "" && (
-          <Text style={styles.message}>{successMessage}</Text>
-        )}
-      </View>
+          <Button
+            style={styles.save_btn}
+            mode="contained"
+            onPress={() => {
+              // if (!validatePassword(editedPassword)) {
+              //   setErrorMessage("Invalid password");
+              //   setSuccessMessage("");
+              // } else
+              if (!validateFullName(editedName)) {
+                setErrorMessage("Invalid full name");
+                setSuccessMessage("");
+              } else {
+                setSuccessMessage("");
+                setErrorMessage("");
+                handleUpdate(email, editedName);
+              }
+            }}
+          >
+            <Text style={styles.save_text}>SAVE</Text>
+          </Button>
+          {errorMessage !== "" && (
+            <Text style={styles.message}>{errorMessage}</Text>
+          )}
+          {successMessage !== "" && (
+            <Text style={styles.message}>{successMessage}</Text>
+          )}
+        </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -294,21 +308,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileImage: {
-    width: 130,
-    height: 130,
+    width: 110,
+    height: 110,
     borderRadius: 100,
     marginTop: 70,
-    backgroundColor: "#91AEC4",
+    marginLeft: 7,
+    backgroundColor: "white",
   },
-  camera: {
-    opacity: 0.7,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "#fff",
-    borderRadius: 10,
-    marginTop: -10,
-  },
+
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
@@ -318,10 +325,18 @@ const styles = StyleSheet.create({
   save_btn: {
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 100,
+    marginLeft: 132,
     marginRight: 20,
-    width: "50%",
-    marginTop: 15,
+    width: "35%",
+    marginTop: 55,
+    // backgroundColor:"#061848"
+  },
+  save_text: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   message: {
     marginTop: 5,
@@ -329,7 +344,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
-    color: colors.blue1,
+    color: "white",
   },
   data_icons_Container: {
     flexDirection: "row",
@@ -337,9 +352,9 @@ const styles = StyleSheet.create({
     marginTop: -15,
     marginBottom: 10,
   },
-  user_icon: { marginLeft: 10 },
+  user_icon: { marginLeft: 10, color: "white" },
   bottomSheet: {
-    backgroundColor: "#B5B6D8",
+    backgroundColor: "#76A6ED",
     height: 320,
     // justifyContent: "space-around",
     marginTop: 355,
@@ -347,7 +362,7 @@ const styles = StyleSheet.create({
   },
   bottomSheetsButton: {
     margin: 10,
-    backgroundColor: "#7F7EB4",
+    backgroundColor: "#061848",
     borderRadius: 20,
   },
   bottomSheetsText: {
@@ -368,5 +383,10 @@ const styles = StyleSheet.create({
   },
   backdropStyle: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  image: {
+    flex: 1,
+    width: Dimensions.get("window").width,
+    resizeMode: "cover",
   },
 });

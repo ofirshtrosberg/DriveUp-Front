@@ -25,11 +25,7 @@ export default function PassengerProfilePage(props) {
   const { email, fullName, phoneNumber, password, imageProfile } = props;
   const { userToken, login, logout } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
-  const myLat = 32.0853;
-  const myLon = 34.781769;
-  const destLat = 32.794044;
-  const destLon = 34.989571;
-  const num = 2;
+
   const [imageUri, setImageUri] = useState(null);
   useEffect(() => {
     console.log("file system:::", FileSystem.documentDirectory);
@@ -62,62 +58,6 @@ export default function PassengerProfilePage(props) {
     console.log("image uri");
   }, [imageUri]);
 
-  const passengerOrderDrive = async (
-    currentUserEmail,
-    startLat,
-    startLon,
-    destinationLat,
-    destinationLon,
-    numberOfPassengers,
-    userToken
-  ) => {
-    try {
-      const response = await fetch(
-        "http://" + IP + ":" + PORT + "/passenger/order-drive",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            parameter: {
-              currentUserEmail: currentUserEmail,
-              startLat: parseFloat(startLat),
-              startLon: parseFloat(startLon),
-              destinationLat: parseFloat(destinationLat),
-              destinationLon: parseFloat(destinationLon),
-              numberOfPassengers: parseInt(numberOfPassengers),
-            },
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to add order!");
-      }
-      const data = await response.json();
-      if (data.orderId) {
-        console.log(data.orderId);
-        getOrderHistory();
-        return data.orderId;
-      } else {
-        console.error("Failed to add order:", data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // const ButtonPress = async () => {
-  //   try {
-  //     const orderDrive = passengerOrderDrive();
-  //     // Do something with the retrieved order history data
-  //     console.log("ttytyt", orderDrive);
-  //   } catch (error) {
-  //     // Handle any errors that occurred during the fetch
-  //     console.error(error);
-  //   }
-  // };
 
   const getOrderHistory = async (page = 1, size = 20) => {
     try {
@@ -277,12 +217,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
   },
 
-  color: {
-    padding: 10,
-    width: "100%",
-    backgroundColor: "#5F84A2",
-    height: 130,
-  },
   avatar: {
     width: 125,
     height: 125,
