@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, Image,ImageBackground } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { TextInput, Button } from "react-native-paper";
@@ -36,8 +36,7 @@ export default function EditProfilePage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageProfile);
-  // const [imageUrl, setImageUrl] = useState(null);
-  // const [savedImageUri, setSavedImageUri] = useState(null);
+ 
 
   const handleUpdate = (email, editedName) => {
     console.log(userToken);

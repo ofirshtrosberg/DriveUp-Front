@@ -8,6 +8,8 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  ImageBackground,
+  Dimensions,
 } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 // import { ScrollView } from "react-native-gesture-handler";
@@ -180,99 +182,100 @@ export default function PassengerProfilePage(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.color}>
-        <Text></Text>
-      </View>
-      <View style={{ alignItems: "center" }}>
-        <TouchableOpacity>
-          {imageUri!==null ? (
-            <Image source={{ uri: imageUri }} style={styles.avatar} />
-          ) : (
-            <UserAvatar size={110} name={fullName} style={styles.avatar} />
-          )}
-        </TouchableOpacity>
-        <Modal visible={isPopupVisible} onRequestClose={closePopup}>
-          <View style={styles.popupContainer}>
-            <Image
-              // source={require("path/to/profile/image")}
-              style={styles.popupImage}
-            />
-            {/* Add any additional content for the popup */}
-          </View>
-        </Modal>
-        <Icon
-          name="edit"
-          size={20}
-          style={styles.edit_icon}
-          onPress={() => {
-            navigation.navigate("EditPassenger", {
-              fullName,
-              email,
-              imageProfile,
-              password,
-            });
-          }}
-        ></Icon>
-      </View>
-      <Text style={styles.passenger_name}>{fullName} </Text>
-      <View style={styles.data_icons_Container}>
-        <Icon
-          name="envelope"
-          size={30}
-          color="#608cd7"
-          style={styles.email_icon}
-        />
-        <Text style={styles.passenger_email}>{email} </Text>
-        {/* <Text>{imageProfile}</Text> */}
-      </View>
-      <View style={styles.data_icons_Container}>
-        <Icon
-          name="phone"
-          size={20}
-          color="#608cd7"
-          style={styles.phone_icon}
-        />
-        <Text style={styles.passenger_phone}>{phoneNumber} </Text>
-      </View>
-      <Text style={styles.orders_title}>History Orders </Text>
-      <Button
-        onPress={() => {
-          passengerOrderDrive(
-            email,
-            myLat,
-            myLon,
-            destLat,
-            destLon,
-            num,
-            userToken
-          );
-        }}
+      <ImageBackground
+        source={require("../assets/profilePage.png")}
+        resizeMode="cover"
+        style={styles.image}
       >
-        order drive !!
-      </Button>
-      {/* <Button
+        <View style={styles.container}>
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity>
+              {imageProfile ? (
+                <Image source={{ uri: imageProfile }} style={styles.avatar} />
+              ) : (
+                <UserAvatar
+                  size={110}
+                  name={fullName}
+                  style={styles.avatar}
+                  textColor={"#061848"}
+                />
+              )}
+            </TouchableOpacity>
+            <Modal visible={isPopupVisible} onRequestClose={closePopup}>
+              <View style={styles.popupContainer}>
+                <Image
+                  // source={require("path/to/profile/image")}
+                  style={styles.popupImage}
+                />
+                {/* Add any additional content for the popup */}
+              </View>
+            </Modal>
+            <Icon
+              name="edit"
+              size={20}
+              style={styles.edit_icon}
+              onPress={() => {
+                navigation.navigate("EditPassenger", {
+                  fullName,
+                  email,
+                  imageProfile,
+                  password,
+                });
+              }}
+            ></Icon>
+          </View>
+          <Text style={styles.passenger_name}>{fullName} </Text>
+          <View style={styles.data_icons_Container}>
+            <Icon
+              name="envelope"
+              size={30}
+              color="#608cd7"
+              style={styles.email_icon}
+            />
+            <Text style={styles.passenger_email}>{email} </Text>
+            {/* <Text>{imageProfile}</Text> */}
+          </View>
+          <View style={styles.data_icons_Container}>
+            <Icon
+              name="phone"
+              size={20}
+              color="#608cd7"
+              style={styles.phone_icon}
+            />
+            <Text style={styles.passenger_phone}>{phoneNumber} </Text>
+          </View>
+          <Text style={styles.orders_title}>History Orders </Text>
+          <Button
+            onPress={() => {
+              passengerOrderDrive(
+                email,
+                myLat,
+                myLon,
+                destLat,
+                destLon,
+                num,
+                userToken
+              );
+            }}
+          >
+            order drive !!
+          </Button>
+          {/* <Button
         onPress={() => {
           getOrderHistory();
         }}
       >
         the irders
       </Button> */}
-      <View style={styles.orders_list}>
-        <FlatList
-          data={orders}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.orderId.toString()}
-        />
-      </View>
-      {/* <Text>hello</Text>
-          <Button
-            onPress={() => {
-              handlePressOrder;
-            }}
-            style={styles.Button}
-          >
-            <Text style={styles.passenger_name}>WATCH ORDER DETAILS </Text>
-          </Button> */}
+          <View style={styles.orders_list}>
+            <FlatList
+              data={orders}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.orderId.toString()}
+            />
+          </View>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -282,6 +285,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  image: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+
   color: {
     padding: 10,
     width: "100%",
@@ -289,18 +297,19 @@ const styles = StyleSheet.create({
     height: 130,
   },
   avatar: {
-    width: 130,
-    height: 130,
+    width: 125,
+    height: 125,
     borderRadius: 100,
-    marginTop: -70,
-    backgroundColor: "#91AEC4",
+    marginTop: 102.5,
+    marginLeft: 9,
+    backgroundColor: "white",
   },
   passenger_name: {
-    color: "black",
-    fontSize: 22,
-    marginLeft: 0,
-    marginTop: 20,
-    width: 300,
+    color: "#626FB4",
+    fontSize: 24,
+    marginLeft: 10,
+    marginTop: 70,
+    width: 400,
     textAlign: "center",
     fontWeight: "600",
   },
@@ -346,8 +355,9 @@ const styles = StyleSheet.create({
   },
   edit_icon: {
     padding: 5,
-    marginLeft: 350,
-    marginTop: -50,
+    marginLeft: 370,
+    marginTop: -90,
+    color: "white",
   },
   listContainer: {
     flexDirection: "row",
