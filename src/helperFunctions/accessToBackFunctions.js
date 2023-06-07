@@ -450,3 +450,31 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
       console.log(error);
     });
 };
+export const cancelOrder = async (orderId, userToken, navigation, logout) => {
+  fetch(`http://${IP}:${PORT}/passenger/cancel-order/${orderId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      console.log("cancel drive res", response);
+      if (response.status === 401) {
+        navigation.navigate("Login");
+        logout();
+        throw new Error("your token expired or invalid please login");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.success === true) {
+        navigation.goBack();
+        resolve(true);
+      }
+      resolve(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};

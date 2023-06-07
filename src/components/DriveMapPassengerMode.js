@@ -55,18 +55,18 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
   const [estimatedTime, setEstimatedTime] = useState("");
   const getDriveDetails = async () => {
     try {
-      // const driveEstimatedTime = await getEstimatedTime(
-      //   orderId,
-      //   userToken,
-      //   navigation,
-      //   logout
-      // );
-      // const dateObject = new Date(driveEstimatedTime);
-      // const time = dateObject.toLocaleTimeString([], {
-      //   hour: "2-digit",
-      //   minute: "2-digit",
-      // });
-      // setEstimatedTime(time.toString());
+      const driveEstimatedTime = await getEstimatedTime(
+        orderId,
+        userToken,
+        navigation,
+        logout
+      );
+      const dateObject = new Date(driveEstimatedTime);
+      const time = dateObject.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      setEstimatedTime(time.toString());
       const response = await driveDetails(
         userToken,
         driveId,
@@ -216,15 +216,17 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
         </View>
         <View style={{ flex: 1, marginTop: 20 }}>
           <Text style={styles.boldText}>You need to pay: 10$</Text>
-          <Text style={styles.boldText}>Driver will arrive at: 21:00</Text>
-          <Button
+          <Text style={styles.boldText}>
+            Driver will arrive at: {estimatedTime}
+          </Text>
+          {/* <Button
             mode="contained"
             buttonColor="#8569F6"
             style={{ marginHorizontal: 70, marginTop: 10 }}
             onPress={() => {}}
           >
             Cancel Order
-          </Button>
+          </Button> */}
         </View>
       </View>
       <Modal
