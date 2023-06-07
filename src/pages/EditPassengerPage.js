@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import {
   View,
@@ -37,13 +37,13 @@ export default function EditProfilePage({ navigation, route }) {
     });
   }, [navigation]);
   const { userToken, login, logout } = useContext(AuthContext);
-  const { fullName, email, imageProfile } = route.params;
+  const { fullName, email, imageProfile, imageUri } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   // const [editedPassword, setEditedPassword] = useState(password);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [newImageProfile, setNewImageProfile] = useState(imageProfile);
+  const [newImageProfile, setNewImageProfile] = useState(imageUri);
 
   const handleUpdate = (email, editedName) => {
     console.log(userToken);
@@ -225,7 +225,7 @@ export default function EditProfilePage({ navigation, route }) {
           backdropStyle={styles.backdropStyle}
         >
           <Text style={styles.bottomSheetsTitle}>
-            Choose Youe Profile Picture
+            Choose Your Profile Picture
           </Text>
           <Button onPress={() => takePhoto()} style={styles.bottomSheetsButton}>
             <Text style={styles.bottomSheetsText}>Take a Photo</Text>
@@ -266,7 +266,6 @@ export default function EditProfilePage({ navigation, route }) {
         /> */}
           <Button
             style={styles.save_btn}
-            mode="contained"
             onPress={() => {
               // if (!validatePassword(editedPassword)) {
               //   setErrorMessage("Invalid password");
