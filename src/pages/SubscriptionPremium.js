@@ -1,25 +1,25 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ImageBackground } from "react-native";
 import { useFonts } from "expo-font";
-import { Lobster_400Regular } from "@expo-google-fonts/lobster";
 import { Button } from "react-native-paper";
+import { Lobster_400Regular } from "@expo-google-fonts/lobster";
 import { useNavigation } from "@react-navigation/native";
 import { deleteSubscription } from "../helperFunctions/accessToBackFunctions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function SubscriptionPremium() {
   const { userToken, login, logout } = useContext(AuthContext);
   const navigation = useNavigation();
-  const handleCancelSubscription =async () => {
-     try {
-       const value = await AsyncStorage.getItem("currentUserEmail");
-       if (value !== null && value !== "") {
-         deleteSubscription(value, userToken, navigation);
-         navigation.goBack();
-       }
-     } catch (error) {
-       console.error("Error deleting subscription:", error);
-     }
+  const handleCancelSubscription = async () => {
+    try {
+      const value = await AsyncStorage.getItem("currentUserEmail");
+      if (value !== null && value !== "") {
+        deleteSubscription(value, userToken, navigation, logout);
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.error("Error deleting subscription:", error);
+    }
   };
   const [fontsLoaded] = useFonts({
     Lobster_400Regular,
@@ -29,17 +29,21 @@ export default function SubscriptionPremium() {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Subscription</Text>
-      <Text style={styles.text}>Your current Subscription:</Text>
-      <Text style={styles.subscription}>Premium</Text>
-      <Button
-        style={styles.subscriptionBtn}
-        mode="contained"
-        buttonColor="#111"
-        onPress={handleCancelSubscription}
+      <ImageBackground
+        source={require("../assets/premium.png")}
+        style={{
+          width: "100%",
+          height: undefined,
+          aspectRatio: 42 / 62.4,
+        }}
       >
-        Cancel subscription
-      </Button>
+        <Button
+          style={styles.subscriptionBtn}
+          onPress={handleCancelSubscription}
+        >
+          <Text style={styles.textBtn}>Cancel subscription</Text>
+        </Button>
+      </ImageBackground>
     </View>
   );
 }
@@ -64,6 +68,17 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
   },
   subscriptionBtn: {
-    marginTop: 20,
+    marginTop: 425,
+    width: 200,
+    height: 50,
+    alignSelf: "center",
+    textAlign: "center",
+  },
+  textBtn: {
+    fontSize: 17,
+    marginTop: 100,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#fff",
   },
 });

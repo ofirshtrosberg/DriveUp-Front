@@ -15,7 +15,11 @@ import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import { driveDetails } from "../helperFunctions/accessToBackFunctions";
+import { driveDetailsPreview } from "../helperFunctions/accessToBackFunctions";
+import {
+  acceptDrive,
+  finishDrive,
+} from "../helperFunctions/accessToBackFunctions";
 function calculateLatLonDelta(orderLocations) {
   const latitudes = orderLocations.map((location) => location.address.latitude);
   const longitudes = orderLocations.map(
@@ -45,7 +49,12 @@ export default function DriveOnMapDriverMode() {
   const [isDriveAccepted, setIsDriveAccepted] = useState(false);
   const getDriveDetails = async () => {
     try {
-      const response = await driveDetails(userToken, driveId, navigation);
+      const response = await driveDetailsPreview(
+        userToken,
+        driveId,
+        navigation,
+        logout
+      );
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);
       console.log(orderLocations);
@@ -152,7 +161,9 @@ export default function DriveOnMapDriverMode() {
                     style={styles.img}
                     source={require("../assets/1761892.png")}
                   ></Image>
-                  <Text>{location.price}$</Text>
+                  <Text style={{ color: "#8569F6", fontSize: 16 }}>
+                    {location.price}$
+                  </Text>
                 </View>
               );
             } else {
@@ -165,10 +176,11 @@ export default function DriveOnMapDriverMode() {
           {!isDriveAccepted && (
             <Button
               mode="contained"
-              buttonColor="#111"
+              buttonColor="#76A6ED"
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
+                acceptDrive(driveId, userToken, navigation, logout);
               }}
             >
               Accept Order
@@ -177,14 +189,15 @@ export default function DriveOnMapDriverMode() {
           {isDriveAccepted && (
             <Button
               mode="contained"
-              buttonColor="#111"
+              buttonColor="#6FC7E9"
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
                 setIsDriveAccepted(true);
-                navigation.goBack();
+                finishDrive(driveId, userToken, navigation, logout);
+                navigation.navigate("FinishDrive");
               }}
             >
-              Finish order
+              Finish drive
             </Button>
           )}
         </View>
@@ -196,6 +209,7 @@ export default function DriveOnMapDriverMode() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#061848",
   },
   map: {
     flex: 1,
@@ -216,21 +230,25 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 5,
     fontSize: 20,
+    color: "#fff",
   },
   boldText: {
     marginTop: 5,
     fontSize: 20,
     fontWeight: "bold",
     alignSelf: "center",
+    color: "#fff",
   },
   driverName: {
     marginTop: 10,
     fontSize: 20,
     fontWeight: "bold",
+    color: "#fff",
   },
   passengerImgPrice: {
     flexDirection: "column",
     flex: 1,
     alignItems: "center",
+    color: "#8569F6",
   },
 });

@@ -28,7 +28,7 @@ export default function HomePage() {
           </Text>
           <Button
             onPress={() => {
-              navigation.navigate("Landing");
+              navigation.navigate("FinishDrive");
             }}
           >
             Move to open

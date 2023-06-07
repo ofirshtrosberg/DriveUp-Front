@@ -18,7 +18,8 @@ import { Button } from "react-native-paper";
 import { IP, PORT } from "@env";
 import { AuthContext } from "../../AuthContext";
 import { format } from "date-fns";
-
+import * as FileSystem from "expo-file-system";
+import axios from "axios";
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
@@ -30,39 +31,36 @@ export default function PassengerProfilePage(props) {
   const destLon = 34.989571;
   const num = 2;
   const [imageUri, setImageUri] = useState(null);
-
   useEffect(() => {
-    const getImage = async () => {
-      console.log("inside get image", imageProfile);
-      try {
-        const response = await fetch(
-          "http://" + IP + ":" + PORT + imageProfile,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userToken}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Get image failed");
-        }
-
-        const blob = await response.blob(); // Convert the response to a Blob object
-        const uri = blob._data.blobId; // Create a URI for the Blob object
-        setImageUri(uri);
-        console.log("uri", imageUri);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getImage();
+    console.log("file system:::", FileSystem.documentDirectory);
+    downloadImage();
     getOrderHistory();
   }, []);
 
+  const downloadImage = async () => {
+    try {
+      const response = await fetch("http://driveup.cs.colman.ac.il/images/29", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to download image");
+      }
+
+      const imageUri = `${FileSystem.documentDirectory}image.png`;
+      await FileSystem.downloadAsync(response.url, imageUri);
+
+      setImageUri(imageUri);
+      console.log("uri====", imageUri);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    console.log("image uri");
+  }, [imageUri]);
   const passengerOrderDrive = async (
     currentUserEmail,
     startLat,
@@ -184,7 +182,6 @@ export default function PassengerProfilePage(props) {
 
   return (
     <View style={styles.container}>
-
       <ImageBackground
         source={require("../assets/profilePage.png")}
         resizeMode="cover"
