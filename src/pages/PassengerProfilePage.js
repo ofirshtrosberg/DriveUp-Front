@@ -142,12 +142,12 @@ export default function PassengerProfilePage(props) {
         throw new Error("Failed to retrieve order history");
       }
       const orderHistory = await response.json();
-      // const filteredOrders = orderHistory.filter(
-      //   (order) => order.driverId !== null
-      // );
-      setOrders(orderHistory);
-      // console.log("orders: ", filteredOrders);
-      return orderHistory;
+      const filteredOrders = orderHistory.filter(
+        (order) => order.driverId !== null
+      );
+      setOrders(filteredOrders);
+      console.log("orders: ", filteredOrders);
+      return filteredOrders;
     } catch (error) {
       console.error(error);
     }
@@ -238,44 +238,22 @@ export default function PassengerProfilePage(props) {
             <Icon
               name="envelope"
               size={30}
-              color="#608cd7"
+              color="#76A6ED"
               style={styles.email_icon}
             />
             <Text style={styles.passenger_email}>{email} </Text>
-            {/* <Text>{imageProfile}</Text> */}
           </View>
           <View style={styles.data_icons_Container}>
             <Icon
               name="phone"
               size={20}
-              color="#608cd7"
+              color="#76A6ED"
               style={styles.phone_icon}
             />
             <Text style={styles.passenger_phone}>{phoneNumber} </Text>
           </View>
-          <Text style={styles.orders_title}>History Orders </Text>
-          <Button
-            onPress={() => {
-              passengerOrderDrive(
-                email,
-                myLat,
-                myLon,
-                destLat,
-                destLon,
-                num,
-                userToken
-              );
-            }}
-          >
-            order drive !!
-          </Button>
-          {/* <Button
-        onPress={() => {
-          getOrderHistory();
-        }}
-      >
-        the irders
-      </Button> */}
+          <Text style={styles.orders_title}>Orders History </Text>
+
           <View style={styles.orders_list}>
             <FlatList
               data={orders}
@@ -355,10 +333,9 @@ const styles = StyleSheet.create({
     color: "white",
   },
   orders_list: {
-    backgroundColor: "#000",
     padding: 10,
     width: "90%",
-    backgroundColor: "#5F84A2",
+    backgroundColor: "#76A6ED",
     height: 140,
     marginTop: 5,
     marginBottom: 10,
@@ -367,7 +344,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginLeft: 370,
     marginTop: -90,
-    color: "white",
+    color: "#76A6ED",
   },
   listContainer: {
     flexDirection: "row",
@@ -380,13 +357,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   Button: {
-    backgroundColor: "black",
+    backgroundColor: "#061848",
     borderRadius: 20,
-    width: 170,
+    width: 180,
   },
   textButton: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+    fontSize:15,
   },
+  date: { color: "#061848",fontSize: 16.5, fontWeight: "bold" },
 });
