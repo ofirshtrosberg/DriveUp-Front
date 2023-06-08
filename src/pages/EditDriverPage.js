@@ -1,6 +1,13 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { View, TouchableOpacity, StyleSheet, Text, Image,ImageBackground } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  Image,
+  ImageBackground,
+} from "react-native";
 import { IP, PORT } from "@env";
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
@@ -17,6 +24,7 @@ import {
 import { BottomSheet } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
+import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
 
 export default function EditDriverPage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -64,7 +72,7 @@ export default function EditDriverPage({ navigation, route }) {
     })
       .then((response) => {
         if (response.status === 401) {
-          navigation.navigate("Login");
+          clearStackAndNavigate(navigation, "Login");
           logout();
           throw new Error("your token expired or invalid please login");
         }
@@ -177,7 +185,7 @@ export default function EditDriverPage({ navigation, route }) {
         }
       );
       if (response.status === 401) {
-        navigation.navigate("Login");
+        clearStackAndNavigate(navigation, "Login");
         logout();
         throw new Error("your token expired or invalid please login");
       }
