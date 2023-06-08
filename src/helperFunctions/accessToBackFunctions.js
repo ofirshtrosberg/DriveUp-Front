@@ -1,4 +1,21 @@
 import { IP, PORT } from "@env";
+import * as FileSystem from "expo-file-system";
+export const downloadImage = async (imageProfile, setImageUri) => {
+  try {
+    const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
+    console.log("download image", response);
+    if (!response.ok) {
+      throw new Error("Failed to download image");
+    }
+    const timestamp = Date.now();
+    const imageUri = `${FileSystem.documentDirectory}image_${timestamp}.png`;
+    await FileSystem.downloadAsync(response.url, imageUri);
+    setImageUri(imageUri);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const clearStackAndNavigate = (navigation, screenName) => {
   navigation.reset({
     index: 0,
