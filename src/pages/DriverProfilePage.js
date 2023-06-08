@@ -18,6 +18,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
 import { IP, PORT } from "@env";
 import * as FileSystem from "expo-file-system";
+import { downloadImage } from "../helperFunctions/accessToBackFunctions";
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
   const {
@@ -34,26 +35,12 @@ export default function DriverProfilePage(props) {
   const [imageUri, setImageUri] = useState(null);
   useFocusEffect(
     React.useCallback(() => {
-      if(imageProfile!==""&& imageProfile!==null)
-        downloadImage();
+      if (imageProfile !== "" && imageProfile !== null)
+        downloadImage(imageProfile, setImageUri);
       return () => {};
     }, [])
   );
-  const downloadImage = async () => {
-    try {
-      const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
-      console.log("download image", response);
-      if (!response.ok) {
-        throw new Error("Failed to download image");
-      }
-      const timestamp = Date.now();
-      const imageUri = `${FileSystem.documentDirectory}image_${timestamp}.png`;
-      await FileSystem.downloadAsync(response.url, imageUri);
-      setImageUri(imageUri);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
   useEffect(() => {
     console.log("");
   }, [imageUri]);

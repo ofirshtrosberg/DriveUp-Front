@@ -18,9 +18,8 @@ import { Button } from "react-native-paper";
 import { IP, PORT } from "@env";
 import { AuthContext } from "../../AuthContext";
 import { format } from "date-fns";
-import * as FileSystem from "expo-file-system";
 import axios from "axios";
-
+import { downloadImage } from "../helperFunctions/accessToBackFunctions";
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
@@ -30,30 +29,13 @@ export default function PassengerProfilePage(props) {
   const [imageUri, setImageUri] = useState(null);
   useFocusEffect(
     React.useCallback(() => {
-     if (imageProfile !== "" && imageProfile !== null) downloadImage();
+      if (imageProfile !== "" && imageProfile !== null)
+        downloadImage(imageProfile, setImageUri);
       getOrderHistory();
       return () => {};
     }, [])
   );
-  const downloadImage = async () => {
-    try {
-      console.log("downloading", imageProfile);
-      console.log(imageProfile);
-      const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
-      console.log("download image", response);
-      if (!response.ok) {
-        throw new Error("Failed to download image");
-      }
-      const timestamp = Date.now();
-      const imageUri = `${FileSystem.documentDirectory}image_${timestamp}.png`;
-      await FileSystem.downloadAsync(response.url, imageUri);
 
-      setImageUri(imageUri);
-      console.log("uri====", imageUri);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   useEffect(() => {
     console.log("image uri");
   }, [imageUri]);
