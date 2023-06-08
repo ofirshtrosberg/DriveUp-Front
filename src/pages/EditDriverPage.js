@@ -33,8 +33,15 @@ export default function EditDriverPage({ navigation, route }) {
     });
   }, [navigation]);
   const { userToken, login, logout } = useContext(AuthContext);
-  const { fullName, email, carModel, plateNumber, carColor, imageProfile } =
-    route.params;
+  const {
+    fullName,
+    email,
+    carModel,
+    plateNumber,
+    carColor,
+    imageProfile,
+    imageUri,
+  } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
   const [editedCarModel, setEditedCarModel] = useState(carModel);
@@ -43,7 +50,7 @@ export default function EditDriverPage({ navigation, route }) {
   const [editedCarColor, setEditedCarColor] = useState(carColor);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [newImageProfile, setNewImageProfile] = useState(imageProfile);
+  const [newImageProfile, setNewImageProfile] = useState(imageUri);
   const handleUpdate = (
     email,
     editedName,
@@ -83,7 +90,7 @@ export default function EditDriverPage({ navigation, route }) {
       })
       .then((data) => {
         console.log("User update successfully!");
-        navigation.goBack();
+        clearStackAndNavigate(navigation, "Profile");
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
@@ -125,20 +132,20 @@ export default function EditDriverPage({ navigation, route }) {
 
     if (!newImage.canceled) {
       const imageUri = newImage.assets[0].uri; // Access the selected image URI
-      const { width, height } = await ImageManipulator.manipulateAsync(
-        imageUri,
-        [
-          {
-            crop: getCircularCrop(
-              newImage.assets[0].width,
-              newImage.assets[0].height
-            ),
-          },
-        ],
-        { format: "png" }
-      );
+      // const { width, height } = await ImageManipulator.manipulateAsync(
+      //   imageUri,
+      //   [
+      //     {
+      //       crop: getCircularCrop(
+      //         newImage.assets[0].width,
+      //         newImage.assets[0].height
+      //       ),
+      //     },
+      //   ],
+      //   { format: "png" }
+      // );
 
-      uploadImage({ uri: imageUri, width, height });
+      uploadImage({ uri: imageUri, width:50, height:50 });
       setNewImageProfile(imageUri);
     }
   };

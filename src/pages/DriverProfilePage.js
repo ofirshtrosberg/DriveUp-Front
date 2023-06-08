@@ -1,7 +1,7 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
 // import Icon from "react-native-vector-icons/Feather";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -15,7 +15,9 @@ import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-
+import { useFocusEffect } from "@react-navigation/native";
+import { IP, PORT } from "@env";
+import * as FileSystem from "expo-file-system";
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
   const {
@@ -29,7 +31,32 @@ export default function DriverProfilePage(props) {
     forOrder,
     imageProfile,
   } = props;
-
+  const [imageUri, setImageUri] = useState(null);
+  useFocusEffect(
+    React.useCallback(() => {
+      if(imageProfile!==""&& imageProfile!==null)
+        downloadImage();
+      return () => {};
+    }, [])
+  );
+  const downloadImage = async () => {
+    try {
+      const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
+      console.log("download image", response);
+      if (!response.ok) {
+        throw new Error("Failed to download image");
+      }
+      const timestamp = Date.now();
+      const imageUri = `${FileSystem.documentDirectory}image_${timestamp}.png`;
+      await FileSystem.downloadAsync(response.url, imageUri);
+      setImageUri(imageUri);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    console.log("");
+  }, [imageUri]);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -40,8 +67,8 @@ export default function DriverProfilePage(props) {
         <View style={styles.container}>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity>
-              {imageProfile ? (
-                <Image source={{ uri: imageProfile }} style={styles.avatar} />
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.avatar} />
               ) : (
                 <UserAvatar
                   size={110}
@@ -66,6 +93,7 @@ export default function DriverProfilePage(props) {
                     password,
                     carColor,
                     imageProfile,
+                    imageUri,
                   });
                 }}
               ></Icon>
