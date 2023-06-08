@@ -28,15 +28,9 @@ export default function PassengerProfilePage(props) {
   const [orders, setOrders] = useState([]);
 
   const [imageUri, setImageUri] = useState(null);
-  // useEffect(() => {
-  //   console.log("file system:::", FileSystem.documentDirectory);
-  //   console.log("in passenger", imageProfile);
-  //   downloadImage();
-  //   getOrderHistory();
-  // }, []);
   useFocusEffect(
     React.useCallback(() => {
-      downloadImage();
+     if (imageProfile !== "" && imageProfile !== null) downloadImage();
       getOrderHistory();
       return () => {};
     }, [])
