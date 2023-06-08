@@ -29,7 +29,7 @@ import { BottomSheet } from "@rneui/themed";
 
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-
+import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,7 +64,7 @@ export default function EditProfilePage({ navigation, route }) {
     })
       .then((response) => {
         if (response.status === 401) {
-          navigation.navigate("Login");
+          clearStackAndNavigate(navigation, "Login");
           logout();
           throw new Error("your token expired or invalid please login");
         }
@@ -75,7 +75,7 @@ export default function EditProfilePage({ navigation, route }) {
       })
       .then((data) => {
         console.log("User update successfully!");
-        navigation.goBack();
+        clearStackAndNavigate(navigation, "Profile");
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
@@ -155,7 +155,7 @@ export default function EditProfilePage({ navigation, route }) {
         }
       );
       if (response.status === 401) {
-        navigation.navigate("Login");
+        clearStackAndNavigate(navigation, "Login");
         logout();
         throw new Error("your token expired or invalid please login");
       }
@@ -179,6 +179,11 @@ export default function EditProfilePage({ navigation, route }) {
     })
       .then((response) => {
         console.log(response);
+        if (response.status === 401) {
+          clearStackAndNavigate(navigation, "Login");
+          logout();
+          throw new Error("your token expired or invalid please login");
+        }
         if (!response.ok) {
           throw new Error("Update failed");
         }

@@ -20,12 +20,12 @@ export default function LoginPage({ navigation }) {
   const [password, setPassword] = useState("");
   useEffect(() => {
     console.log(userToken);
+    //logout();
   }, [userToken]);
 
   const handleLoginLocal = async (token) => {
     const isUserExist = await isUserExistLocal(email);
     console.log("isUserExist", isUserExist);
-    // console.log(",handleLoginLocal email", userToken);
     if (!isUserExist) {
       console.log("token in handleLoginLocal", token);
       fetch("http://" + IP + ":" + PORT + "/users/" + email, {

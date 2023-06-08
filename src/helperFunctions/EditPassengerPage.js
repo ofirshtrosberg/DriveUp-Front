@@ -13,6 +13,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { BottomSheet } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import { clearStackAndNavigate } from "./accessToBackFunctions";
 
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -47,7 +48,7 @@ export default function EditProfilePage({ navigation, route }) {
     })
       .then((response) => {
         if (response.status === 401) {
-          navigation.navigate("Login");
+          clearStackAndNavigate(navigation, "Login");
           logout();
           throw new Error("your token expired or invalid please login");
         }
