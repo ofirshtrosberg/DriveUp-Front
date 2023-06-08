@@ -25,10 +25,9 @@ export default function ProfilePage({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [carColor, setCarColor] = useState("");
-  const [imageId, setImageId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState("");
-
+  const [imageProfile, setImageProfile] = useState("");
   const fetchUser = async () => {
     try {
       const value = await AsyncStorage.getItem("currentUserEmail");
@@ -49,16 +48,8 @@ export default function ProfilePage({ navigation }) {
         setPhoneNumber(fetchedUser.phoneNumber);
         setPassword(fetchedUser.password);
         setCarColor(fetchedUser.carColor);
-        setImageId(fetchedUser.imageUrl);
+        setImageProfile(fetchedUser.imageUrl);
         setIsLoading(false);
-        // if (fetchedUser && fetchedUser.imageUrl) {
-        //   const imageBlob = await getImageById(fetchedUser.imageUrl);
-        //   console.log("h" + imageBlob);
-        //   // const blobId = imageBlob._data.blobId;
-        //   setImageProfile(imageBlob);
-        // } else {
-        //   console.log("User not found or no image associated");
-        // }
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -71,28 +62,9 @@ export default function ProfilePage({ navigation }) {
       return () => {};
     }, [])
   );
-
-  // const getImageById = async (imageId) => {
-  //   fetch("http://" + IP + ":" + PORT + imageId, {
-  //     method: "GET",
-  //   })
-  //     .then((response) => response.blob())
-  //     .then((blob) => {
-  //       const imagePath = RNFS.DocumentDirectoryPath + "/image.png";
-
-  //       RNFS.writeFile(imagePath, blob, "base64")
-  //         .then(() => {
-  //           setImageProfile(imagePath);
-  //         })
-  //         .catch((error) => {
-  //           console.log("errpr", error);
-  //         });
-  //     });
-  // };
-
-  const [imageProfile, setImageProfile] = useState("");
-
-
+    useEffect(()=>{
+      console.log("in profile",imageProfile)
+    }, [imageProfile])
   return (
     <View>
       {isLoading ? (

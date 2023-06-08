@@ -20,6 +20,7 @@ export default function LoginPage({ navigation }) {
   const [password, setPassword] = useState("");
   useEffect(() => {
     console.log(userToken);
+    // logout()
   }, [userToken]);
 
   const handleLoginLocal = async (token) => {

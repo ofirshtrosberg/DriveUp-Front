@@ -20,6 +20,7 @@ import { AuthContext } from "../../AuthContext";
 import { format } from "date-fns";
 import * as FileSystem from "expo-file-system";
 import axios from "axios";
+
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
@@ -27,22 +28,30 @@ export default function PassengerProfilePage(props) {
   const [orders, setOrders] = useState([]);
 
   const [imageUri, setImageUri] = useState(null);
-  useEffect(() => {
-    console.log("file system:::", FileSystem.documentDirectory);
-    console.log(imageProfile);
-    downloadImage();
-    getOrderHistory();
-  }, []);
-
+  // useEffect(() => {
+  //   console.log("file system:::", FileSystem.documentDirectory);
+  //   console.log("in passenger", imageProfile);
+  //   downloadImage();
+  //   getOrderHistory();
+  // }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      downloadImage();
+      getOrderHistory();
+      return () => {};
+    }, [])
+  );
   const downloadImage = async () => {
     try {
+      console.log("downloading", imageProfile);
+      console.log(imageProfile);
       const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
-
+      console.log("download image", response);
       if (!response.ok) {
         throw new Error("Failed to download image");
       }
-
-      const imageUri = `${FileSystem.documentDirectory}image.png`;
+      const timestamp = Date.now();
+      const imageUri = `${FileSystem.documentDirectory}image_${timestamp}.png`;
       await FileSystem.downloadAsync(response.url, imageUri);
 
       setImageUri(imageUri);

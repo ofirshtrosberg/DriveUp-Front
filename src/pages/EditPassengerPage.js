@@ -75,7 +75,7 @@ export default function EditProfilePage({ navigation, route }) {
       })
       .then((data) => {
         console.log("User update successfully!");
-        navigation.goBack();
+        navigation.navigate("Profile");
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
