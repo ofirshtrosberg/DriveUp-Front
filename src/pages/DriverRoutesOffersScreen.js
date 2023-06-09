@@ -28,6 +28,7 @@ export default function DriverRoutesOffersPage() {
   const [useLimits, setUseLimits] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [limits, setLimits] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     // fetchSuggestions();
     console.log("hfhfhfh");
@@ -68,8 +69,12 @@ export default function DriverRoutesOffersPage() {
         logout
       );
       console.log("response fetchSuggestions", response);
-      setData(response.solutions);
+      if (response.ok) {
+        setData(response.solutions);
+        setErrorMessage("");
+      }
     } catch (error) {
+      setErrorMessage("Load failed");
       console.log("error fetchSuggestions", error);
     }
   };
@@ -177,6 +182,17 @@ export default function DriverRoutesOffersPage() {
                 </Text>
               </ImageBackground>
             </TouchableOpacity>
+            <Text
+              style={{
+                marginTop: 10,
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {errorMessage}
+            </Text>
           </View>
         ) : (
           <View>
@@ -310,6 +326,17 @@ export default function DriverRoutesOffersPage() {
                 </Text>
               </ImageBackground>
             </TouchableOpacity>
+            <Text
+              style={{
+                marginTop: 10,
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {errorMessage}
+            </Text>
           </View>
         )}
       </View>
