@@ -44,7 +44,7 @@ export default function PassengerOrderResult() {
         navigation,
         logout
       );
-      if (response===false) {
+      if (response === false) {
         setErrorMessage("Cancel order failed!");
       }
     } catch (error) {
@@ -63,7 +63,7 @@ export default function PassengerOrderResult() {
       }
     };
 
-    interval = setInterval(checkDriveWithInterval, 5000);
+    interval = setInterval(checkDriveWithInterval, 7000);
     checkDriveWithInterval();
 
     return () => clearInterval(interval);
