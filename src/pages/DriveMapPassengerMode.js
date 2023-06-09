@@ -14,7 +14,7 @@ import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
-import DriverProfilePage from "../pages/DriverProfilePage";
+import DriverProfilePage from "./DriverProfilePage";
 import {
   driveDetails,
   getUserByEmail,

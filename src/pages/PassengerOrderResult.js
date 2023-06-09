@@ -11,7 +11,7 @@ import {
   getDriveByOrderId,
   cancelOrder,
 } from "../helperFunctions/accessToBackFunctions";
-import DriveMapPassengerMode from "../components/DriveMapPassengerMode";
+import DriveMapPassengerMode from "./DriveMapPassengerMode";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
