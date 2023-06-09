@@ -334,6 +334,7 @@ export const acceptDrive = (
   setErrorMessage,
   setIsDriveAccepted
 ) => {
+  console.log(orderId)
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -361,12 +362,13 @@ export const acceptDrive = (
           navigation.goBack();
         }, 1500);
       } else {
+        console.log("######",data)
         setIsDriveAccepted(true);
       }
     })
     .catch((error) => {
       setErrorMessage("Accept Failed");
-      console.error(error);
+      console.log(error);
     });
 };
 
@@ -422,15 +424,15 @@ export const driveDetailsPreview = async (
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("drive details response", response);
+        console.log("drive details prev response", response);
         return response.json();
       })
       .then((data) => {
-        console.log("driveDetails data", data);
+        console.log("driveDetails prev data", data);
         resolve(data);
       })
       .catch((error) => {
-        console.error("drive details error", error);
+        console.error("drive details preview error", error);
         reject("drive details error", error);
       });
   });
