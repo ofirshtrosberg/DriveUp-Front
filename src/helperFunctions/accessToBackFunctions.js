@@ -326,7 +326,14 @@ export const requestDrives = async (
   });
 };
 // !! check 401
-export const acceptDrive = (orderId, userToken, navigation, logout) => {
+export const acceptDrive = (
+  orderId,
+  userToken,
+  navigation,
+  logout,
+  setErrorMessage,
+  setIsDriveAccepted
+) => {
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -349,11 +356,16 @@ export const acceptDrive = (orderId, userToken, navigation, logout) => {
     .then((data) => {
       console.log("data accept drive", data);
       if (data.success !== true) {
-        navigation.goBack();
+        setErrorMessage("Accept Failed");
+        setTimeout(() => {
+          navigation.goBack();
+        }, 1500);
+      } else {
+        setIsDriveAccepted(true);
       }
     })
     .catch((error) => {
-      navigation.goBack();
+      setErrorMessage("Accept Failed");
       console.error(error);
     });
 };

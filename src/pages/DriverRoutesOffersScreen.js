@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { Checkbox, Provider as PaperProvider } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../../AuthContext";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
@@ -29,10 +30,12 @@ export default function DriverRoutesOffersPage() {
   const [showModal, setShowModal] = useState(false);
   const [limits, setLimits] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
-  useEffect(() => {
-    // fetchSuggestions();
-    console.log("hfhfhfh");
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchSuggestions();
+      return () => {};
+    }, [])
+  );
   const updateCurrentLocation = async () => {
     // let { status } = await Location.requestForegroundPermissionsAsync();
     // if (status !== "granted") {
@@ -55,11 +58,11 @@ export default function DriverRoutesOffersPage() {
     console.log(currLon);
   }, [currLon]);
   useEffect(() => {
-    console.log(data);
+    console.log("data changed:", data);
   }, [data]);
   const fetchSuggestions = async () => {
     try {
-      await updateCurrentLocation();
+      // await updateCurrentLocation();
       const response = await requestDrives(
         userToken,
         32.0672504,
@@ -69,10 +72,9 @@ export default function DriverRoutesOffersPage() {
         logout
       );
       console.log("response fetchSuggestions", response);
-      if (response.ok) {
-        setData(response.solutions);
-        setErrorMessage("");
-      }
+
+      setData(response.solutions);
+      setErrorMessage("");
     } catch (error) {
       setErrorMessage("Load failed");
       console.log("error fetchSuggestions", error);
@@ -90,7 +92,7 @@ export default function DriverRoutesOffersPage() {
   return (
     <PaperProvider theme={theme}>
       <View style={styles.container}>
-        {data === null ? (
+        {data === null || data === undefined ? (
           <View>
             <View
               style={{
