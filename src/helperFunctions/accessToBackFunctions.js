@@ -307,12 +307,12 @@ export const requestDrives = async (
       }),
     })
       .then((response) => {
+        console.log("requestDrives res", response);
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("response in requestDrives", response);
         return response.json();
       })
       .then((data) => {
@@ -320,7 +320,7 @@ export const requestDrives = async (
         resolve(data);
       })
       .catch((error) => {
-        console.error(error);
+        console.error("error in requestDrives", error);
         reject(error);
       });
   });
@@ -334,7 +334,7 @@ export const acceptDrive = (
   setErrorMessage,
   setIsDriveAccepted
 ) => {
-  console.log(orderId)
+  console.log(orderId);
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -362,7 +362,7 @@ export const acceptDrive = (
           navigation.goBack();
         }, 1500);
       } else {
-        console.log("######",data)
+        console.log("######", data);
         setIsDriveAccepted(true);
       }
     })
