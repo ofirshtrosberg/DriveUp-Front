@@ -87,15 +87,13 @@ export default function SubscriptionBasic() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/basic.png")}
-        style={{
-          width: "100%",
-          height: undefined,
-          aspectRatio: 42 / 62.4,
-        }}
+        source={require("../assets/basicNew.png")}
+        resizeMode="cover"
+        style={styles.image}
       >
+      <View style={{flex:1}}></View>
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={{ flex: 7, justifyContent: "center", alignItems: "center" }}
         >
           <View
             style={{
@@ -205,9 +203,6 @@ export default function SubscriptionBasic() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: "#061848",
   },
   title: {
     fontFamily: "Lobster_400Regular",
@@ -228,15 +223,13 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 7,
-    marginHorizontal: 20,
-    width: (4 / 5) * windowWidth,
+    width:330,
   },
   upgradeBtn: {
     position: "absolute",
     top: 500,
     left: 120,
     width: 170,
-    // width: (2 / 3) * windowWidth,
   },
   errorText: {
     fontSize: 18,
@@ -245,5 +238,9 @@ const styles = StyleSheet.create({
     color: "#fff",
     position: "absolute",
     top: 557,
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
   },
 });

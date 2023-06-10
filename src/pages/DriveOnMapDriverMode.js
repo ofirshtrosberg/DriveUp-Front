@@ -162,6 +162,7 @@ export default function DriveOnMapDriverMode() {
                     style={styles.img}
                     source={require("../assets/1761892.png")}
                   ></Image>
+                  <Text style={{ color: "#8569F6", fontSize: 16 }}>Name</Text>
                   <Text style={{ color: "#8569F6", fontSize: 16 }}>
                     {location.price}$
                   </Text>
