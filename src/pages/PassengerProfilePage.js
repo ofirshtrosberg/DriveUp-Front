@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
     height: 140,
     marginTop: 5,
     marginBottom: 10,
+    borderRadius:10,
   },
   edit_icon: {
     padding: 5,
