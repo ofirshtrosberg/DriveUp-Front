@@ -42,16 +42,21 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [startLon, setStartLon] = useState(0);
   const [destinationLon, setDestinationLon] = useState(0);
   const checkLocationsForMap = async () => {
+    setErrorMessage("");
     try {
       await checkIfLocationsAreFine(startAddress, destinationAddress);
+      console.log("fine before if", isGeocodingFine);
       if (isGeocodingFine) {
+        console.log("isGeocodingFine", isGeocodingFine);
         toggleModal();
+        setShowErrorMessage(false);
       } else {
         setErrorMessage("Invalid address");
         setShowErrorMessage(true);
       }
     } catch (error) {
       setErrorMessage("Invalid address");
+       setShowErrorMessage(true);
     }
   };
   const toggleModal = () => {
@@ -136,6 +141,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log(startLat);
   }, [startLat]);
   useEffect(() => {
+    console.log("fine?",isGeocodingFine);
+  }, [isGeocodingFine]);
+  useEffect(() => {
     console.log(startLon);
   }, [startLon]);
   useEffect(() => {
@@ -147,6 +155,12 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   useEffect(() => {
     console.log(currAddress);
   }, [currAddress]);
+  useEffect(() => {
+    console.log(errorMessage);
+  }, [errorMessage]);
+  useEffect(() => {
+    console.log(showErrorMessage);
+  }, [showErrorMessage]);
   useEffect(() => {
     console.log("start change", startLat, startLon);
   }, [startAddress]);

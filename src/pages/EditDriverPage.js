@@ -51,6 +51,9 @@ export default function EditDriverPage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageUri);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  
   const handleUpdate = (
     email,
     editedName,
@@ -145,7 +148,7 @@ export default function EditDriverPage({ navigation, route }) {
       //   { format: "png" }
       // );
 
-      uploadImage({ uri: imageUri, width:50, height:50 });
+      uploadImage({ uri: imageUri, width: 50, height: 50 });
       setNewImageProfile(imageUri);
     }
   };
@@ -172,6 +175,7 @@ export default function EditDriverPage({ navigation, route }) {
     }
   };
   const uploadImage = async (imageData) => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("image", {
       uri: imageData.uri,
