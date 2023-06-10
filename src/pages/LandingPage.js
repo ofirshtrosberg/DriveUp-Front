@@ -23,8 +23,7 @@ export default function LandingPage() {
         resizeMode="cover"
         style={styles.image}
       >
-        <Button
-          style={styles.button}
+        <TouchableOpacity
           onPress={() => {
             AsyncStorage.getItem("userToken").then((value) => {
               if (value !== null && value !== "") {
@@ -35,9 +34,33 @@ export default function LandingPage() {
               }
             });
           }}
+          style={{
+            width: 200,
+            height: 50,
+            borderRadius: 20,
+            overflow: "hidden",
+            position:"absolute",
+            bottom:60,
+            left:20,
+          }}
         >
-          <Text style={styles.text}>Get Started</Text>
-        </Button>
+          <ImageBackground
+            source={require("../assets/btnOrder.png")}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <Text
+              style={{
+                color: "white",
+                textAlign: "center",
+                lineHeight: 50,
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >
+              Get Started
+            </Text>
+          </ImageBackground>
+        </TouchableOpacity>
       </ImageBackground>
     </View>
   );
