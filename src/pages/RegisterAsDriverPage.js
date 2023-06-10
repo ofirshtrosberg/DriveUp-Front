@@ -103,7 +103,7 @@ export default function RegisterAsDriverPage({ navigation }) {
   };
   return (
     <ImageBackground
-      source={require("../assets/register.jpg")}
+      source={require("../assets/registerImg.png")}
       style={{ flex: 1 }}
     >
       <View style={{ flex: 1, marginBottom: 3 }}>
