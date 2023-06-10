@@ -11,7 +11,7 @@ export const downloadImage = async (imageProfile, setImageUri) => {
     await FileSystem.downloadAsync(response.url, imageUri);
     setImageUri(imageUri);
   } catch (error) {
-    console.log(error);
+    console.log("downloadImage failed");
   }
 };
 
@@ -43,7 +43,7 @@ export const getUserByEmail = async (email, userToken, navigation, logout) => {
         resolve(data.result);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("getUserByEmail failed");
         reject(error);
       });
   });
@@ -87,10 +87,9 @@ export const createUserSubscription = (
       }
       return response.json();
     })
-    .then((data) => {
-    })
+    .then((data) => {})
     .catch((error) => {
-      console.log(error);
+      console.log("createUserSubscription failed");
     });
 };
 
@@ -121,7 +120,7 @@ export const isUserPremium = (email, userToken, navigation, logout) => {
         resolve(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("isUserPremium failed");
         reject(error);
       });
   });
@@ -145,7 +144,7 @@ export const deleteSubscription = (email, userToken, navigation, logout) => {
     })
     .then((data) => {})
     .catch((error) => {
-      console.log(error);
+      console.log("deleteSubscription failed");
     });
 };
 
@@ -194,7 +193,7 @@ export const passengerOrderDrive = async (
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Order creation failed");
         reject(error);
       });
   });
@@ -230,7 +229,7 @@ export const getDriveByOrderId = async (
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("getDriveByOrderId failed");
         reject(error);
       });
   });
@@ -262,11 +261,11 @@ export const getEstimatedTime = async (
         if (data.estimatedDriverArrival !== undefined) {
           resolve(data.estimatedDriverArrival);
         } else {
-          reject(new Error("Drive check failed"));
+          reject(new Error("getEstimatedTime failed"));
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("getEstimatedTime failed");
         reject(error);
       });
   });
@@ -306,7 +305,7 @@ export const requestDrives = async (
         resolve(data);
       })
       .catch((error) => {
-        console.log("error in requestDrives", error);
+        console.log("error in requestDrives");
         reject(error);
       });
   });
@@ -352,7 +351,7 @@ export const acceptDrive = (
     })
     .catch((error) => {
       setErrorMessage("Accept Failed");
-      console.log(error);
+      console.log("acceptDrive failed");
     });
 };
 
@@ -378,7 +377,7 @@ export const driveDetails = async (userToken, driveId, navigation, logout) => {
         resolve(data);
       })
       .catch((error) => {
-        console.log("drive details error", error);
+        console.log("drive details error");
         reject("drive details error", error);
       });
   });
@@ -411,7 +410,7 @@ export const driveDetailsPreview = async (
         resolve(data);
       })
       .catch((error) => {
-        console.log("drive details preview error", error);
+        console.log("drive details preview error");
         reject("drive details error", error);
       });
   });
@@ -436,7 +435,7 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
     })
     .then((data) => {})
     .catch((error) => {
-      console.log(error);
+      console.log("failed finish drive");
     });
 };
 // !!! check 401

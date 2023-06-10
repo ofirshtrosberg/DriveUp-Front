@@ -52,7 +52,7 @@ export default function DriverRoutesOffersPage() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
+      console.log("rejectAndLoadOffers error");
     }
   };
   const updateCurrentLocation = async () => {
@@ -96,7 +96,7 @@ export default function DriverRoutesOffersPage() {
       setIsLoading(false);
     } catch (error) {
       setErrorMessage("Load failed");
-      console.log("error fetchSuggestions", error);
+      console.log("error fetchSuggestions");
       setIsLoading(false);
     }
   };

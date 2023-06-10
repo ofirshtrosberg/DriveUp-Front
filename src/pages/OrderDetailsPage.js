@@ -29,7 +29,7 @@ export default function OrderDetailsPage({ route }) {
         setDriver(data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("getUserByEmail error");
       });
   };
   return (

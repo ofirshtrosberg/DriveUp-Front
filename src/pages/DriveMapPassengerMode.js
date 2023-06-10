@@ -92,7 +92,7 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);
     } catch (error) {
-      console.log(error);
+      console.log("getDriveDetails error");
     }
   };
   useEffect(() => {

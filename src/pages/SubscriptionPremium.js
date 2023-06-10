@@ -24,7 +24,7 @@ export default function SubscriptionPremium() {
         navigation.goBack();
       }
     } catch (error) {
-      console.log("Error deleting subscription:", error);
+      console.log("Error deleting subscription");
     }
   };
   const [fontsLoaded] = useFonts({
