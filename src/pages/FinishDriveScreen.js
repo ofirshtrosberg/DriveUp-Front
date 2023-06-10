@@ -8,7 +8,7 @@ export default function FinishDriveScreen() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/finishDrive.png")}
+        source={require("../assets/finish.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
+    alignSelf:"center",
     marginTop: 460,
-    marginLeft: 160,
     width: 150,
     height: 60,
     borderRadius: 15,
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontWeight: "bold",
-    color: "#061042",
+    color: "#fff",
   },
 });

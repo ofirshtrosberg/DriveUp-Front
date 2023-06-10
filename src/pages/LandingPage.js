@@ -19,7 +19,7 @@ export default function LandingPage() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/initPage.png")}
+        source={require("../assets/landing.png")}
         resizeMode="cover"
         style={styles.image}
       >
