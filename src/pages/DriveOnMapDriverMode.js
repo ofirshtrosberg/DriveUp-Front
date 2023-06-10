@@ -59,7 +59,7 @@ export default function DriveOnMapDriverMode() {
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);
     } catch (error) {
-      console.log(error);
+      console.log("getDriveDetails error");
     }
   };
   useEffect(() => {

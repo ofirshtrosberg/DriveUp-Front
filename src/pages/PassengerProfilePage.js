@@ -69,7 +69,7 @@ export default function PassengerProfilePage(props) {
       setOrders(filteredOrders);
       return filteredOrders;
     } catch (error) {
-      console.log(error);
+      console.log("getOrderHistory error");
     }
   };
 

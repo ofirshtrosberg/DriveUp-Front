@@ -52,7 +52,6 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       }
     } catch (error) {
       setErrorMessage("Invalid address");
-      console.log(error);
     }
   };
   const toggleModal = () => {
@@ -86,10 +85,10 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
           }
         })
         .catch((error) => {
-          console.log("Geocoding error:", error);
+          console.log("Geocoding error");
         });
     } catch (error) {
-      console.log("Error in updateCurrentLocation:", error);
+      console.log("Error in updateCurrentLocation");
     }
   };
 
@@ -112,7 +111,6 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       setShowErrorMessage(false);
       navigation.navigate("OrderResult", { orderId: response });
     } catch (error) {
-      console.log(error);
       setErrorMessage("Order Failed");
       setShowErrorMessage(true);
     }
@@ -132,7 +130,6 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     } catch (error) {
       setErrorMessage("Invalid address");
       setIsGeocodingFine(false);
-      console.log(error.message);
     }
   };
   useEffect(() => {

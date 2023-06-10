@@ -51,7 +51,7 @@ export default function ProfilePage({ navigation }) {
         setIsLoading(false);
       }
     } catch (error) {
-      console.log("Error fetching user:", error);
+      console.log("Error fetching user");
     }
   };
 

@@ -48,7 +48,7 @@ export default function LoginPage({ navigation }) {
           }
         })
         .catch((error) => {
-          console.log("handleLoginLocal", error);
+          console.log("handleLoginLocal error");
         });
     }
   };
@@ -91,7 +91,7 @@ export default function LoginPage({ navigation }) {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("loginBackend error");
       });
   };
 

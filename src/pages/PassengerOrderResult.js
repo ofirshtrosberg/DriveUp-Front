@@ -32,7 +32,7 @@ export default function PassengerOrderResult() {
       );
       setDriveId(response);
     } catch (error) {
-      console.log("checkDrive ", error);
+      console.log("checkDrive error");
     }
   };
   const cancelOrderCheck = async () => {
@@ -48,7 +48,6 @@ export default function PassengerOrderResult() {
       }
     } catch (error) {
       setErrorMessage("Cancel order failed!");
-      console.log(error);
     }
   };
   useEffect(() => {

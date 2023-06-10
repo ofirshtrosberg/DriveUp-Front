@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem("userToken", token);
       console.log("Token changed in storage successfully");
     } catch (error) {
-      console.log("Error storing token:", error);
+      console.log("Error storing token");
     }
   };
   const login = (token) => {

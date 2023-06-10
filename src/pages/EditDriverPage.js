@@ -202,7 +202,7 @@ export default function EditDriverPage({ navigation, route }) {
         console.log("Failed to upload image.");
       }
     } catch (error) {
-      console.log("Error occurred during image upload:", error);
+      console.log("Error occurred during image upload");
     }
   };
 
