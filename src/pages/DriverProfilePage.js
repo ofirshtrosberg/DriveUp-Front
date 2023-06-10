@@ -1,7 +1,7 @@
 import Icon from "react-native-vector-icons/FontAwesome5";
 // import Icon from "react-native-vector-icons/Feather";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   View,
@@ -18,6 +18,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
 import { IP, PORT } from "@env";
 import * as FileSystem from "expo-file-system";
+import { AuthContext } from "../../AuthContext";
+
 import { downloadImage } from "../helperFunctions/accessToBackFunctions";
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
@@ -33,10 +35,14 @@ export default function DriverProfilePage(props) {
     imageProfile,
   } = props;
   const [imageUri, setImageUri] = useState(null);
+  const [rating, setRating] = useState(0);
+  const { userToken, login, logout } = useContext(AuthContext);
+
   useFocusEffect(
     React.useCallback(() => {
       if (imageProfile !== "" && imageProfile !== null)
         downloadImage(imageProfile, setImageUri);
+      getRating(email);
       return () => {};
     }, [])
   );
@@ -44,6 +50,30 @@ export default function DriverProfilePage(props) {
   useEffect(() => {
     console.log("");
   }, [imageUri]);
+
+  const getRating = (email) => {
+    fetch("http://" + IP + ":" + PORT + "/rating/" + email, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          clearStackAndNavigate(navigation, "Login");
+          logout();
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRating(data.rating);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -122,6 +152,9 @@ export default function DriverProfilePage(props) {
               >
                 <Text style={styles.sub_text}>Subscription</Text>
               </Button>
+            )}
+            {rating == 0 && (
+              <Text style={styles.driver_name}>rating: {rating}</Text>
             )}
           </View>
         </View>
