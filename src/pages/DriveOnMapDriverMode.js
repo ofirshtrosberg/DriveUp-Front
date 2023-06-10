@@ -47,6 +47,7 @@ export default function DriveOnMapDriverMode() {
   const [orderLocations, setOrderLocations] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isDriveAccepted, setIsDriveAccepted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const getDriveDetails = async () => {
     try {
       const response = await driveDetailsPreview(
@@ -57,9 +58,8 @@ export default function DriveOnMapDriverMode() {
       );
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);
-      console.log(orderLocations);
     } catch (error) {
-      console.log(error);
+      console.log("getDriveDetails error");
     }
   };
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function DriveOnMapDriverMode() {
       >
         <View>
           <Text style={{ color: "#fff", fontSize: 30 }}>
-            Finding you a drive
+            Loading your drive
           </Text>
           <ActivityIndicator
             size="large"
@@ -161,6 +161,7 @@ export default function DriveOnMapDriverMode() {
                     style={styles.img}
                     source={require("../assets/1761892.png")}
                   ></Image>
+                  <Text style={{ color: "#8569F6", fontSize: 16 }}>Name</Text>
                   <Text style={{ color: "#8569F6", fontSize: 16 }}>
                     {location.price}$
                   </Text>
@@ -179,8 +180,14 @@ export default function DriveOnMapDriverMode() {
               buttonColor="#76A6ED"
               style={{ marginHorizontal: 70, marginTop: 10 }}
               onPress={() => {
-                setIsDriveAccepted(true);
-                acceptDrive(driveId, userToken, navigation, logout);
+                acceptDrive(
+                  driveId,
+                  userToken,
+                  navigation,
+                  logout,
+                  setErrorMessage,
+                  setIsDriveAccepted
+                );
               }}
             >
               Accept Order
@@ -200,6 +207,16 @@ export default function DriveOnMapDriverMode() {
               Finish drive
             </Button>
           )}
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 16,
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            {errorMessage}
+          </Text>
         </View>
       </View>
     </View>

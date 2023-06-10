@@ -66,10 +66,9 @@ export default function PassengerProfilePage(props) {
         (order) => order.driverId !== null
       );
       setOrders(filteredOrders);
-      console.log("orders: ", filteredOrders);
       return filteredOrders;
     } catch (error) {
-      console.error(error);
+      console.log("getOrderHistory error");
     }
   };
 

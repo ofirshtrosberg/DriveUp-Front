@@ -3,7 +3,6 @@ import * as FileSystem from "expo-file-system";
 export const downloadImage = async (imageProfile, setImageUri) => {
   try {
     const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
-    console.log("download image", response);
     if (!response.ok) {
       throw new Error("Failed to download image");
     }
@@ -12,7 +11,7 @@ export const downloadImage = async (imageProfile, setImageUri) => {
     await FileSystem.downloadAsync(response.url, imageUri);
     setImageUri(imageUri);
   } catch (error) {
-    console.error("down failed", error);
+    console.log("downloadImage failed");
   }
 };
 
@@ -24,8 +23,6 @@ export const clearStackAndNavigate = (navigation, screenName) => {
 };
 
 export const getUserByEmail = async (email, userToken, navigation, logout) => {
-  console.log("getUserByEmail email", email);
-  console.log("getUserByEmail token", userToken);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/users/${email}`, {
       method: "GET",
@@ -43,11 +40,10 @@ export const getUserByEmail = async (email, userToken, navigation, logout) => {
         return response.json();
       })
       .then((data) => {
-        console.log("data.result", data.result);
         resolve(data.result);
       })
       .catch((error) => {
-        console.error(error);
+        console.log("getUserByEmail failed");
         reject(error);
       });
   });
@@ -91,11 +87,9 @@ export const createUserSubscription = (
       }
       return response.json();
     })
-    .then((data) => {
-      console.log(data);
-    })
+    .then((data) => {})
     .catch((error) => {
-      console.error(error);
+      console.log("createUserSubscription failed");
     });
 };
 
@@ -117,9 +111,7 @@ export const isUserPremium = (email, userToken, navigation, logout) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         for (const user of data.result) {
-          console.log(user);
           if (user.user_email === email) {
             resolve(true);
             return;
@@ -128,7 +120,7 @@ export const isUserPremium = (email, userToken, navigation, logout) => {
         resolve(false);
       })
       .catch((error) => {
-        console.error(error);
+        console.log("isUserPremium failed");
         reject(error);
       });
   });
@@ -152,7 +144,7 @@ export const deleteSubscription = (email, userToken, navigation, logout) => {
     })
     .then((data) => {})
     .catch((error) => {
-      console.error(error);
+      console.log("deleteSubscription failed");
     });
 };
 
@@ -167,7 +159,6 @@ export const passengerOrderDrive = async (
   navigation,
   logout
 ) => {
-  console.log(startLat, startLon, destinationLat, destinationLon);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/passenger/order-drive`, {
       method: "POST",
@@ -202,7 +193,7 @@ export const passengerOrderDrive = async (
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log("Order creation failed");
         reject(error);
       });
   });
@@ -238,7 +229,7 @@ export const getDriveByOrderId = async (
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log("getDriveByOrderId failed");
         reject(error);
       });
   });
@@ -270,11 +261,11 @@ export const getEstimatedTime = async (
         if (data.estimatedDriverArrival !== undefined) {
           resolve(data.estimatedDriverArrival);
         } else {
-          reject(new Error("Drive check failed"));
+          reject(new Error("getEstimatedTime failed"));
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log("getEstimatedTime failed");
         reject(error);
       });
   });
@@ -288,10 +279,6 @@ export const requestDrives = async (
   navigation,
   logout
 ) => {
-  console.log("limits:", limits);
-  console.log("token", userToken);
-  console.log("lt", currLat);
-  console.log("ln", currLon);
   console.log(`http://${IP}:${PORT}/driver/request-drives`);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/request-drives`, {
@@ -312,21 +299,27 @@ export const requestDrives = async (
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("response in requestDrives", response);
         return response.json();
       })
       .then((data) => {
-        console.log("data in requestDrives", data);
         resolve(data);
       })
       .catch((error) => {
-        console.error(error);
+        console.log("error in requestDrives");
         reject(error);
       });
   });
 };
 // !! check 401
-export const acceptDrive = (orderId, userToken, navigation, logout) => {
+export const acceptDrive = (
+  orderId,
+  userToken,
+  navigation,
+  logout,
+  setErrorMessage,
+  setIsDriveAccepted
+) => {
+  console.log(orderId);
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -338,7 +331,6 @@ export const acceptDrive = (orderId, userToken, navigation, logout) => {
     }),
   })
     .then((response) => {
-      console.log("accept drive res", response);
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
@@ -349,18 +341,22 @@ export const acceptDrive = (orderId, userToken, navigation, logout) => {
     .then((data) => {
       console.log("data accept drive", data);
       if (data.success !== true) {
-        navigation.goBack();
+        setErrorMessage("Accept Failed");
+        setTimeout(() => {
+          navigation.goBack();
+        }, 1500);
+      } else {
+        setIsDriveAccepted(true);
       }
     })
     .catch((error) => {
-      navigation.goBack();
-      console.error(error);
+      setErrorMessage("Accept Failed");
+      console.log("acceptDrive failed");
     });
 };
 
 // !!!! need to check 401
 export const driveDetails = async (userToken, driveId, navigation, logout) => {
-  console.log("drive details");
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/drive-details/${driveId}`, {
       method: "GET",
@@ -375,15 +371,13 @@ export const driveDetails = async (userToken, driveId, navigation, logout) => {
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("drive details response", response);
         return response.json();
       })
       .then((data) => {
-        console.log("driveDetails data", data);
         resolve(data);
       })
       .catch((error) => {
-        console.error("drive details error", error);
+        console.log("drive details error");
         reject("drive details error", error);
       });
   });
@@ -410,15 +404,13 @@ export const driveDetailsPreview = async (
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("drive details response", response);
         return response.json();
       })
       .then((data) => {
-        console.log("driveDetails data", data);
         resolve(data);
       })
       .catch((error) => {
-        console.error("drive details error", error);
+        console.log("drive details preview error");
         reject("drive details error", error);
       });
   });
@@ -443,35 +435,67 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
     })
     .then((data) => {})
     .catch((error) => {
-      console.log(error);
+      console.log("failed finish drive");
     });
 };
 // !!! check 401
 export const cancelOrder = async (orderId, userToken, navigation, logout) => {
-  fetch(`http://${IP}:${PORT}/passenger/cancel-order/${orderId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      console.log("cancel drive res", response);
-      if (response.status === 401) {
-        clearStackAndNavigate(navigation, "Login");
-        logout();
-        throw new Error("your token expired or invalid please login");
-      }
-      return response.json();
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/passenger/cancel-order/${orderId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
     })
-    .then((data) => {
-      if (data.success === true) {
-        navigation.goBack();
-        resolve(true);
-      }
-      resolve(false);
+      .then((response) => {
+        if (response.status === 401) {
+          clearStackAndNavigate(navigation, "Login");
+          logout();
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success === true) {
+          navigation.goBack();
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+// !!! check 401
+export const rejectDrives = async (userToken, navigation, logout) => {
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/driver/reject-drives`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
     })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        if (response.status === 401) {
+          clearStackAndNavigate(navigation, "Login");
+          logout();
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success === true) {
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => {
+        reject(error);
+        console.log(error);
+      });
+  });
 };

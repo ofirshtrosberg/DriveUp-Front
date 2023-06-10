@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput, Button } from "react-native-paper";
@@ -87,21 +88,18 @@ export default function SubscriptionBasic() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/basic.png")}
-        style={{
-          width: "100%",
-          height: undefined,
-          aspectRatio: 42 / 62.4,
-        }}
+        source={require("../assets/basicNew.png")}
+        resizeMode="cover"
+        style={styles.image}
       >
+        <View style={{ flex: 1 }}></View>
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={{ flex: 3, justifyContent: "center", alignItems: "center" }}
         >
           <View
             style={{
               backgroundColor: "#fff",
               borderRadius: 10,
-              marginTop: 170,
             }}
           >
             <Picker
@@ -136,10 +134,8 @@ export default function SubscriptionBasic() {
           />
           <View
             style={{
-              flex: 1,
               flexDirection: "row",
               flexWrap: "wrap",
-              // maxHeight: windowWidth / 5,
             }}
           >
             <View
@@ -191,11 +187,37 @@ export default function SubscriptionBasic() {
               </Picker>
             </View>
           </View>
-          <Button style={styles.upgradeBtn} onPress={() => handleUpgrade()}>
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>
-              Upgrade to premium
-            </Text>
-          </Button>
+          <TouchableOpacity
+            onPress={() => {
+              handleUpgrade();
+            }}
+            style={{
+              width: 200,
+              height: 50,
+              borderRadius: 20,
+              overflow: "hidden",
+              position: "absolute",
+              bottom: 30,
+              alignSelf: "center",
+            }}
+          >
+            <ImageBackground
+              source={require("../assets/btnOrder.png")}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  lineHeight: 50,
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Upgrade to premium
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
           <Text style={styles.errorText}>{error}</Text>
         </View>
       </ImageBackground>
@@ -205,9 +227,6 @@ export default function SubscriptionBasic() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: "#061848",
   },
   title: {
     fontFamily: "Lobster_400Regular",
@@ -228,15 +247,10 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 7,
-    marginHorizontal: 20,
-    width: (4 / 5) * windowWidth,
+    width: 330,
   },
   upgradeBtn: {
-    position: "absolute",
-    top: 500,
-    left: 120,
     width: 170,
-    // width: (2 / 3) * windowWidth,
   },
   errorText: {
     fontSize: 18,
@@ -245,5 +259,9 @@ const styles = StyleSheet.create({
     color: "#fff",
     position: "absolute",
     top: 557,
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
   },
 });

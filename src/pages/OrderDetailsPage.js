@@ -69,7 +69,7 @@ export default function OrderDetailsPage({ route }) {
         setImageProfile(driver.imageUrl);
       })
       .catch((error) => {
-        console.error("aaa", error);
+        console.log("getUserByEmail error");
         // reject("aaa", error);
       });
   };
@@ -101,6 +101,7 @@ export default function OrderDetailsPage({ route }) {
       })
       .catch((error) => {
         console.log("error:", error);
+      
       });
   };
 

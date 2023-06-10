@@ -39,7 +39,6 @@ export default function ProfilePage({ navigation }) {
           navigation,
           logout
         );
-        console.log("fetch user", fetchedUser);
         setEmail(value);
         setUser(fetchedUser);
         setFullName(fetchedUser.fullName);
@@ -52,7 +51,7 @@ export default function ProfilePage({ navigation }) {
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error fetching user:", error);
+      console.log("Error fetching user");
     }
   };
 

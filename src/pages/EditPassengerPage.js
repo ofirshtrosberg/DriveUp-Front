@@ -131,7 +131,6 @@ export default function EditProfilePage({ navigation, route }) {
     if (!newImage.canceled) {
       uploadImage(newImage.assets[0]);
       setNewImageProfile(newImage.assets[0].uri);
-      // console.log("dddddddd", newImage);
     }
   };
 
@@ -160,12 +159,12 @@ export default function EditProfilePage({ navigation, route }) {
         throw new Error("your token expired or invalid please login");
       }
       if (response.ok) {
-        console.log("Image uploaded successfully! Response:");
+        console.log("Image uploaded successfully!");
       } else {
-        console.log("Failed to upload image. Response:");
+        console.log("Failed to upload image.");
       }
     } catch (error) {
-      console.log("Error occurred during image upload:", error);
+      console.log("Error occurred during image upload");
     }
   };
   const deleteProfileImage = () => {
@@ -178,7 +177,6 @@ export default function EditProfilePage({ navigation, route }) {
       },
     })
       .then((response) => {
-        console.log(response);
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
@@ -187,7 +185,6 @@ export default function EditProfilePage({ navigation, route }) {
         if (!response.ok) {
           throw new Error("Update failed");
         }
-        console.log(response);
         setSuccessMessage("Image delete successfully!");
       })
       .then((data) => {

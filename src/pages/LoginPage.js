@@ -20,7 +20,6 @@ export default function LoginPage({ navigation }) {
   const [password, setPassword] = useState("");
   useEffect(() => {
     console.log(userToken);
-    //logout();
   }, [userToken]);
 
   const handleLoginLocal = async (token) => {
@@ -36,7 +35,6 @@ export default function LoginPage({ navigation }) {
         },
       })
         .then((response) => {
-          console.log("response in handleLoginLocal", response);
           return response.json();
         })
         .then((data) => {
@@ -50,12 +48,11 @@ export default function LoginPage({ navigation }) {
           }
         })
         .catch((error) => {
-          console.error("handleLoginLocal", error);
+          console.log("handleLoginLocal error");
         });
     }
   };
   const addLocal = async (user) => {
-    console.log(user);
     await addUserLocal(user);
     await printUsersLocal();
   };
@@ -94,7 +91,7 @@ export default function LoginPage({ navigation }) {
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log("loginBackend error");
       });
   };
 

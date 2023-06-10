@@ -169,7 +169,6 @@ export default function EditDriverPage({ navigation, route }) {
     if (!newImage.canceled) {
       uploadImage(newImage.assets[0]);
       setNewImageProfile(newImage.assets[0].uri);
-      // console.log("dddddddd", newImage);
     }
   };
   const uploadImage = async (imageData) => {
@@ -197,13 +196,13 @@ export default function EditDriverPage({ navigation, route }) {
         throw new Error("your token expired or invalid please login");
       }
       if (response.ok) {
-        console.log("Image uploaded successfully! Response:", response);
+        console.log("Image uploaded successfully!");
         printUsersLocal();
       } else {
-        console.log("Failed to upload image. Response:", response);
+        console.log("Failed to upload image.");
       }
     } catch (error) {
-      console.log("Error occurred during image upload:", error);
+      console.log("Error occurred during image upload");
     }
   };
 
@@ -217,11 +216,9 @@ export default function EditDriverPage({ navigation, route }) {
       },
     })
       .then((response) => {
-        console.log(response);
         if (!response.ok) {
           throw new Error("Update failed");
         }
-        console.log(response);
         setSuccessMessage("Image delete successfully!");
       })
       .then((data) => {

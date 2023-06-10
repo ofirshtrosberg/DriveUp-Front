@@ -14,11 +14,12 @@ import { Button } from "react-native-paper";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
-import DriverProfilePage from "../pages/DriverProfilePage";
+import DriverProfilePage from "./DriverProfilePage";
 import {
   driveDetails,
   getUserByEmail,
   getEstimatedTime,
+  downloadImage,
 } from "../helperFunctions/accessToBackFunctions";
 function calculateLatLonDelta(orderLocations) {
   const latitudes = orderLocations.map((location) => location.address.latitude);
@@ -53,6 +54,7 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
   const [driverPlateNumber, setDriverPlateNumber] = useState("");
   const [driverImageUrl, setDriverImageUrl] = useState("");
   const [estimatedTime, setEstimatedTime] = useState("");
+  const [imageUri, setImageUri] = useState(null);
   const getDriveDetails = async () => {
     try {
       const driveEstimatedTime = await getEstimatedTime(
@@ -90,15 +92,22 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
       setOrderLocations(response.orderLocations);
       setTotalPrice(response.totalPrice);
     } catch (error) {
-      console.log(error);
+      console.log("getDriveDetails error");
     }
   };
   useEffect(() => {
     getDriveDetails();
   }, []);
   useEffect(() => {
+    if (driverImageUrl !== "" && driverImageUrl !== null)
+      downloadImage(driverImageUrl, setImageUri);
+  }, [driverImageUrl]);
+  useEffect(() => {
     console.log(driverEmail);
   }, [driverEmail]);
+  useEffect(() => {
+    console.log("");
+  }, [imageUri]);
   if (orderLocations === null) {
     return (
       <ImageBackground
@@ -187,17 +196,17 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
       </MapView>
       <View style={styles.bottomView}>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          {/* {driverImageUrl !== "" && driverImageUrl !== null ? (
+          {imageUri ? (
             <Image
               style={styles.driverImage}
-              source={{ uri: { driverImageUrl } }}
+              source={{ uri: { imageUri } }}
             ></Image>
-          ) : ( */}
-          <Image
-            style={styles.driverImage}
-            source={require("../assets/blankProfilePicture.jpg")}
-          ></Image>
-          {/* )} */}
+          ) : (
+            <Image
+              style={styles.driverImage}
+              source={require("../assets/blankProfilePicture.jpg")}
+            ></Image>
+          )}
 
           <View>
             <Text style={styles.driverName}>{driverFullName}</Text>
