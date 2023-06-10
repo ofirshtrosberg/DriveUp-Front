@@ -30,7 +30,6 @@ export default function PassengerOrderResult() {
         navigation,
         logout
       );
-      console.log("drive id", response);
       setDriveId(response);
     } catch (error) {
       console.log("checkDrive ", error);

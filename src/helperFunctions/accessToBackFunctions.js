@@ -3,7 +3,6 @@ import * as FileSystem from "expo-file-system";
 export const downloadImage = async (imageProfile, setImageUri) => {
   try {
     const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
-    console.log("download image", response);
     if (!response.ok) {
       throw new Error("Failed to download image");
     }
@@ -24,8 +23,6 @@ export const clearStackAndNavigate = (navigation, screenName) => {
 };
 
 export const getUserByEmail = async (email, userToken, navigation, logout) => {
-  console.log("getUserByEmail email", email);
-  console.log("getUserByEmail token", userToken);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/users/${email}`, {
       method: "GET",
@@ -43,7 +40,6 @@ export const getUserByEmail = async (email, userToken, navigation, logout) => {
         return response.json();
       })
       .then((data) => {
-        console.log("data.result", data.result);
         resolve(data.result);
       })
       .catch((error) => {
@@ -92,7 +88,6 @@ export const createUserSubscription = (
       return response.json();
     })
     .then((data) => {
-      console.log(data);
     })
     .catch((error) => {
       console.log(error);
@@ -117,9 +112,7 @@ export const isUserPremium = (email, userToken, navigation, logout) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         for (const user of data.result) {
-          console.log(user);
           if (user.user_email === email) {
             resolve(true);
             return;
@@ -167,7 +160,6 @@ export const passengerOrderDrive = async (
   navigation,
   logout
 ) => {
-  console.log(startLat, startLon, destinationLat, destinationLon);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/passenger/order-drive`, {
       method: "POST",
@@ -288,10 +280,6 @@ export const requestDrives = async (
   navigation,
   logout
 ) => {
-  console.log("limits:", limits);
-  console.log("token", userToken);
-  console.log("lt", currLat);
-  console.log("ln", currLon);
   console.log(`http://${IP}:${PORT}/driver/request-drives`);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/request-drives`, {
@@ -307,7 +295,6 @@ export const requestDrives = async (
       }),
     })
       .then((response) => {
-        console.log("requestDrives res", response);
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
@@ -316,7 +303,6 @@ export const requestDrives = async (
         return response.json();
       })
       .then((data) => {
-        console.log("data in requestDrives", data);
         resolve(data);
       })
       .catch((error) => {
@@ -346,7 +332,6 @@ export const acceptDrive = (
     }),
   })
     .then((response) => {
-      console.log("accept drive res", response);
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
@@ -362,7 +347,6 @@ export const acceptDrive = (
           navigation.goBack();
         }, 1500);
       } else {
-        console.log("######", data);
         setIsDriveAccepted(true);
       }
     })
@@ -374,7 +358,6 @@ export const acceptDrive = (
 
 // !!!! need to check 401
 export const driveDetails = async (userToken, driveId, navigation, logout) => {
-  console.log("drive details");
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/drive-details/${driveId}`, {
       method: "GET",
@@ -389,11 +372,9 @@ export const driveDetails = async (userToken, driveId, navigation, logout) => {
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("drive details response", response);
         return response.json();
       })
       .then((data) => {
-        console.log("driveDetails data", data);
         resolve(data);
       })
       .catch((error) => {
@@ -424,11 +405,9 @@ export const driveDetailsPreview = async (
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("drive details prev response", response);
         return response.json();
       })
       .then((data) => {
-        console.log("driveDetails prev data", data);
         resolve(data);
       })
       .catch((error) => {
@@ -471,7 +450,6 @@ export const cancelOrder = async (orderId, userToken, navigation, logout) => {
       },
     })
       .then((response) => {
-        console.log("cancel drive res", response);
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
@@ -511,7 +489,6 @@ export const rejectDrives = async (userToken, navigation, logout) => {
         return response.json();
       })
       .then((data) => {
-        console.log("reject data", data);
         if (data.success === true) {
           resolve(true);
         }
