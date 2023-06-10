@@ -15,7 +15,10 @@ import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Slider from "@react-native-community/slider";
-import { requestDrives } from "../helperFunctions/accessToBackFunctions";
+import {
+  requestDrives,
+  rejectDrives,
+} from "../helperFunctions/accessToBackFunctions";
 import theme from "../config/theme";
 import { TextInput, Button } from "react-native-paper";
 export default function DriverRoutesOffersPage() {
@@ -37,6 +40,22 @@ export default function DriverRoutesOffersPage() {
       return () => {};
     }, [])
   );
+  const rejectAndLoadOffers = async () => {
+    try {
+      setIsLoading(true);
+      setErrorMessage("");
+      const response = await rejectDrives(userToken, navigation, logout);
+      console.log("response in rejectAndLoadOffers", response);
+      if (response === true) fetchSuggestions();
+      else {
+        setErrorMessage("Action failed");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
   const updateCurrentLocation = async () => {
     // let { status } = await Location.requestForegroundPermissionsAsync();
     // if (status !== "granted") {
@@ -64,6 +83,7 @@ export default function DriverRoutesOffersPage() {
   const fetchSuggestions = async () => {
     try {
       setIsLoading(true);
+      setErrorMessage("");
       // await updateCurrentLocation();
       const response = await requestDrives(
         userToken,
@@ -329,6 +349,36 @@ export default function DriverRoutesOffersPage() {
                   }}
                 >
                   Load drive suggestions
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                rejectAndLoadOffers();
+              }}
+              style={{
+                width: 200,
+                height: 50,
+                alignSelf: "center",
+                borderRadius: 20,
+                overflow: "hidden",
+                marginTop: 10,
+              }}
+            >
+              <ImageBackground
+                source={require("../assets/buttonBack.jpeg")}
+                style={{ width: "100%", height: "100%" }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    lineHeight: 50,
+                    fontSize: 16,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Reject & Load suggestions
                 </Text>
               </ImageBackground>
             </TouchableOpacity>
