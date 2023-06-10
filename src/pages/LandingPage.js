@@ -19,7 +19,7 @@ export default function LandingPage() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/landingPage.png")}
+        source={require("../assets/initPage.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
     marginTop: 100,
     textAlign: "center",
     fontWeight: "bold",
-    color: "#061042",
+    color: "#fff",
   },
 });
