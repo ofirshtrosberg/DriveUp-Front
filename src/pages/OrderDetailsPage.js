@@ -31,18 +31,14 @@ export default function OrderDetailsPage({ route }) {
   };
 
   useFocusEffect(
-    React.useCallback(async () => {
-      await getUserByEmail(email, userToken, navigation, logout);
-      setTimeout(async () => {
-        if (imageProfile !== "" && imageProfile !== null) {
-          await downloadImage(imageProfile, setImageUri);
-        }
-      }, 2000);
+    React.useCallback(() => {
+      getUserByEmail(email, userToken, navigation, logout);
+      if (imageProfile !== "" && imageProfile !== null) {
+        downloadImage(imageProfile, setImageUri);
+      }
       return () => {};
     }, [])
   );
-
-
   const formattedTime = format(new Date(timeDate), "HH:mm");
   const formattedDate = format(new Date(timeDate), "dd-MM-yyyy");
 
@@ -66,6 +62,7 @@ export default function OrderDetailsPage({ route }) {
         console.log("data.result", data.result);
         // resolve(data.result);
         setDriver(data.result);
+        console.log("driver:",driver)
         setImageProfile(driver.imageUrl);
       })
       .catch((error) => {
@@ -101,7 +98,6 @@ export default function OrderDetailsPage({ route }) {
       })
       .catch((error) => {
         console.log("error:", error);
-      
       });
   };
 
