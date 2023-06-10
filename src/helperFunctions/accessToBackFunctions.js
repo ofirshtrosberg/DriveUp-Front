@@ -307,12 +307,12 @@ export const requestDrives = async (
       }),
     })
       .then((response) => {
+        console.log("requestDrives res", response);
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("response in requestDrives", response);
         return response.json();
       })
       .then((data) => {
@@ -320,13 +320,21 @@ export const requestDrives = async (
         resolve(data);
       })
       .catch((error) => {
-        console.error(error);
+        console.error("error in requestDrives", error);
         reject(error);
       });
   });
 };
 // !! check 401
-export const acceptDrive = (orderId, userToken, navigation, logout) => {
+export const acceptDrive = (
+  orderId,
+  userToken,
+  navigation,
+  logout,
+  setErrorMessage,
+  setIsDriveAccepted
+) => {
+  console.log(orderId);
   fetch(`http://${IP}:${PORT}/driver/accept-drive`, {
     method: "POST",
     headers: {
@@ -349,12 +357,18 @@ export const acceptDrive = (orderId, userToken, navigation, logout) => {
     .then((data) => {
       console.log("data accept drive", data);
       if (data.success !== true) {
-        navigation.goBack();
+        setErrorMessage("Accept Failed");
+        setTimeout(() => {
+          navigation.goBack();
+        }, 1500);
+      } else {
+        console.log("######", data);
+        setIsDriveAccepted(true);
       }
     })
     .catch((error) => {
-      navigation.goBack();
-      console.error(error);
+      setErrorMessage("Accept Failed");
+      console.log(error);
     });
 };
 
@@ -410,15 +424,15 @@ export const driveDetailsPreview = async (
           logout();
           throw new Error("your token expired or invalid please login");
         }
-        console.log("drive details response", response);
+        console.log("drive details prev response", response);
         return response.json();
       })
       .then((data) => {
-        console.log("driveDetails data", data);
+        console.log("driveDetails prev data", data);
         resolve(data);
       })
       .catch((error) => {
-        console.error("drive details error", error);
+        console.error("drive details preview error", error);
         reject("drive details error", error);
       });
   });

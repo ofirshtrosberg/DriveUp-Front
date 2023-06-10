@@ -11,7 +11,7 @@ import {
   getDriveByOrderId,
   cancelOrder,
 } from "../helperFunctions/accessToBackFunctions";
-import DriveMapPassengerMode from "../components/DriveMapPassengerMode";
+import DriveMapPassengerMode from "./DriveMapPassengerMode";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native-paper";
@@ -44,7 +44,7 @@ export default function PassengerOrderResult() {
         navigation,
         logout
       );
-      if (response===false) {
+      if (response === false) {
         setErrorMessage("Cancel order failed!");
       }
     } catch (error) {
@@ -63,7 +63,7 @@ export default function PassengerOrderResult() {
       }
     };
 
-    interval = setInterval(checkDriveWithInterval, 5000);
+    interval = setInterval(checkDriveWithInterval, 7000);
     checkDriveWithInterval();
 
     return () => clearInterval(interval);

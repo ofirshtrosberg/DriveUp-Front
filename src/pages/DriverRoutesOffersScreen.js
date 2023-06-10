@@ -5,9 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
 import { Checkbox, Provider as PaperProvider } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../../AuthContext";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
@@ -21,17 +23,20 @@ export default function DriverRoutesOffersPage() {
   const [data, setData] = useState(null);
   const [currLat, setCurrLat] = useState(0);
   const [currLon, setCurrLon] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [pickUpDistance, setPickUpDistance] = useState(0);
-  const [rideDistance, setRideDistance] = useState(0);
+  const [pickUpDistance, setPickUpDistance] = useState("");
+  const [rideDistance, setRideDistance] = useState("");
   const navigation = useNavigation();
   const [useLimits, setUseLimits] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [limits, setLimits] = useState({});
-  useEffect(() => {
-    // fetchSuggestions();
-    console.log("hfhfhfh");
-  }, []);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchSuggestions();
+      return () => {};
+    }, [])
+  );
   const updateCurrentLocation = async () => {
     // let { status } = await Location.requestForegroundPermissionsAsync();
     // if (status !== "granted") {
@@ -54,11 +59,12 @@ export default function DriverRoutesOffersPage() {
     console.log(currLon);
   }, [currLon]);
   useEffect(() => {
-    console.log(data);
+    console.log("data changed:", data);
   }, [data]);
   const fetchSuggestions = async () => {
     try {
-      await updateCurrentLocation();
+      setIsLoading(true);
+      // await updateCurrentLocation();
       const response = await requestDrives(
         userToken,
         32.0672504,
@@ -68,9 +74,14 @@ export default function DriverRoutesOffersPage() {
         logout
       );
       console.log("response fetchSuggestions", response);
+
       setData(response.solutions);
+      setErrorMessage("");
+      setIsLoading(false);
     } catch (error) {
+      setErrorMessage("Load failed");
       console.log("error fetchSuggestions", error);
+      setIsLoading(false);
     }
   };
   const toggleModal = () => {
@@ -85,7 +96,7 @@ export default function DriverRoutesOffersPage() {
   return (
     <PaperProvider theme={theme}>
       <View style={styles.container}>
-        {data === null ? (
+        {data === null || data === undefined ? (
           <View>
             <View
               style={{
@@ -105,41 +116,47 @@ export default function DriverRoutesOffersPage() {
               <Text style={{ color: "#fff", fontSize: 16 }}>Use limits</Text>
             </View>
             <Modal isVisible={showModal} onBackdropPress={toggleModal}>
-              <View style={{ flex: 1, backgroundColor: "#061848" }}>
-                <TextInput
-                  mode="outlined"
-                  label="Pickup Distance"
-                  style={styles.input}
-                  value={pickUpDistance}
-                  keyboardType="numeric"
-                  onChangeText={handlePickUpDistanceChange}
-                />
-                <TextInput
-                  mode="outlined"
-                  label="Ride Distance"
-                  style={styles.input}
-                  value={rideDistance}
-                  keyboardType="numeric"
-                  onChangeText={handleRideDistanceChange}
-                />
-                <Button
-                  mode="contained"
-                  buttonColor="#111"
-                  onPress={() => {
-                    setLimits({
-                      pick_up_distance: {
-                        min: 0,
-                        max: parseInt(pickUpDistance),
-                      },
-                      ride_distance: { min: 0, max: parseInt(rideDistance) },
-                    });
-                    setShowModal(false);
-                  }}
-                  style={styles.save_button}
-                >
-                  Save
-                </Button>
-              </View>
+              <ImageBackground
+                source={require("../assets/limitsBack.png")}
+                style={{ flex: 1 }}
+              >
+                <View style={{ flex: 1 }}></View>
+                <View style={{ flex: 3 }}>
+                  <TextInput
+                    mode="outlined"
+                    label="Pickup Distance"
+                    style={styles.input}
+                    value={pickUpDistance}
+                    keyboardType="numeric"
+                    onChangeText={handlePickUpDistanceChange}
+                  />
+                  <TextInput
+                    mode="outlined"
+                    label="Ride Distance"
+                    style={styles.input}
+                    value={rideDistance}
+                    keyboardType="numeric"
+                    onChangeText={handleRideDistanceChange}
+                  />
+                  <Button
+                    mode="contained"
+                    buttonColor="#111"
+                    onPress={() => {
+                      setLimits({
+                        pick_up_distance: {
+                          min: 0,
+                          max: parseInt(pickUpDistance),
+                        },
+                        ride_distance: { min: 0, max: parseInt(rideDistance) },
+                      });
+                      setShowModal(false);
+                    }}
+                    style={styles.save_button}
+                  >
+                    Save
+                  </Button>
+                </View>
+              </ImageBackground>
             </Modal>
             <TouchableOpacity
               onPress={() => {
@@ -171,6 +188,17 @@ export default function DriverRoutesOffersPage() {
                 </Text>
               </ImageBackground>
             </TouchableOpacity>
+            <Text
+              style={{
+                marginTop: 10,
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {errorMessage}
+            </Text>
           </View>
         ) : (
           <View>
@@ -232,41 +260,47 @@ export default function DriverRoutesOffersPage() {
               <Text style={{ color: "#fff", fontSize: 16 }}>Use limits</Text>
             </View>
             <Modal isVisible={showModal} onBackdropPress={toggleModal}>
-              <View style={{ flex: 1, backgroundColor: "#061848" }}>
-                <TextInput
-                  mode="outlined"
-                  label="Pickup Distance"
-                  style={styles.input}
-                  value={pickUpDistance}
-                  keyboardType="numeric"
-                  onChangeText={handlePickUpDistanceChange}
-                />
-                <TextInput
-                  mode="outlined"
-                  label="Ride Distance"
-                  style={styles.input}
-                  value={rideDistance}
-                  keyboardType="numeric"
-                  onChangeText={handleRideDistanceChange}
-                />
-                <Button
-                  mode="contained"
-                  buttonColor="#111"
-                  onPress={() => {
-                    setLimits({
-                      pick_up_distance: {
-                        min: 0,
-                        max: parseInt(pickUpDistance),
-                      },
-                      ride_distance: { min: 0, max: parseInt(rideDistance) },
-                    });
-                    setShowModal(false);
-                  }}
-                  style={styles.save_button}
-                >
-                  Save
-                </Button>
-              </View>
+              <ImageBackground
+                source={require("../assets/limitsBack.png")}
+                style={{ flex: 1 }}
+              >
+                <View style={{ flex: 1 }}></View>
+                <View style={{ flex: 3 }}>
+                  <TextInput
+                    mode="outlined"
+                    label="Pickup Distance"
+                    style={styles.input}
+                    value={pickUpDistance}
+                    keyboardType="numeric"
+                    onChangeText={handlePickUpDistanceChange}
+                  />
+                  <TextInput
+                    mode="outlined"
+                    label="Ride Distance"
+                    style={styles.input}
+                    value={rideDistance}
+                    keyboardType="numeric"
+                    onChangeText={handleRideDistanceChange}
+                  />
+                  <Button
+                    mode="contained"
+                    buttonColor="#111"
+                    onPress={() => {
+                      setLimits({
+                        pick_up_distance: {
+                          min: 0,
+                          max: parseInt(pickUpDistance),
+                        },
+                        ride_distance: { min: 0, max: parseInt(rideDistance) },
+                      });
+                      setShowModal(false);
+                    }}
+                    style={styles.save_button}
+                  >
+                    Save
+                  </Button>
+                </View>
+              </ImageBackground>
             </Modal>
             <TouchableOpacity
               onPress={() => {
@@ -298,8 +332,20 @@ export default function DriverRoutesOffersPage() {
                 </Text>
               </ImageBackground>
             </TouchableOpacity>
+            <Text
+              style={{
+                marginTop: 10,
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {errorMessage}
+            </Text>
           </View>
         )}
+        {isLoading && <ActivityIndicator size="large" color="#76A6ED" />}
       </View>
     </PaperProvider>
   );
@@ -317,7 +363,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 90,
   },
   input: {
-    marginBottom: 7,
+    marginBottom: 10,
     marginHorizontal: 20,
   },
   save_button: {
