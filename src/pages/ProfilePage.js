@@ -39,7 +39,6 @@ export default function ProfilePage({ navigation }) {
           navigation,
           logout
         );
-        console.log("fetch user", fetchedUser);
         setEmail(value);
         setUser(fetchedUser);
         setFullName(fetchedUser.fullName);

@@ -26,7 +26,6 @@ export default function OrderDetailsPage({ route }) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setDriver(data);
       })
       .catch((error) => {

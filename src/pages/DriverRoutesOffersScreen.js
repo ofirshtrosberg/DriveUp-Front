@@ -45,7 +45,6 @@ export default function DriverRoutesOffersPage() {
       setIsLoading(true);
       setErrorMessage("");
       const response = await rejectDrives(userToken, navigation, logout);
-      console.log("response in rejectAndLoadOffers", response);
       if (response === true) fetchSuggestions();
       else {
         setErrorMessage("Action failed");
@@ -67,7 +66,6 @@ export default function DriverRoutesOffersPage() {
     // let lat = location.coords.latitude;
     // setCurrLat(lat);
     // setCurrLon(lon);
-    console.log("hjvbhj");
     setCurrLat(32.0672504);
     setCurrLon(34.7663349);
   };
@@ -93,8 +91,6 @@ export default function DriverRoutesOffersPage() {
         navigation,
         logout
       );
-      console.log("response fetchSuggestions", response);
-
       setData(response.solutions);
       setErrorMessage("");
       setIsLoading(false);

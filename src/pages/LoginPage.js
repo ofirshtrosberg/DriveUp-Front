@@ -20,7 +20,6 @@ export default function LoginPage({ navigation }) {
   const [password, setPassword] = useState("");
   useEffect(() => {
     console.log(userToken);
-    //logout();
   }, [userToken]);
 
   const handleLoginLocal = async (token) => {
@@ -36,7 +35,6 @@ export default function LoginPage({ navigation }) {
         },
       })
         .then((response) => {
-          console.log("response in handleLoginLocal", response);
           return response.json();
         })
         .then((data) => {
@@ -55,7 +53,6 @@ export default function LoginPage({ navigation }) {
     }
   };
   const addLocal = async (user) => {
-    console.log(user);
     await addUserLocal(user);
     await printUsersLocal();
   };
