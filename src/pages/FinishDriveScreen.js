@@ -1,5 +1,11 @@
 import React, { useContext } from "react";
-import { Text, View, StyleSheet, ImageBackground } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
@@ -12,14 +18,45 @@ export default function FinishDriveScreen() {
         resizeMode="cover"
         style={styles.image}
       >
-        <Button
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("TaxiPage");
+          }}
+          style={{
+            width: 200,
+            height: 50,
+            borderRadius: 20,
+            overflow: "hidden",
+            position: "absolute",
+            bottom: 100,
+            alignSelf:"center"
+          }}
+        >
+          <ImageBackground
+            source={require("../assets/btnOrder.png")}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <Text
+              style={{
+                color: "white",
+                textAlign: "center",
+                lineHeight: 50,
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >
+              New Drive
+            </Text>
+          </ImageBackground>
+        </TouchableOpacity>
+        {/* <Button
           style={styles.button}
           onPress={() => {
             navigation.navigate("TaxiPage");
           }}
         >
           <Text style={styles.text}>New Drive</Text>
-        </Button>
+        </Button> */}
       </ImageBackground>
     </View>
   );
@@ -33,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    alignSelf:"center",
+    alignSelf: "center",
     marginTop: 460,
     width: 150,
     height: 60,
