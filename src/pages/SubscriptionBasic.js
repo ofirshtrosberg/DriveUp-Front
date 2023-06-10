@@ -91,15 +91,14 @@ export default function SubscriptionBasic() {
         resizeMode="cover"
         style={styles.image}
       >
-      <View style={{flex:1}}></View>
+        <View style={{ flex: 1 }}></View>
         <View
-          style={{ flex: 7, justifyContent: "center", alignItems: "center" }}
+          style={{ flex: 3, justifyContent: "center", alignItems: "center" }}
         >
           <View
             style={{
               backgroundColor: "#fff",
               borderRadius: 10,
-              marginTop: 170,
             }}
           >
             <Picker
@@ -134,10 +133,8 @@ export default function SubscriptionBasic() {
           />
           <View
             style={{
-              flex: 1,
               flexDirection: "row",
               flexWrap: "wrap",
-              // maxHeight: windowWidth / 5,
             }}
           >
             <View
@@ -223,12 +220,9 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 7,
-    width:330,
+    width: 330,
   },
   upgradeBtn: {
-    position: "absolute",
-    top: 500,
-    left: 120,
     width: 170,
   },
   errorText: {
