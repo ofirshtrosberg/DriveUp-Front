@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { Text, View, StyleSheet, ImageBackground } from "react-native";
+import { Text, View, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
 import { Button } from "react-native-paper";
 import { Lobster_400Regular } from "@expo-google-fonts/lobster";
@@ -34,12 +34,35 @@ export default function SubscriptionPremium() {
         resizeMode="cover"
         style={styles.image}
       >
-        <Button
-          style={styles.subscriptionBtn}
-          onPress={handleCancelSubscription}
+        <TouchableOpacity
+          onPress={() => {handleCancelSubscription();}}
+          style={{
+            width: 200,
+            height: 50,
+            borderRadius: 20,
+            overflow: "hidden",
+            position: "absolute",
+            bottom: 130,
+            alignSelf: "center",
+          }}
         >
-          <Text style={styles.textBtn}>Cancel subscription</Text>
-        </Button>
+          <ImageBackground
+            source={require("../assets/btnOrder.png")}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <Text
+              style={{
+                color: "white",
+                textAlign: "center",
+                lineHeight: 50,
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >
+              Cancel subscription
+            </Text>
+          </ImageBackground>
+        </TouchableOpacity>
       </ImageBackground>
     </View>
   );

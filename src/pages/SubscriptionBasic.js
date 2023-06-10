@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput, Button } from "react-native-paper";
@@ -186,11 +187,37 @@ export default function SubscriptionBasic() {
               </Picker>
             </View>
           </View>
-          <Button style={styles.upgradeBtn} onPress={() => handleUpgrade()}>
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>
-              Upgrade to premium
-            </Text>
-          </Button>
+          <TouchableOpacity
+            onPress={() => {
+              handleUpgrade();
+            }}
+            style={{
+              width: 200,
+              height: 50,
+              borderRadius: 20,
+              overflow: "hidden",
+              position: "absolute",
+              bottom: 30,
+              alignSelf: "center",
+            }}
+          >
+            <ImageBackground
+              source={require("../assets/btnOrder.png")}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  lineHeight: 50,
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Upgrade to premium
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
           <Text style={styles.errorText}>{error}</Text>
         </View>
       </ImageBackground>
