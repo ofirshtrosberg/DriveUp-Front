@@ -18,7 +18,7 @@ export const getUserByEmail = async (email) => {
     const user = parsedUsers.find((user) => user.email === email);
     return user;
   } catch (error) {
-    console.error("Error fetching user from local database:", error);
+    console.log("Error fetching user from local database:", error);
   }
 };
 

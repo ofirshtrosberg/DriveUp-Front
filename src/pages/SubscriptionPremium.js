@@ -1,6 +1,12 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { Text, View, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import { useFonts } from "expo-font";
 import { Button } from "react-native-paper";
 import { Lobster_400Regular } from "@expo-google-fonts/lobster";
@@ -18,7 +24,7 @@ export default function SubscriptionPremium() {
         navigation.goBack();
       }
     } catch (error) {
-      console.error("Error deleting subscription:", error);
+      console.log("Error deleting subscription:", error);
     }
   };
   const [fontsLoaded] = useFonts({
@@ -35,7 +41,9 @@ export default function SubscriptionPremium() {
         style={styles.image}
       >
         <TouchableOpacity
-          onPress={() => {handleCancelSubscription();}}
+          onPress={() => {
+            handleCancelSubscription();
+          }}
           style={{
             width: 200,
             height: 50,

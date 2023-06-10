@@ -70,7 +70,7 @@ export default function PassengerProfilePage(props) {
       console.log("orders: ", filteredOrders);
       return filteredOrders;
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 

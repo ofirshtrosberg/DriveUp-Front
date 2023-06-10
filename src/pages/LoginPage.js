@@ -50,7 +50,7 @@ export default function LoginPage({ navigation }) {
           }
         })
         .catch((error) => {
-          console.error("handleLoginLocal", error);
+          console.log("handleLoginLocal", error);
         });
     }
   };
@@ -94,7 +94,7 @@ export default function LoginPage({ navigation }) {
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   };
 
