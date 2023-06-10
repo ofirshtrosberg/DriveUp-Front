@@ -6,7 +6,10 @@ import { useSpacingFunc } from "@react-native-material/core";
 import { AuthContext } from "../../AuthContext";
 import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
 import { format } from "date-fns";
-import { downloadImage } from "../helperFunctions/accessToBackFunctions";
+import {
+  downloadImage,
+  getUserByEmail,
+} from "../helperFunctions/accessToBackFunctions";
 import { useFocusEffect } from "@react-navigation/native";
 import UserAvatar from "react-native-user-avatar";
 import { TextInput, Button } from "react-native-paper";
@@ -30,46 +33,29 @@ export default function OrderDetailsPage({ route }) {
     setIsModalVisible(!isModalVisible);
   };
 
+  const fetchUserDownloadImage = async () => {
+    try {
+      const driver = await getUserByEmail(email, userToken, navigation, logout);
+      setDriver(driver);
+      console.log("image profile before if", driver.imageUrl);
+      if (driver.imageUrl !== "" && driver.imageUrl !== null) {
+        await downloadImage(driver.imageUrl, setImageUri);
+      }
+    } catch (error) {
+      console.log("fetchUserDownloadImage error");
+    }
+  };
   useFocusEffect(
     React.useCallback(() => {
-      getUserByEmail(email, userToken, navigation, logout);
-      if (imageProfile !== "" && imageProfile !== null) {
-        downloadImage(imageProfile, setImageUri);
-      }
+      fetchUserDownloadImage();
       return () => {};
     }, [])
   );
+  useEffect(() => {
+    console.log(driver);
+  }, [driver]);
   const formattedTime = format(new Date(timeDate), "HH:mm");
   const formattedDate = format(new Date(timeDate), "dd-MM-yyyy");
-
-  const getUserByEmail = async (email, userToken, navigation, logout) => {
-    fetch("http://" + IP + ":" + PORT + "/users/" + email, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.status === 401) {
-          clearStackAndNavigate(navigation, "Login");
-          logout();
-          throw new Error("your token expired or invalid please login");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("data.result", data.result);
-        // resolve(data.result);
-        setDriver(data.result);
-        console.log("driver:",driver)
-        setImageProfile(driver.imageUrl);
-      })
-      .catch((error) => {
-        console.log("getUserByEmail error");
-        // reject("aaa", error);
-      });
-  };
 
   const rateDriver = () => {
     fetch("http://" + IP + ":" + PORT + "/rating", {
@@ -93,11 +79,10 @@ export default function OrderDetailsPage({ route }) {
         return response.json();
       })
       .then((data) => {
-        console.log("data:", data);
         navigation.goBack();
       })
       .catch((error) => {
-        console.log("error:", error);
+        console.log("error in rateDriver");
       });
   };
 
