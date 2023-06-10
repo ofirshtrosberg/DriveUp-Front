@@ -18,8 +18,9 @@ export const validatePhoneNumber = (text) => {
   return validateNumbersOnly(text) && text.length == 10;
 };
 export const validateFullName = (text) => {
-  text = removeWhiteSpaces(text);
-  return validateLettersOnly(text) && text.length >= 4;
+  text = text.trim();
+  const regex = /^[A-Za-z]{2,6} [A-Za-z]{2,8}$/;
+  return regex.test(text);
 };
 export const validateCarModel = (text) => {
   text = removeWhiteSpaces(text);

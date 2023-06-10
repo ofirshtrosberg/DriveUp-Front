@@ -41,7 +41,20 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [destinationLat, setDestinationLat] = useState(0);
   const [startLon, setStartLon] = useState(0);
   const [destinationLon, setDestinationLon] = useState(0);
-
+  const checkLocationsForMap = async () => {
+    try {
+      await checkIfLocationsAreFine(startAddress, destinationAddress);
+      if (isGeocodingFine) {
+        toggleModal();
+      } else {
+        setErrorMessage("Invalid address");
+        setShowErrorMessage(true);
+      }
+    } catch (error) {
+      setErrorMessage("Invalid address");
+      console.log(error);
+    }
+  };
   const toggleModal = () => {
     setShowErrorMessage(false);
     setIsModalVisible(!isModalVisible);
@@ -117,7 +130,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       setDestinationLon(responseDest.results[0].geometry.location.lng);
       setIsGeocodingFine(true);
     } catch (error) {
+      setErrorMessage("Invalid address");
       setIsGeocodingFine(false);
+      console.log(error.message);
     }
   };
   useEffect(() => {
@@ -278,17 +293,13 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             >
               <TouchableOpacity
                 onPress={() => {
-                  // if (startAddress == "" || destinationAddress == "") {
-                  //   setErrorMessage("Invalid address");
-                  //   setShowErrorMessage(true);
-                  // } else {
-                  //   checkIfLocationsAreFine(startAddress, destinationAddress);
-                  //   if (isGeocodingFine) {
-                  //     setErrorMessage("");
-                  //     setShowErrorMessage(false);
-                  handleAddOrder(startAddress, destinationAddress);
-                  // }
-                  // }
+                  setErrorMessage("");
+                  if (startAddress == "" || destinationAddress == "") {
+                    setErrorMessage("Invalid address");
+                    setShowErrorMessage(true);
+                  } else {
+                    handleAddOrder(startAddress, destinationAddress);
+                  }
                 }}
                 style={{
                   width: 130,
@@ -320,17 +331,12 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
 
               <TouchableOpacity
                 onPress={() => {
+                  setErrorMessage("");
                   if (startAddress == "" || destinationAddress == "") {
                     setErrorMessage("Invalid address");
                     setShowErrorMessage(true);
                   } else {
-                    checkIfLocationsAreFine(startAddress, destinationAddress);
-                    if (isGeocodingFine) {
-                      toggleModal();
-                    } else {
-                      setErrorMessage("Invalid address");
-                      setShowErrorMessage(true);
-                    }
+                    checkLocationsForMap();
                   }
                 }}
                 style={{
@@ -403,7 +409,6 @@ const styles = StyleSheet.create({
     aspectRatio: 16 / 9,
   },
   errorText: {
-    marginTop: 10,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",

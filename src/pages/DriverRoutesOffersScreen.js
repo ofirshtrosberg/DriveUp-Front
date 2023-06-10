@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
 import { Checkbox, Provider as PaperProvider } from "react-native-paper";
@@ -22,7 +23,6 @@ export default function DriverRoutesOffersPage() {
   const [data, setData] = useState(null);
   const [currLat, setCurrLat] = useState(0);
   const [currLon, setCurrLon] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
   const [pickUpDistance, setPickUpDistance] = useState("");
   const [rideDistance, setRideDistance] = useState("");
   const navigation = useNavigation();
@@ -30,6 +30,7 @@ export default function DriverRoutesOffersPage() {
   const [showModal, setShowModal] = useState(false);
   const [limits, setLimits] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   useFocusEffect(
     React.useCallback(() => {
       fetchSuggestions();
@@ -62,6 +63,7 @@ export default function DriverRoutesOffersPage() {
   }, [data]);
   const fetchSuggestions = async () => {
     try {
+      setIsLoading(true);
       // await updateCurrentLocation();
       const response = await requestDrives(
         userToken,
@@ -75,9 +77,11 @@ export default function DriverRoutesOffersPage() {
 
       setData(response.solutions);
       setErrorMessage("");
+      setIsLoading(false);
     } catch (error) {
       setErrorMessage("Load failed");
       console.log("error fetchSuggestions", error);
+      setIsLoading(false);
     }
   };
   const toggleModal = () => {
@@ -341,6 +345,7 @@ export default function DriverRoutesOffersPage() {
             </Text>
           </View>
         )}
+        {isLoading && <ActivityIndicator size="large" color="#76A6ED" />}
       </View>
     </PaperProvider>
   );
