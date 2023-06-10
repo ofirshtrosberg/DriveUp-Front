@@ -462,30 +462,64 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
 };
 // !!! check 401
 export const cancelOrder = async (orderId, userToken, navigation, logout) => {
-  fetch(`http://${IP}:${PORT}/passenger/cancel-order/${orderId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      console.log("cancel drive res", response);
-      if (response.status === 401) {
-        clearStackAndNavigate(navigation, "Login");
-        logout();
-        throw new Error("your token expired or invalid please login");
-      }
-      return response.json();
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/passenger/cancel-order/${orderId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
     })
-    .then((data) => {
-      if (data.success === true) {
-        navigation.goBack();
-        resolve(true);
-      }
-      resolve(false);
+      .then((response) => {
+        console.log("cancel drive res", response);
+        if (response.status === 401) {
+          clearStackAndNavigate(navigation, "Login");
+          logout();
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success === true) {
+          navigation.goBack();
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
+};
+// !!! check 401
+export const rejectDrives = async (userToken, navigation, logout) => {
+  return new Promise((resolve, reject) => {
+    fetch(`http://${IP}:${PORT}/driver/reject-drives`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
     })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        if (response.status === 401) {
+          clearStackAndNavigate(navigation, "Login");
+          logout();
+          throw new Error("your token expired or invalid please login");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("reject data", data);
+        if (data.success === true) {
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch((error) => {
+        reject(error);
+        console.error(error);
+      });
+  });
 };
