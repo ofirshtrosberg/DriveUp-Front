@@ -52,7 +52,7 @@ export default function ProfilePage({ navigation }) {
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error fetching user:", error);
+      console.log("Error fetching user:", error);
     }
   };
 

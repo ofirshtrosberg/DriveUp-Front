@@ -30,7 +30,7 @@ export default function OrderDetailsPage({ route }) {
         setDriver(data);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   };
   return (

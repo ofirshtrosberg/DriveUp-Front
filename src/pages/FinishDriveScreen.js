@@ -29,7 +29,7 @@ export default function FinishDriveScreen() {
             overflow: "hidden",
             position: "absolute",
             bottom: 100,
-            alignSelf:"center"
+            alignSelf: "center",
           }}
         >
           <ImageBackground
@@ -49,14 +49,6 @@ export default function FinishDriveScreen() {
             </Text>
           </ImageBackground>
         </TouchableOpacity>
-        {/* <Button
-          style={styles.button}
-          onPress={() => {
-            navigation.navigate("TaxiPage");
-          }}
-        >
-          <Text style={styles.text}>New Drive</Text>
-        </Button> */}
       </ImageBackground>
     </View>
   );

@@ -12,7 +12,7 @@ export const downloadImage = async (imageProfile, setImageUri) => {
     await FileSystem.downloadAsync(response.url, imageUri);
     setImageUri(imageUri);
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 
@@ -47,7 +47,7 @@ export const getUserByEmail = async (email, userToken, navigation, logout) => {
         resolve(data.result);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         reject(error);
       });
   });
@@ -95,7 +95,7 @@ export const createUserSubscription = (
       console.log(data);
     })
     .catch((error) => {
-      console.error(error);
+      console.log(error);
     });
 };
 
@@ -128,7 +128,7 @@ export const isUserPremium = (email, userToken, navigation, logout) => {
         resolve(false);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         reject(error);
       });
   });
@@ -152,7 +152,7 @@ export const deleteSubscription = (email, userToken, navigation, logout) => {
     })
     .then((data) => {})
     .catch((error) => {
-      console.error(error);
+      console.log(error);
     });
 };
 
@@ -202,7 +202,7 @@ export const passengerOrderDrive = async (
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         reject(error);
       });
   });
@@ -238,7 +238,7 @@ export const getDriveByOrderId = async (
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         reject(error);
       });
   });
@@ -274,7 +274,7 @@ export const getEstimatedTime = async (
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         reject(error);
       });
   });
@@ -320,7 +320,7 @@ export const requestDrives = async (
         resolve(data);
       })
       .catch((error) => {
-        console.error("error in requestDrives", error);
+        console.log("error in requestDrives", error);
         reject(error);
       });
   });
@@ -397,7 +397,7 @@ export const driveDetails = async (userToken, driveId, navigation, logout) => {
         resolve(data);
       })
       .catch((error) => {
-        console.error("drive details error", error);
+        console.log("drive details error", error);
         reject("drive details error", error);
       });
   });
@@ -432,7 +432,7 @@ export const driveDetailsPreview = async (
         resolve(data);
       })
       .catch((error) => {
-        console.error("drive details preview error", error);
+        console.log("drive details preview error", error);
         reject("drive details error", error);
       });
   });
@@ -487,7 +487,7 @@ export const cancelOrder = async (orderId, userToken, navigation, logout) => {
         resolve(false);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         reject(error);
       });
   });
@@ -519,7 +519,7 @@ export const rejectDrives = async (userToken, navigation, logout) => {
       })
       .catch((error) => {
         reject(error);
-        console.error(error);
+        console.log(error);
       });
   });
 };
