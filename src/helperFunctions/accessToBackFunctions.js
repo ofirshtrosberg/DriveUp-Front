@@ -12,7 +12,7 @@ export const downloadImage = async (imageProfile, setImageUri) => {
     await FileSystem.downloadAsync(response.url, imageUri);
     setImageUri(imageUri);
   } catch (error) {
-    console.error(error);
+    console.error("down failed", error);
   }
 };
 

@@ -18,7 +18,6 @@ import { Button } from "react-native-paper";
 import { IP, PORT } from "@env";
 import { AuthContext } from "../../AuthContext";
 import { format } from "date-fns";
-import axios from "axios";
 import { downloadImage } from "../helperFunctions/accessToBackFunctions";
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
@@ -87,7 +86,7 @@ export default function PassengerProfilePage(props) {
     const formattedTime = format(new Date(item.time), "HH:mm");
     const formattedDate = format(new Date(item.time), "dd-MM-yyyy");
     const handlePressOrder = () => {
-      navigation.navigate("OrderDetails", { order: item });
+      navigation.navigate("OrderDetails", { order: item, imageProfile });
     };
 
     return (
@@ -164,15 +163,19 @@ export default function PassengerProfilePage(props) {
             />
             <Text style={styles.passenger_phone}>{phoneNumber} </Text>
           </View>
-          <Text style={styles.orders_title}>Orders History </Text>
+          {orders.length > 0 && (
+            <>
+              <Text style={styles.orders_title}>Orders History </Text>
 
-          <View style={styles.orders_list}>
-            <FlatList
-              data={orders}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.orderId.toString()}
-            />
-          </View>
+              <View style={styles.orders_list}>
+                <FlatList
+                  data={orders}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.orderId.toString()}
+                />
+              </View>
+            </>
+          )}
         </View>
       </ImageBackground>
     </View>
