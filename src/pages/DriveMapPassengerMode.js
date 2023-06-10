@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -199,7 +200,7 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
           {imageUri ? (
             <Image
               style={styles.driverImage}
-              source={{ uri: { imageUri } }}
+              source={{ uri: imageUri }}
             ></Image>
           ) : (
             <Image
@@ -242,18 +243,26 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
         isVisible={isModalVisibleProfile}
         onBackdropPress={toggleModalProfile}
       >
-        <View style={{ flex: 1, backgroundColor: "#fff" }}>
-          <DriverProfilePage
-            email={driverEmail}
-            fullName={driverFullName}
-            plateNumber={driverPlateNumber}
-            phoneNumber={driverPhoneNumber}
-            carModel={driverCarModel}
-            password={driverPassword}
-            carColor={driverCarColor}
-            forOrder="true"
-            imageProfile={driverImageUrl}
-          />
+        <View style={{ flex: 1 }}>
+          <View style={styles.modalContainer}>
+            <TouchableOpacity
+              onPress={toggleModalProfile}
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+            <DriverProfilePage
+              email={driverEmail}
+              fullName={driverFullName}
+              plateNumber={driverPlateNumber}
+              phoneNumber={driverPhoneNumber}
+              carModel={driverCarModel}
+              password={driverPassword}
+              carColor={driverCarColor}
+              forOrder="true"
+              imageProfile={driverImageUrl}
+            />
+          </View>
         </View>
       </Modal>
     </View>
@@ -296,5 +305,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 10,
+    backgroundColor: "transparent",
+    zIndex:10000
+  },
+  closeButtonText: {
+    fontSize: 16,
+    color: "black",
   },
 });

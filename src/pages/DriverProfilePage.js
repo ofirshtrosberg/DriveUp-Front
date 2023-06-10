@@ -35,14 +35,19 @@ export default function DriverProfilePage(props) {
     imageProfile,
   } = props;
   const [imageUri, setImageUri] = useState(null);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState("Not available");
   const { userToken, login, logout } = useContext(AuthContext);
 
+  const downloadImageGetRating = async () => {
+    try {
+      getRating(email);
+      if (imageProfile !== "" && imageProfile !== null)
+        await downloadImage(imageProfile, setImageUri);
+    } catch (error) {}
+  };
   useFocusEffect(
     React.useCallback(() => {
-      if (imageProfile !== "" && imageProfile !== null)
-        downloadImage(imageProfile, setImageUri);
-      getRating(email);
+      downloadImageGetRating();
       return () => {};
     }, [])
   );
@@ -68,12 +73,17 @@ export default function DriverProfilePage(props) {
         return response.json();
       })
       .then((data) => {
-        setRating(data.rating);
+        console.log(data)
+        if (data.rating !== undefined && data.rating !== null)
+          setRating(data.rating.toString());
       })
       .catch((error) => {
         console.error(error);
       });
   };
+  useEffect(() => {
+    console.log("rating changed", rating);
+  }, [rating]);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -153,7 +163,7 @@ export default function DriverProfilePage(props) {
                 <Text style={styles.sub_text}>Subscription</Text>
               </Button>
             )}
-            {rating == 0 && (
+            {rating !== "" && (
               <Text style={styles.driver_name}>rating: {rating}</Text>
             )}
           </View>
