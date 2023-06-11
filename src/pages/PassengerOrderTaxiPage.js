@@ -56,7 +56,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
       }
     } catch (error) {
       setErrorMessage("Invalid address");
-       setShowErrorMessage(true);
+      setShowErrorMessage(true);
     }
   };
   const toggleModal = () => {
@@ -141,7 +141,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log(startLat);
   }, [startLat]);
   useEffect(() => {
-    console.log("fine?",isGeocodingFine);
+    console.log("fine?", isGeocodingFine);
   }, [isGeocodingFine]);
   useEffect(() => {
     console.log(startLon);
@@ -183,13 +183,13 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
 
   return (
     <PaperProvider theme={theme}>
-      <View style={styles.container}>
-        <ImageBackground
-          source={require("../assets/orderBack.png")}
-          resizeMode="cover"
-          style={styles.image}
-        >
-          <KeyboardAvoidingView style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.container}>
+          {/* <ImageBackground
+            source={require("../assets/orderBackNew.png")}
+            resizeMode="cover"
+            style={styles.image}
+          > */}
             <View style={{ flex: 1 }}>
               <GooglePlacesAutocomplete
                 placeholder="Start Address"
@@ -269,7 +269,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
                   alignItems: "center",
                   justifyContent: "center",
                   position: "absolute",
-                  top: 240,
+                  top: 220,
                   left: 0,
                   right: 0,
                 }}
@@ -318,8 +318,8 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
                   alignSelf: "center",
                   borderRadius: 20,
                   overflow: "hidden",
-                  marginTop: 70,
-                  marginLeft: 200,
+                  // marginTop: 30,
+                  // marginLeft: 200,
                 }}
               >
                 <ImageBackground
@@ -357,7 +357,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
                   borderRadius: 20,
                   overflow: "hidden",
                   marginTop: 10,
-                  marginLeft: 170,
+                  // marginLeft: 170,
                 }}
               >
                 <ImageBackground
@@ -392,16 +392,16 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
                 </View>
               </Modal>
             </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
+          {/* </ImageBackground> */}
+        </View>
+      </KeyboardAvoidingView>
     </PaperProvider>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#061848",
+    backgroundColor: "#061848",
   },
   image: {
     flex: 1,
@@ -424,5 +424,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     color: "#fff",
+    // marginLeft: 185,
+    marginTop: 17,
   },
 });
