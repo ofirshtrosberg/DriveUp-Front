@@ -41,6 +41,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [destinationLat, setDestinationLat] = useState(0);
   const [startLon, setStartLon] = useState(0);
   const [destinationLon, setDestinationLon] = useState(0);
+  console.log("key", GOOGLE_MAPS_API_KEY);
   const checkLocationsForMap = async () => {
     setErrorMessage("");
     try {
@@ -182,220 +183,218 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   };
 
   return (
-    <PaperProvider theme={theme}>
-      <KeyboardAvoidingView style={styles.container}>
-        <View style={styles.container}>
-          {/* <ImageBackground
-            source={require("../assets/orderBackNew.png")}
-            resizeMode="cover"
-            style={styles.image}
-          > */}
-            <View style={{ flex: 1 }}>
-              <GooglePlacesAutocomplete
-                placeholder="Start Address"
-                fetchDetails={true}
-                onPress={(data, details = null) => {
-                  setStartAddress(data.description);
-                }}
-                textInputProps={{
-                  onChangeText: handleStartAddressChange,
-                  value: startAddress,
-                }}
-                query={{
-                  key: GOOGLE_MAPS_API_KEY,
-                  language: "en",
-                }}
-                styles={{
-                  container: {
-                    position: "absolute",
-                    top: 10,
-                    left: 0,
-                    right: 0,
-                    zIndex: 9999,
-                  },
-                  listView: {
-                    zIndex: 10000,
-                  },
-                }}
-              />
-              <GooglePlacesAutocomplete
-                placeholder="Destination Address"
-                fetchDetails={true}
-                onPress={(data, details = null) => {
-                  setDestinationAddress(data.description);
-                }}
-                textInputProps={{
-                  onChangeText: handleDestinationAddressChange,
-                  value: destinationAddress,
-                }}
-                query={{
-                  key: GOOGLE_MAPS_API_KEY,
-                  language: "en",
-                }}
-                styles={{
-                  container: {
-                    position: "absolute",
-                    top: 70,
-                    left: 0,
-                    right: 0,
-                    zIndex: 9997,
-                  },
-                  listView: {
-                    zIndex: 9998,
-                  },
-                }}
-              />
-              <TextInput
-                value={numberOfPassengers}
-                keyboardType="numeric"
-                maxLength={2}
-                style={{
-                  backgroundColor: "#fff",
-                  height: 46,
-                  zIndex: 100,
-                  position: "absolute",
-                  top: 130,
-                  width: 160,
-                  alignSelf: "center",
-                  borderRadius: 10,
-                  textAlign: "center",
-                }}
-                onChangeText={handleNumberOfPassengersChange}
-                placeholder="Number of passengers"
-              />
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "absolute",
-                  top: 220,
-                  left: 0,
-                  right: 0,
-                }}
-              >
-                <Checkbox
-                  status={checked ? "checked" : "unchecked"}
-                  onPress={() => {
-                    if (!checked) {
-                      setStartAddress(currAddress);
-                    } else {
-                      setStartAddress("");
-                    }
-                    setChecked(!checked);
-                  }}
-                  color="#fff"
-                />
-                <Text
-                  style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}
-                >
-                  Use current location as start address
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                flex: 1,
+    // <PaperProvider theme={theme}>
+    // <KeyboardAvoidingView style={styles.container}>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require("../assets/orderBackNew.png")}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        <View style={{ flex: 1 }}>
+          <GooglePlacesAutocomplete
+            placeholder="Start Address"
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              setStartAddress(data.description);
+            }}
+            textInputProps={{
+              onChangeText: handleStartAddressChange,
+              value: startAddress,
+            }}
+            query={{
+              key: GOOGLE_MAPS_API_KEY,
+              language: "en",
+            }}
+            styles={{
+              container: {
                 position: "absolute",
-                top: 350,
+                top: 10,
                 left: 0,
                 right: 0,
+                zIndex: 9999,
+              },
+              listView: {
+                zIndex: 10000,
+              },
+            }}
+          />
+          <GooglePlacesAutocomplete
+            placeholder="Destination Address"
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              setDestinationAddress(data.description);
+            }}
+            textInputProps={{
+              onChangeText: handleDestinationAddressChange,
+              value: destinationAddress,
+            }}
+            query={{
+              key: GOOGLE_MAPS_API_KEY,
+              language: "en",
+            }}
+            styles={{
+              container: {
+                position: "absolute",
+                top: 70,
+                left: 0,
+                right: 0,
+                zIndex: 9997,
+              },
+              listView: {
+                zIndex: 9998,
+              },
+            }}
+          />
+          <TextInput
+            value={numberOfPassengers}
+            keyboardType="numeric"
+            maxLength={2}
+            style={{
+              backgroundColor: "#fff",
+              height: 46,
+              zIndex: 100,
+              position: "absolute",
+              top: 130,
+              width: 160,
+              alignSelf: "center",
+              borderRadius: 10,
+              textAlign: "center",
+            }}
+            onChangeText={handleNumberOfPassengersChange}
+            placeholder="Number of passengers"
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "absolute",
+              top: 220,
+              left: 0,
+              right: 0,
+            }}
+          >
+            <Checkbox
+              status={checked ? "checked" : "unchecked"}
+              onPress={() => {
+                if (!checked) {
+                  setStartAddress(currAddress);
+                } else {
+                  setStartAddress("");
+                }
+                setChecked(!checked);
               }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  setErrorMessage("");
-                  if (startAddress == "" || destinationAddress == "") {
-                    setErrorMessage("Invalid address");
-                    setShowErrorMessage(true);
-                  } else {
-                    handleAddOrder(startAddress, destinationAddress);
-                  }
-                }}
-                style={{
-                  width: 130,
-                  height: 50,
-                  alignSelf: "center",
-                  borderRadius: 20,
-                  overflow: "hidden",
-                  // marginTop: 30,
-                  // marginLeft: 200,
-                }}
-              >
-                <ImageBackground
-                  source={require("../assets/btnOrder.png")}
-                  style={{ width: "100%", height: "100%" }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      textAlign: "center",
-                      lineHeight: 50,
-                      fontSize: 16,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Order now
-                  </Text>
-                </ImageBackground>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => {
-                  setErrorMessage("");
-                  if (startAddress == "" || destinationAddress == "") {
-                    setErrorMessage("Invalid address");
-                    setShowErrorMessage(true);
-                  } else {
-                    checkLocationsForMap();
-                  }
-                }}
-                style={{
-                  width: 170,
-                  height: 50,
-                  alignSelf: "center",
-                  borderRadius: 20,
-                  overflow: "hidden",
-                  marginTop: 10,
-                  // marginLeft: 170,
-                }}
-              >
-                <ImageBackground
-                  source={require("../assets/btnOrder.png")}
-                  style={{ width: "100%", height: "100%" }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      textAlign: "center",
-                      lineHeight: 50,
-                      fontSize: 16,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Show on map
-                  </Text>
-                </ImageBackground>
-              </TouchableOpacity>
-
-              {showErrorMessage && (
-                <Text style={styles.errorText}>{errorMessage}</Text>
-              )}
-              <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-                <View style={{ flex: 1 }}>
-                  <PassengerOrderOnMap
-                    startLat={startLat}
-                    startLon={startLon}
-                    destinationLat={destinationLat}
-                    destinationLon={destinationLon}
-                  />
-                </View>
-              </Modal>
-            </View>
-          {/* </ImageBackground> */}
+              color="#fff"
+            />
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
+              Use current location as start address
+            </Text>
+          </View>
         </View>
-      </KeyboardAvoidingView>
-    </PaperProvider>
+        <View
+          style={{
+            flex: 1,
+            position: "absolute",
+            top: 350,
+            left: 0,
+            right: 0,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              setErrorMessage("");
+              if (startAddress == "" || destinationAddress == "") {
+                setErrorMessage("Invalid address");
+                setShowErrorMessage(true);
+              } else {
+                handleAddOrder(startAddress, destinationAddress);
+              }
+            }}
+            style={{
+              width: 130,
+              height: 50,
+              alignSelf: "center",
+              borderRadius: 20,
+              overflow: "hidden",
+              // marginTop: 30,
+              // marginLeft: 200,
+            }}
+          >
+            <ImageBackground
+              source={require("../assets/btnOrder.png")}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  lineHeight: 50,
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Order now
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setErrorMessage("");
+              if (startAddress == "" || destinationAddress == "") {
+                setErrorMessage("Invalid address");
+                setShowErrorMessage(true);
+              } else {
+                checkLocationsForMap();
+              }
+            }}
+            style={{
+              width: 170,
+              height: 50,
+              alignSelf: "center",
+              borderRadius: 20,
+              overflow: "hidden",
+              marginTop: 10,
+              // marginLeft: 170,
+            }}
+          >
+            <ImageBackground
+              source={require("../assets/btnOrder.png")}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  lineHeight: 50,
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Show on map
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
+
+          {showErrorMessage && (
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          )}
+          <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+            <View style={{ flex: 1 }}>
+              <PassengerOrderOnMap
+                startLat={startLat}
+                startLon={startLon}
+                destinationLat={destinationLat}
+                destinationLon={destinationLon}
+              />
+            </View>
+          </Modal>
+        </View>
+      </ImageBackground>
+    </View>
+    /* </KeyboardAvoidingView> */
+    /* </PaperProvider> */
   );
 }
 const styles = StyleSheet.create({

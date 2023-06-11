@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IP, PORT } from "@env";
 import { useSpacingFunc } from "@react-native-material/core";
@@ -25,13 +33,8 @@ export default function OrderDetailsPage({ route }) {
   const [driver, setDriver] = useState("");
   const { userToken, login, logout } = useContext(AuthContext);
   const [imageUri, setImageUri] = useState(null);
-  const [imageProfile, setImageProfile] = useState("");
   const [rating, setRating] = useState(0);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const toggleModal = () => {
-    // setShowErrorMessage(false);
-    setIsModalVisible(!isModalVisible);
-  };
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Order details",
@@ -121,48 +124,45 @@ export default function OrderDetailsPage({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text>Order Number: {order.orderId}</Text>
-      <Text style={styles.date}>
-        {formattedDate} - {formattedTime}
-      </Text>
-      <Text>Sum: {order.cost}</Text>
-      <Text>{driver.fullName}</Text>
-      {/* <TouchableOpacity
-        onPress={() => {
-          toggleModal();
-        }}
+      <ImageBackground
+        source={require("../assets/orderdetails.png")}
+        resizeMode="cover"
+        style={styles.image}
       >
-        <Text>show profile</Text>
-      </TouchableOpacity>
+        <View style={styles.container}>
+          <Text style={styles.orderNumber}>Order Number : {order.orderId}</Text>
 
-      <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-        <View style={{ flex: 1 }}>
-          <DriverProfilePage></DriverProfilePage>
+          {imageUri ? (
+            <Image source={{ uri: imageUri }} style={styles.avatar} />
+          ) : (
+            <UserAvatar
+              size={110}
+              name={driver.fullName}
+              style={styles.avatar}
+              textColor={"#061848"}
+            />
+          )}
+          <Text style={styles.data}>{driver.fullName}</Text>
+
+          <Text style={styles.data}>
+            {formattedDate} - {formattedTime}
+          </Text>
+          <Text style={styles.data}>Sum: {order.cost}</Text>
+          <Text style={styles.data}>Phone: {driver.phoneNumber}</Text>
+
+          {/* <Rating rating={rating} onRatingChange={handleRatingChange} /> */}
+
+          {/* <Button onPress={() => rateDriver()}>save</Button> */}
         </View>
-      </Modal> */}
-      <TouchableOpacity>
-        {imageUri ? (
-          <Image source={{ uri: imageUri }} style={styles.avatar} />
-        ) : (
-          <UserAvatar
-            size={110}
-            name={driver.fullName}
-            style={styles.avatar}
-            textColor={"#061848"}
-          />
-        )}
-      </TouchableOpacity>
-      <Rating rating={rating} onRatingChange={handleRatingChange} />
-
-      <Button onPress={() => rateDriver()}>save</Button>
+      </ImageBackground>
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   ratingContainer: {
     flexDirection: "row",
@@ -183,16 +183,29 @@ const styles = StyleSheet.create({
     color: "gold",
   },
   avatar: {
-    width: 125,
-    height: 125,
+    width: 120,
+    height: 120,
     borderRadius: 100,
-    marginTop: 20,
-    marginLeft: 9,
+    marginTop: 41,
+    marginLeft: 5,
     backgroundColor: "white",
+    marginBottom: 20,
   },
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
     width: 340,
   },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  orderNumber: {
+    color: "white",
+    fontWeight: 700,
+    fontSize: 25,
+    marginTop: 60,
+    marginBottom: 7,
+  },
+  data: { fontSize: 20, color: "white" },
 });
