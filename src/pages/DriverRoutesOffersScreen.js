@@ -67,7 +67,7 @@ export default function DriverRoutesOffersPage() {
       let lat = location.coords.latitude;
       return { lat, lon };
     } catch (error) {
-      console.log("updateCurrentLocation", error);
+      console.log("updateCurrentLocation");
     }
   };
   useEffect(() => {

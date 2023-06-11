@@ -286,8 +286,8 @@ export const requestDrives = async (
   navigation,
   logout
 ) => {
-  console.log("!@!@!",currLat);
-  console.log("!@!@!",currLon);
+  console.log("!@!@!", currLat);
+  console.log("!@!@!", currLon);
   console.log(`http://${IP}:${PORT}/driver/request-drives`);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/request-drives`, {
@@ -350,7 +350,6 @@ export const acceptDrive = (
       return response.json();
     })
     .then((data) => {
-      console.log("data accept drive", data);
       if (data.success !== true) {
         setErrorMessage("Accept Failed");
         setTimeout(() => {
@@ -390,7 +389,7 @@ export const driveDetails = async (userToken, driveId, navigation, logout) => {
       })
       .catch((error) => {
         console.log("drive details error");
-        reject("drive details error", error);
+        reject("drive details error",);
       });
   });
 };

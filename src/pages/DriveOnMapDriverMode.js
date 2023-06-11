@@ -64,7 +64,7 @@ export default function DriveOnMapDriverMode() {
     }
   };
   useEffect(() => {
-    console.log(GOOGLE_MAPS_API_KEY)
+    console.log(GOOGLE_MAPS_API_KEY);
     getDriveDetails();
   }, []);
   if (orderLocations === null) {
@@ -186,8 +186,15 @@ export default function DriveOnMapDriverMode() {
                       source={require("../assets/imgPassenger4.png")}
                     ></Image>
                   )}
-                  <Text style={{ color: "#8569F6", fontSize: 16 }}>Name</Text>
-                  <Text style={{ color: "#8569F6", fontSize: 16 }}>
+                  <Text
+                    style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
+                  >
+                    {location.name.split(" ")[0]}
+                  </Text>
+                  <Text style={{ color: "#fff", fontSize: 12 }}>
+                    {location.phone}
+                  </Text>
+                  <Text style={{ color: "#fff", fontSize: 16 }}>
                     {location.price}$
                   </Text>
                 </View>
@@ -197,7 +204,7 @@ export default function DriveOnMapDriverMode() {
             }
           })}
         </View>
-        <View style={{ flex: 2, marginTop: 20 }}>
+        <View style={{ flex: 2, marginTop: 50 }}>
           <Text style={styles.boldText}>Profit: {totalPrice}$</Text>
           {!isDriveAccepted && (
             <Button
