@@ -32,7 +32,11 @@ export default function OrderDetailsPage({ route }) {
     // setShowErrorMessage(false);
     setIsModalVisible(!isModalVisible);
   };
-
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Order details",
+    });
+  }, [navigation]);
   const fetchUserDownloadImage = async () => {
     try {
       const driver = await getUserByEmail(email, userToken, navigation, logout);
