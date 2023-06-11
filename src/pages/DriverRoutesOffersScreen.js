@@ -26,8 +26,8 @@ export default function DriverRoutesOffersPage() {
   const [data, setData] = useState(null);
   const [currLat, setCurrLat] = useState(0);
   const [currLon, setCurrLon] = useState(0);
-  const [pickUpDistance, setPickUpDistance] = useState("");
-  const [rideDistance, setRideDistance] = useState("");
+  const [pickUpDistance, setPickUpDistance] = useState("100");
+  const [rideDistance, setRideDistance] = useState("100");
   const navigation = useNavigation();
   const [useLimits, setUseLimits] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -40,19 +40,37 @@ export default function DriverRoutesOffersPage() {
       return () => {};
     }, [])
   );
+  useEffect(() => {
+    console.log("curr lat:", currLat);
+  }, [currLat]);
+  useEffect(() => {
+    console.log("curr lon:", currLon);
+  }, [currLon]);
+  useEffect(() => {
+    console.log("data changed:", data);
+  }, [data]);
+  useEffect(() => {
+    console.log("is loading changed", isLoading);
+  }, [isLoading]);
   const rejectAndLoadOffers = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       setErrorMessage("");
       const response = await rejectDrives(userToken, navigation, logout);
-      if (response === true) fetchSuggestions();
-      else {
+      if (response === true) {
+        await fetchSuggestions();
+      } else {
         setErrorMessage("Action failed");
       }
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       console.log("rejectAndLoadOffers error");
+    } finally {
+      const timeoutId = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
   };
   const updateCurrentLocation = async () => {
@@ -66,36 +84,29 @@ export default function DriverRoutesOffersPage() {
       let lon = location.coords.longitude;
       let lat = location.coords.latitude;
       return { lat, lon };
-    } catch (error) {}
+    } catch (error) {
+      console.log("updateCurrentLocation");
+    }
   };
-  useEffect(() => {
-    console.log("curr lat:", currLat);
-  }, [currLat]);
-  useEffect(() => {
-    console.log("curr lon:", currLon);
-  }, [currLon]);
-  useEffect(() => {
-    console.log("data changed:", data);
-  }, [data]);
   const fetchSuggestions = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       setErrorMessage("");
-      const { lat, lon } = await updateCurrentLocation();
+      const res = await updateCurrentLocation();
       const response = await requestDrives(
         userToken,
-        lat,
-        lon,
+        res.lat,
+        res.lon,
         limits,
         navigation,
         logout
       );
       setData(response.solutions);
       setErrorMessage("");
-      setIsLoading(false);
     } catch (error) {
       setErrorMessage("Load failed");
       console.log("error fetchSuggestions");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -141,7 +152,7 @@ export default function DriverRoutesOffersPage() {
                     mode="outlined"
                     label="Pickup Distance"
                     style={styles.input}
-                    value={pickUpDistance}
+                    value={pickUpDistance.toString()}
                     keyboardType="numeric"
                     onChangeText={handlePickUpDistanceChange}
                   />
@@ -149,7 +160,7 @@ export default function DriverRoutesOffersPage() {
                     mode="outlined"
                     label="Ride Distance"
                     style={styles.input}
-                    value={rideDistance}
+                    value={rideDistance.toString()}
                     keyboardType="numeric"
                     onChangeText={handleRideDistanceChange}
                   />
@@ -285,7 +296,7 @@ export default function DriverRoutesOffersPage() {
                     mode="outlined"
                     label="Pickup Distance"
                     style={styles.input}
-                    value={pickUpDistance}
+                    value={pickUpDistance.toString()}
                     keyboardType="numeric"
                     onChangeText={handlePickUpDistanceChange}
                   />
@@ -293,7 +304,7 @@ export default function DriverRoutesOffersPage() {
                     mode="outlined"
                     label="Ride Distance"
                     style={styles.input}
-                    value={rideDistance}
+                    value={rideDistance.toString()}
                     keyboardType="numeric"
                     onChangeText={handleRideDistanceChange}
                   />
@@ -317,39 +328,43 @@ export default function DriverRoutesOffersPage() {
                 </View>
               </ImageBackground>
             </Modal>
-            <TouchableOpacity
-              onPress={() => {
-                fetchSuggestions();
-              }}
-              style={{
-                width: 200,
-                height: 50,
-                alignSelf: "center",
-                borderRadius: 20,
-                overflow: "hidden",
-                marginTop: 20,
-              }}
-            >
-              <ImageBackground
-                source={require("../assets/buttonBack.jpeg")}
-                style={{ width: "100%", height: "100%" }}
+            {!useLimits && (
+              <TouchableOpacity
+                onPress={() => {
+                  fetchSuggestions();
+                }}
+                style={{
+                  width: 200,
+                  height: 50,
+                  alignSelf: "center",
+                  borderRadius: 20,
+                  overflow: "hidden",
+                  marginTop: 20,
+                }}
               >
-                <Text
-                  style={{
-                    color: "white",
-                    textAlign: "center",
-                    lineHeight: 50,
-                    fontSize: 16,
-                    fontWeight: "bold",
-                  }}
+                <ImageBackground
+                  source={require("../assets/buttonBack.jpeg")}
+                  style={{ width: "100%", height: "100%" }}
                 >
-                  Load drive suggestions
-                </Text>
-              </ImageBackground>
-            </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: "white",
+                      textAlign: "center",
+                      lineHeight: 50,
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Load drive suggestions
+                  </Text>
+                </ImageBackground>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => {
+                setIsLoading(true);
                 rejectAndLoadOffers();
+                setIsLoading(false);
               }}
               style={{
                 width: 200,

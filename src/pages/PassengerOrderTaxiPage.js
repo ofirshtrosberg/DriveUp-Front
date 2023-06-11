@@ -166,6 +166,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log("start change", startLat, startLon);
   }, [startAddress]);
   useEffect(() => {
+    // console.log(GOOGLE_MAPS_API_KEY)
     updateCurrentLocation();
     Geocoder.init(GOOGLE_MAPS_API_KEY);
   }, []);
