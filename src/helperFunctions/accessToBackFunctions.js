@@ -286,6 +286,8 @@ export const requestDrives = async (
   navigation,
   logout
 ) => {
+  console.log("!@!@!",currLat);
+  console.log("!@!@!",currLon);
   console.log(`http://${IP}:${PORT}/driver/request-drives`);
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/driver/request-drives`, {
