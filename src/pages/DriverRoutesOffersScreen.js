@@ -56,24 +56,23 @@ export default function DriverRoutesOffersPage() {
     }
   };
   const updateCurrentLocation = async () => {
-    // let { status } = await Location.requestForegroundPermissionsAsync();
-    // if (status !== "granted") {
-    //   console.log("Permission to access location was denied");
-    //   return;
-    // }
-    // let location = await Location.getCurrentPositionAsync({});
-    // let lon = location.coords.longitude;
-    // let lat = location.coords.latitude;
-    // setCurrLat(lat);
-    // setCurrLon(lon);
-    setCurrLat(32.0672504);
-    setCurrLon(34.7663349);
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      let lon = location.coords.longitude;
+      let lat = location.coords.latitude;
+      return { lat, lon };
+    } catch (error) {}
   };
   useEffect(() => {
-    console.log(currLat);
+    console.log("curr lat:", currLat);
   }, [currLat]);
   useEffect(() => {
-    console.log(currLon);
+    console.log("curr lon:", currLon);
   }, [currLon]);
   useEffect(() => {
     console.log("data changed:", data);
@@ -82,11 +81,11 @@ export default function DriverRoutesOffersPage() {
     try {
       setIsLoading(true);
       setErrorMessage("");
-      // await updateCurrentLocation();
+      const { lat, lon } = await updateCurrentLocation();
       const response = await requestDrives(
         userToken,
-        32.0672504,
-        34.7663349,
+        lat,
+        lon,
         limits,
         navigation,
         logout
