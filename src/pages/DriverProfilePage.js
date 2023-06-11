@@ -68,12 +68,13 @@ export default function DriverProfilePage(props) {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
       })
       .then((data) => {
-        console.log(data)
+        console.log(data);
         if (data.rating !== undefined && data.rating !== null)
           setRating(data.rating.toString());
       })

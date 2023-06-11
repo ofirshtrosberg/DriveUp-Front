@@ -74,6 +74,7 @@ export default function OrderDetailsPage({ route }) {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();

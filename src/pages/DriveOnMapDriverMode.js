@@ -48,6 +48,7 @@ export default function DriveOnMapDriverMode() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isDriveAccepted, setIsDriveAccepted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  let counter = 0;
   const getDriveDetails = async () => {
     try {
       const response = await driveDetailsPreview(
@@ -154,13 +155,36 @@ export default function DriveOnMapDriverMode() {
       <View style={styles.bottomView}>
         <View style={{ flex: 1, flexDirection: "row", marginTop: 10 }}>
           {orderLocations.map((location, index) => {
+            console.log(counter);
             if (location.isStartAddress && !location.isDriver) {
+              counter = counter + 1;
+              console.log(counter);
               return (
                 <View key={index} style={styles.passengerImgPrice}>
-                  <Image
-                    style={styles.img}
-                    source={require("../assets/1761892.png")}
-                  ></Image>
+                  {counter === 1 && (
+                    <Image
+                      style={styles.img}
+                      source={require("../assets/imgPassenger1.png")}
+                    ></Image>
+                  )}
+                  {counter === 2 && (
+                    <Image
+                      style={styles.img}
+                      source={require("../assets/imgPassenger2.png")}
+                    ></Image>
+                  )}
+                  {counter === 3 && (
+                    <Image
+                      style={styles.img}
+                      source={require("../assets/imgPassenger3.png")}
+                    ></Image>
+                  )}
+                  {counter === 4 && (
+                    <Image
+                      style={styles.img}
+                      source={require("../assets/imgPassenger4.png")}
+                    ></Image>
+                  )}
                   <Text style={{ color: "#8569F6", fontSize: 16 }}>Name</Text>
                   <Text style={{ color: "#8569F6", fontSize: 16 }}>
                     {location.price}$

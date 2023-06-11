@@ -66,6 +66,7 @@ export default function EditProfilePage({ navigation, route }) {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         if (!response.ok) {
@@ -75,7 +76,8 @@ export default function EditProfilePage({ navigation, route }) {
       })
       .then((data) => {
         console.log("User update successfully!");
-        clearStackAndNavigate(navigation, "Profile");
+        clearStackAndNavigate(navigation, "Main");
+        navigation.navigate("Profile");
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
@@ -156,6 +158,7 @@ export default function EditProfilePage({ navigation, route }) {
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
+        console.error("your token expired or invalid please login");
         throw new Error("your token expired or invalid please login");
       }
       if (response.ok) {
@@ -180,6 +183,7 @@ export default function EditProfilePage({ navigation, route }) {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         if (!response.ok) {
