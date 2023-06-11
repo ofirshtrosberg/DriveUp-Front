@@ -66,7 +66,9 @@ export default function DriverRoutesOffersPage() {
       let lon = location.coords.longitude;
       let lat = location.coords.latitude;
       return { lat, lon };
-    } catch (error) {}
+    } catch (error) {
+      console.log("updateCurrentLocation", error);
+    }
   };
   useEffect(() => {
     console.log("curr lat:", currLat);
@@ -81,11 +83,11 @@ export default function DriverRoutesOffersPage() {
     try {
       setIsLoading(true);
       setErrorMessage("");
-      const { lat, lon } = await updateCurrentLocation();
+      const res = await updateCurrentLocation();
       const response = await requestDrives(
         userToken,
-        lat,
-        lon,
+        res.lat,
+        res.lon,
         limits,
         navigation,
         logout
