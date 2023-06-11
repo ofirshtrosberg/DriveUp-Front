@@ -80,6 +80,7 @@ export default function PassengerProfilePage(props) {
   const closePopup = () => {
     setIsPopupVisible(false);
   };
+  const sortedData = orders.sort((a, b) => new Date(a.time) - new Date(b.time));
 
   const renderItem = ({ item }) => {
     const formattedTime = format(new Date(item.time), "HH:mm");
@@ -168,7 +169,7 @@ export default function PassengerProfilePage(props) {
 
               <View style={styles.orders_list}>
                 <FlatList
-                  data={orders}
+                  data={sortedData}
                   renderItem={renderItem}
                   keyExtractor={(item) => item.orderId.toString()}
                 />
