@@ -438,7 +438,7 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
     },
   })
     .then((response) => {
-      console.log("accept drive res", response);
+      // console.log("accept drive res", response);
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
