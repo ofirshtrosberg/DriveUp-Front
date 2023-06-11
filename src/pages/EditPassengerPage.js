@@ -37,10 +37,9 @@ export default function EditProfilePage({ navigation, route }) {
     });
   }, [navigation]);
   const { userToken, login, logout } = useContext(AuthContext);
-  const { fullName, email, imageProfile, imageUri } = route.params;
+  const { fullName, email, imageUri } = route.params;
 
   const [editedName, setEditedName] = useState(fullName);
-  // const [editedPassword, setEditedPassword] = useState(password);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageUri);
@@ -87,13 +86,6 @@ export default function EditProfilePage({ navigation, route }) {
   const handleNameChange = (text) => {
     setEditedName(text);
   };
-  // const handleImageChange = (image) => {
-  //   setImageUrl(image);
-  // };
-
-  // const handlePasswordChange = (text) => {
-  //   setEditedPassword(text);
-  // };
 
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const handleCloseBottomSheet = () => {
@@ -202,7 +194,7 @@ export default function EditProfilePage({ navigation, route }) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/editPage.png")}
+        source={require("../assets/editPassenger.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -216,7 +208,7 @@ export default function EditProfilePage({ navigation, route }) {
                 />
               ) : (
                 <UserAvatar
-                  size={110}
+                  size={130}
                   name={editedName}
                   style={styles.profileImage}
                   textColor={"#061848"}
@@ -228,7 +220,10 @@ export default function EditProfilePage({ navigation, route }) {
         <BottomSheet
           isVisible={isBottomSheetVisible}
           style={styles.bottomSheet}
-          backdropStyle={styles.backdropStyle}
+          backdropStyle={[
+            styles.backdropStyle,
+            { backgroundColor: "rgba(0, 0, 0, 0.65)" },
+          ]}
         >
           <Text style={styles.bottomSheetsTitle}>
             Choose Your Profile Picture
@@ -245,6 +240,7 @@ export default function EditProfilePage({ navigation, route }) {
           >
             <Text style={styles.bottomSheetsText}>Delete Image</Text>
           </Button>
+
           <Button
             onPress={() => handleCloseBottomSheet(true)}
             style={styles.bottomSheetsButton}
@@ -254,7 +250,7 @@ export default function EditProfilePage({ navigation, route }) {
         </BottomSheet>
         <View style={styles.user_details}>
           <View style={styles.data_icons_Container}>
-            <FontAwesome name="user-o" size={20} style={styles.user_icon} />
+            <FontAwesome name="user-o" size={24} style={styles.user_icon} />
             <TextInput
               value={editedName}
               mode="outlined"
@@ -263,20 +259,9 @@ export default function EditProfilePage({ navigation, route }) {
               onChangeText={handleNameChange}
             />
           </View>
-          {/* <TextInput
-          mode="outlined"
-          value={editedPassword}
-          label="Password"
-          style={styles.input}
-          onChangeText={handlePasswordChange}
-        /> */}
           <Button
             style={styles.save_btn}
             onPress={() => {
-              // if (!validatePassword(editedPassword)) {
-              //   setErrorMessage("Invalid password");
-              //   setSuccessMessage("");
-              // } else
               if (!validateFullName(editedName)) {
                 setErrorMessage("Invalid full name");
                 setSuccessMessage("");
@@ -303,8 +288,6 @@ export default function EditProfilePage({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
   },
   photo: {
     height: 100,
@@ -313,11 +296,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileImage: {
-    width: 110,
-    height: 110,
+    width: 160,
+    height: 160,
     borderRadius: 100,
-    marginTop: 70,
-    marginLeft: 7,
+    marginTop: 50,
+    marginLeft: 2,
     backgroundColor: "white",
   },
 
@@ -325,6 +308,8 @@ const styles = StyleSheet.create({
     marginBottom: 7,
     marginHorizontal: 20,
     width: 340,
+    borderRadius: 15,
+    fontSize: 20,
   },
   user_details: { marginTop: 100 },
   save_btn: {
@@ -333,14 +318,11 @@ const styles = StyleSheet.create({
     marginLeft: 132,
     marginRight: 20,
     width: "35%",
-    marginTop: 55,
-    // backgroundColor:"#061848"
+    marginTop: 60,
   },
   save_text: {
     color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
   },
   message: {
@@ -359,9 +341,8 @@ const styles = StyleSheet.create({
   },
   user_icon: { marginLeft: 10, color: "white" },
   bottomSheet: {
-    backgroundColor: "#76A6ED",
+    backgroundColor: "rgba(118, 166, 237, 0.9)",
     height: 320,
-    // justifyContent: "space-around",
     marginTop: 355,
     borderRadius: 20,
   },
@@ -380,7 +361,7 @@ const styles = StyleSheet.create({
   },
   bottomSheetsTitle: {
     fontSize: 23,
-    color: "#FFFFFF",
+    color: "#061848",
     textAlign: "center",
     marginTop: 10,
     marginBottom: 25,
@@ -391,7 +372,8 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    position: "absolute",
     width: Dimensions.get("window").width,
-    resizeMode: "cover",
+    height: Dimensions.get("window").height,
   },
 });
