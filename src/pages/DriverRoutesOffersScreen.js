@@ -40,19 +40,37 @@ export default function DriverRoutesOffersPage() {
       return () => {};
     }, [])
   );
+  useEffect(() => {
+    console.log("curr lat:", currLat);
+  }, [currLat]);
+  useEffect(() => {
+    console.log("curr lon:", currLon);
+  }, [currLon]);
+  useEffect(() => {
+    console.log("data changed:", data);
+  }, [data]);
+  useEffect(() => {
+    console.log("is loading changed", isLoading);
+  }, [isLoading]);
   const rejectAndLoadOffers = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       setErrorMessage("");
       const response = await rejectDrives(userToken, navigation, logout);
-      if (response === true) fetchSuggestions();
-      else {
+      if (response === true) {
+        await fetchSuggestions();
+      } else {
         setErrorMessage("Action failed");
       }
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       console.log("rejectAndLoadOffers error");
+    } finally {
+      const timeoutId = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
   };
   const updateCurrentLocation = async () => {
@@ -70,18 +88,9 @@ export default function DriverRoutesOffersPage() {
       console.log("updateCurrentLocation");
     }
   };
-  useEffect(() => {
-    console.log("curr lat:", currLat);
-  }, [currLat]);
-  useEffect(() => {
-    console.log("curr lon:", currLon);
-  }, [currLon]);
-  useEffect(() => {
-    console.log("data changed:", data);
-  }, [data]);
   const fetchSuggestions = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       setErrorMessage("");
       const res = await updateCurrentLocation();
       const response = await requestDrives(
@@ -94,10 +103,10 @@ export default function DriverRoutesOffersPage() {
       );
       setData(response.solutions);
       setErrorMessage("");
-      setIsLoading(false);
     } catch (error) {
       setErrorMessage("Load failed");
       console.log("error fetchSuggestions");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -353,7 +362,9 @@ export default function DriverRoutesOffersPage() {
             )}
             <TouchableOpacity
               onPress={() => {
+                setIsLoading(true);
                 rejectAndLoadOffers();
+                setIsLoading(false);
               }}
               style={{
                 width: 200,
