@@ -33,7 +33,7 @@ export default function OrderDetailsPage({ route }) {
   const [driver, setDriver] = useState("");
   const { userToken, login, logout } = useContext(AuthContext);
   const [imageUri, setImageUri] = useState(null);
-  const [rating, setRating] = useState(0);
+  // const [rating, setRating] = useState(0);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,63 +64,65 @@ export default function OrderDetailsPage({ route }) {
   const formattedTime = format(new Date(timeDate), "HH:mm");
   const formattedDate = format(new Date(timeDate), "dd-MM-yyyy");
 
-  const rateDriver = () => {
-    fetch("http://" + IP + ":" + PORT + "/rating", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${userToken}`,
 
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        rating: rating,
-        email: email,
-      }),
-    })
-      .then((response) => {
-        if (response.status === 401) {
-          clearStackAndNavigate(navigation, "Login");
-          logout();
-          console.error("your token expired or invalid please login");
-          throw new Error("your token expired or invalid please login");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        navigation.goBack();
-      })
-      .catch((error) => {
-        console.log("error in rateDriver");
-      });
-  };
+/*                      Rating            */
 
-  const handleRatingChange = (value) => {
-    setRating(value);
-  };
+  // const rateDriver = () => {
+  //   fetch("http://" + IP + ":" + PORT + "/rating", {
+  //     method: "POST",
+  //     headers: {
+  //       Authorization: `Bearer ${userToken}`,
 
-  const Rating = ({ rating, onRatingChange }) => {
-    const handleClick = (value) => {
-      onRatingChange(value);
-    };
-    const renderStars = () => {
-      const stars = [];
-      for (let i = 1; i <= 5; i++) {
-        const starIcon = i <= rating ? styles.filledStar : styles.emptyStar;
-        stars.push(
-          <Icon
-            key={i}
-            name="star"
-            size={30}
-            style={starIcon}
-            onPress={() => handleClick(i)}
-          />
-        );
-      }
-      console.log("rating", rating);
-      return stars;
-    };
-    return <View style={styles.ratingContainer}>{renderStars()}</View>;
-  };
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       rating: rating,
+  //       email: email,
+  //     }),
+  //   })
+  //     .then((response) => {
+  //       if (response.status === 401) {
+  //         clearStackAndNavigate(navigation, "Login");
+  //         logout();
+  //         console.error("your token expired or invalid please login");
+  //         throw new Error("your token expired or invalid please login");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       navigation.goBack();
+  //     })
+  //     .catch((error) => {
+  //       console.log("error in rateDriver");
+  //     });
+  // };
+  // const handleRatingChange = (value) => {
+  //   setRating(value);
+  // };
+
+  // const Rating = ({ rating, onRatingChange }) => {
+  //   const handleClick = (value) => {
+  //     onRatingChange(value);
+  //   };
+  //   const renderStars = () => {
+  //     const stars = [];
+  //     for (let i = 1; i <= 5; i++) {
+  //       const starIcon = i <= rating ? styles.filledStar : styles.emptyStar;
+  //       stars.push(
+  //         <Icon
+  //           key={i}
+  //           name="star"
+  //           size={30}
+  //           style={starIcon}
+  //           onPress={() => handleClick(i)}
+  //         />
+  //       );
+  //     }
+  //     console.log("rating", rating);
+  //     return stars;
+  //   };
+  //   return <View style={styles.ratingContainer}>{renderStars()}</View>;
+  // };
 
   return (
     <View style={styles.container}>
@@ -161,27 +163,29 @@ export default function OrderDetailsPage({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
-  },
-  ratingContainer: {
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
   },
-  emptyStar: {
-    width: 30,
-    height: 30,
-    margin: 5,
-    color: "gray",
-  },
-  filledStar: {
-    width: 30,
-    height: 30,
-    margin: 5,
-    color: "gold",
-  },
+
+  // ratingContainer: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   marginTop: 20,
+  // },
+  // emptyStar: {
+  //   width: 30,
+  //   height: 30,
+  //   margin: 5,
+  //   color: "gray",
+  // },
+  // filledStar: {
+  //   width: 30,
+  //   height: 30,
+  //   margin: 5,
+  //   color: "gold",
+  // },
+  
   avatar: {
     width: 120,
     height: 120,
