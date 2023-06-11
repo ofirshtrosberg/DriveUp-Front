@@ -55,7 +55,7 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen name="Subscription" component={SubscriptionPage} />
-            <Stack.Screen name="Profile" component={ProfilePage} />
+            {/* <Stack.Screen name="Profile" component={ProfilePage} /> */}
             <Stack.Screen name="EditPassenger" component={EditPassengerPage} />
             <Stack.Screen name="EditDriver" component={EditDriverPage} />
             <Stack.Screen name="OrderDetails" component={OrderDetailsPage} />

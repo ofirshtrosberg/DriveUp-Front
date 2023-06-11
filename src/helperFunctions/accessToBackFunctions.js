@@ -35,6 +35,7 @@ export const getUserByEmail = async (email, userToken, navigation, logout) => {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -83,6 +84,7 @@ export const createUserSubscription = (
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
+        console.error("your token expired or invalid please login");
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -106,6 +108,7 @@ export const isUserPremium = (email, userToken, navigation, logout) => {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -138,6 +141,7 @@ export const deleteSubscription = (email, userToken, navigation, logout) => {
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
+        console.error("your token expired or invalid please login");
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -180,6 +184,7 @@ export const passengerOrderDrive = async (
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -217,6 +222,7 @@ export const getDriveByOrderId = async (
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -253,6 +259,7 @@ export const getEstimatedTime = async (
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -297,6 +304,7 @@ export const requestDrives = async (
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -334,6 +342,7 @@ export const acceptDrive = (
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
+        console.error("your token expired or invalid please login");
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -369,6 +378,7 @@ export const driveDetails = async (userToken, driveId, navigation, logout) => {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -402,6 +412,7 @@ export const driveDetailsPreview = async (
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -429,6 +440,7 @@ export const finishDrive = (driveId, userToken, navigation, logout) => {
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
+        console.error("your token expired or invalid please login");
         throw new Error("your token expired or invalid please login");
       }
       return response.json();
@@ -452,6 +464,7 @@ export const cancelOrder = async (orderId, userToken, navigation, logout) => {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();
@@ -483,6 +496,7 @@ export const rejectDrives = async (userToken, navigation, logout) => {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         return response.json();

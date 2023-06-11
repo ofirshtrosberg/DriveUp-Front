@@ -52,8 +52,7 @@ export default function EditDriverPage({ navigation, route }) {
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageUri);
   const [isLoading, setIsLoading] = useState(false);
-  
-  
+
   const handleUpdate = (
     email,
     editedName,
@@ -84,6 +83,7 @@ export default function EditDriverPage({ navigation, route }) {
         if (response.status === 401) {
           clearStackAndNavigate(navigation, "Login");
           logout();
+          console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
         if (!response.ok) {
@@ -92,8 +92,10 @@ export default function EditDriverPage({ navigation, route }) {
         return response.json();
       })
       .then((data) => {
+        //check if image upload correctly stop loading if so and navigate
         console.log("User update successfully!");
-        clearStackAndNavigate(navigation, "Profile");
+        clearStackAndNavigate(navigation, "Main");
+        navigation.navigate("Profile");
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
@@ -197,6 +199,7 @@ export default function EditDriverPage({ navigation, route }) {
       if (response.status === 401) {
         clearStackAndNavigate(navigation, "Login");
         logout();
+        console.error("your token expired or invalid please login");
         throw new Error("your token expired or invalid please login");
       }
       if (response.ok) {
