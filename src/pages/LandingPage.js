@@ -19,7 +19,7 @@ export default function LandingPage() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/landing2.png")}
+        source={require("../assets/landing3.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -39,9 +39,9 @@ export default function LandingPage() {
             height: 50,
             borderRadius: 20,
             overflow: "hidden",
-            position:"absolute",
-            bottom:30,
-            left:20,
+            position: "absolute",
+            bottom: 30,
+            left: 20,
           }}
         >
           <ImageBackground
