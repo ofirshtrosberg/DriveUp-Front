@@ -230,7 +230,7 @@ export default function EditProfilePage({ navigation, route }) {
       contentContainerStyle={styles.container}
       keyboardShouldPersistTaps="handled"
       enableOnAndroid={true}
-      extraScrollHeight={220}
+      extraScrollHeight={150}
     >
       <ImageBackground
         source={require("../assets/editPassenger.png")}

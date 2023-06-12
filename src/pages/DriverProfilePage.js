@@ -14,12 +14,23 @@ import {
 import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
-import { ScrollView } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
 import { IP, PORT } from "@env";
 import * as FileSystem from "expo-file-system";
 import { AuthContext } from "../../AuthContext";
-
+import { useFonts } from "expo-font";
+import {
+  Arima_700Bold,
+  Arima_400Regular,
+  Arima_500Medium,
+  Arima_600SemiBold,
+} from "@expo-google-fonts/arima";
+import {
+  Rubik_300Light,
+  Rubik_400Regular,
+  Rubik_500Medium,
+  Rubik_600SemiBold,
+} from "@expo-google-fonts/rubik";
 import { downloadImage } from "../helperFunctions/accessToBackFunctions";
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
@@ -36,6 +47,8 @@ export default function DriverProfilePage(props) {
   } = props;
   const [imageUri, setImageUri] = useState(null);
   const [rating, setRating] = useState("Not available");
+  const formattedRating = parseFloat(rating).toFixed(2);
+
   const { userToken, login, logout } = useContext(AuthContext);
 
   const downloadImageGetRating = async () => {
@@ -85,6 +98,18 @@ export default function DriverProfilePage(props) {
   useEffect(() => {
     console.log("rating changed", rating);
   }, [rating]);
+
+  const [fontsLoaded] = useFonts({
+    Arima_700Bold,
+    Arima_400Regular,
+    Arima_500Medium,
+    Arima_600SemiBold,
+    Rubik_400Regular,
+    Rubik_500Medium,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -165,7 +190,7 @@ export default function DriverProfilePage(props) {
               </Button>
             )}
             {rating !== "" && (
-              <Text style={styles.driver_name}>rating: {rating}</Text>
+              <Text style={styles.rating}>rating: {formattedRating}</Text>
             )}
           </View>
         </View>
@@ -175,9 +200,12 @@ export default function DriverProfilePage(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  image: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   avatar: {
     width: 125,
@@ -189,12 +217,22 @@ const styles = StyleSheet.create({
   },
   driver_name: {
     color: "white",
-    fontSize: 24,
+    fontSize: 26,
     marginLeft: 10,
-    marginTop: 50,
+    marginTop: 55,
     width: 400,
     textAlign: "center",
-    fontWeight: "600",
+    // fontWeight: "600",
+    fontFamily: "Arima_700Bold",
+  },
+  rating: {
+    color: "white",
+    fontSize: 26,
+    marginLeft: 10,
+    marginTop: 30,
+    width: 400,
+    textAlign: "center",
+    fontFamily: "Arima_600SemiBold",
   },
   data_icons_Container: {
     flexDirection: "row",
@@ -210,50 +248,48 @@ const styles = StyleSheet.create({
   },
   driver_phone: {
     color: "white",
-    fontSize: 20,
+    fontSize: 22,
     marginLeft: 15,
     marginTop: 1,
     marginBottom: 5,
+    fontFamily: "Arima_700Bold",
   },
   driver_email: {
     color: "white",
-    fontSize: 20,
+    fontSize: 22,
     marginLeft: 0,
     marginTop: 4,
     marginBottom: 7,
+    fontFamily: "Arima_700Bold",
   },
   driver_carModel: {
     color: "white",
-    fontSize: 20,
+    fontSize: 24,
     marginRight: 0,
     marginTop: 4,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   driver_plateNumber: {
     color: "black",
-    fontSize: 20,
+    fontSize: 22,
     marginLeft: 160,
     marginTop: 4,
     marginBottom: 10,
   },
   edit_icon: {
-    padding: 5,
-    marginLeft: 350,
-    marginTop: -50,
+    padding: 10,
+    marginLeft: 330,
+    marginTop: -90,
     color: "#76A6ED",
   },
   sub_btn: {
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 50,
-    marginRight: 50,
+    marginLeft: 130,
     width: "50%",
     backgroundColor: "#76A6ED",
     marginTop: 20,
   },
-  image: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-  },
+
   sub_text: { fontSize: 20, color: "#061848", fontWeight: "bold" },
 });
