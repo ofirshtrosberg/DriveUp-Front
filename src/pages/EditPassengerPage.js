@@ -8,6 +8,7 @@ import {
   Image,
   ImageBackground,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -43,11 +44,16 @@ export default function EditProfilePage({ navigation, route }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageUri);
-
-  const handleUpdate = (email, editedName) => {
-    console.log(userToken);
+  const [updateImageSuccess, setUpdateImageSuccess] = useState(false);
+  const [imageData, setImageData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const handleUpdate = async (email, editedName) => {
+    setIsLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
+    if (imageData !== null && imageData !== undefined)
+      await uploadImage(imageData);
+
     fetch("http://" + IP + ":" + PORT + "/users/update", {
       method: "PUT",
       headers: {
@@ -75,18 +81,31 @@ export default function EditProfilePage({ navigation, route }) {
       })
       .then((data) => {
         console.log("User update successfully!");
-        clearStackAndNavigate(navigation, "Main");
-        navigation.navigate("Profile");
+        if (updateImageSuccess === true || imageData === null) {
+          clearStackAndNavigate(navigation, "Main");
+          navigation.navigate("Profile");
+        }
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
   const handleNameChange = (text) => {
     setEditedName(text);
   };
-
+  useEffect(() => {
+    console.log("is loading changed");
+  }, [isLoading]);
+  useEffect(() => {
+    console.log("image data changed");
+  }, [imageData]);
+  useEffect(() => {
+    console.log("updateImageSuccess changed");
+  }, [updateImageSuccess]);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const handleCloseBottomSheet = () => {
     setIsBottomSheetVisible(false);
@@ -102,7 +121,7 @@ export default function EditProfilePage({ navigation, route }) {
     });
 
     if (!newImage.canceled) {
-      uploadImage(newImage.assets[0]);
+      setImageData(newImage.assets[0]);
       setNewImageProfile(newImage.assets[0].uri);
     }
   };
@@ -155,11 +174,14 @@ export default function EditProfilePage({ navigation, route }) {
       }
       if (response.ok) {
         console.log("Image uploaded successfully!");
+        setUpdateImageSuccess(true);
       } else {
         console.log("Failed to upload image.");
+        setUpdateImageSuccess(false);
       }
     } catch (error) {
       console.log("Error occurred during image upload");
+      setUpdateImageSuccess(false);
     }
   };
   const deleteProfileImage = () => {
@@ -182,12 +204,15 @@ export default function EditProfilePage({ navigation, route }) {
           throw new Error("Update failed");
         }
         setSuccessMessage("Image delete successfully!");
+        setUpdateImageSuccess(true);
       })
       .then((data) => {
         setNewImageProfile("");
+        setUpdateImageSuccess(true);
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
+        setUpdateImageSuccess(false);
       });
   };
 
@@ -274,6 +299,13 @@ export default function EditProfilePage({ navigation, route }) {
           >
             <Text style={styles.save_text}>SAVE</Text>
           </Button>
+          {isLoading && (
+            <ActivityIndicator
+              size="large"
+              color="#76A6ED"
+              style={{ marginTop: 75 }}
+            />
+          )}
           {errorMessage !== "" && (
             <Text style={styles.message}>{errorMessage}</Text>
           )}

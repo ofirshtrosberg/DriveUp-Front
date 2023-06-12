@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import {
   View,
@@ -8,6 +8,7 @@ import {
   Image,
   ImageBackground,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { IP, PORT } from "@env";
 import { TextInput, Button } from "react-native-paper";
@@ -45,16 +46,20 @@ export default function EditDriverPage({ navigation, route }) {
   const [successMessage, setSuccessMessage] = useState("");
   const [newImageProfile, setNewImageProfile] = useState(imageUri);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleUpdate = (
+  const [updateImageSuccess, setUpdateImageSuccess] = useState(false);
+  const [imageData, setImageData] = useState(null);
+  const handleUpdate = async (
     email,
     editedName,
     editedCarModel,
     editedCarColor,
     editedPlateNumber
   ) => {
+    setIsLoading(true);
     setSuccessMessage("");
     setErrorMessage("");
+    if (imageData !== null && imageData !== undefined)
+      await uploadImage(imageData);
     fetch("http://" + IP + ":" + PORT + "/users/update/", {
       method: "PUT",
       headers: {
@@ -85,14 +90,27 @@ export default function EditDriverPage({ navigation, route }) {
       })
       .then((data) => {
         console.log("User update successfully!");
-        clearStackAndNavigate(navigation, "Main");
-        navigation.navigate("Profile");
+        if (updateImageSuccess === true || imageData === null) {
+          clearStackAndNavigate(navigation, "Main");
+          navigation.navigate("Profile");
+        }
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
-
+  useEffect(() => {
+    console.log("is loading changed");
+  }, [isLoading]);
+  useEffect(() => {
+    console.log("image data changed");
+  }, [imageData]);
+  useEffect(() => {
+    console.log("updateImageSuccess changed");
+  }, [updateImageSuccess]);
   const handleNameChange = (text) => {
     setEditedName(text);
   };
@@ -146,12 +164,11 @@ export default function EditDriverPage({ navigation, route }) {
     });
 
     if (!newImage.canceled) {
-      uploadImage(newImage.assets[0]);
+      setImageData(newImage.assets[0]);
       setNewImageProfile(newImage.assets[0].uri);
     }
   };
   const uploadImage = async (imageData) => {
-    setIsLoading(true);
     const formData = new FormData();
     formData.append("image", {
       uri: imageData.uri,
@@ -178,12 +195,14 @@ export default function EditDriverPage({ navigation, route }) {
       }
       if (response.ok) {
         console.log("Image uploaded successfully!");
-        printUsersLocal();
+        setUpdateImageSuccess(true);
       } else {
         console.log("Failed to upload image.");
+        setUpdateImageSuccess(false);
       }
     } catch (error) {
       console.log("Error occurred during image upload");
+      setUpdateImageSuccess(false);
     }
   };
 
@@ -201,12 +220,15 @@ export default function EditDriverPage({ navigation, route }) {
           throw new Error("Update failed");
         }
         setSuccessMessage("Image delete successfully!");
+        setUpdateImageSuccess(true);
       })
       .then((data) => {
         setNewImageProfile("");
+        setUpdateImageSuccess(true);
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
+        setUpdateImageSuccess(false);
       });
   };
   return (
@@ -324,6 +346,13 @@ export default function EditDriverPage({ navigation, route }) {
           >
             <Text style={styles.save_text}>SAVE</Text>
           </Button>
+          {isLoading && (
+            <ActivityIndicator
+              size="large"
+              color="#76A6ED"
+              style={{ marginTop: 75 }}
+            />
+          )}
           {errorMessage !== "" && (
             <Text style={styles.message}>{errorMessage}</Text>
           )}
