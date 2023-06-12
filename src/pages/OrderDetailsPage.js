@@ -172,8 +172,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: -170,
   },
-
-  
   avatar: {
     width: 105,
     height: 105,
