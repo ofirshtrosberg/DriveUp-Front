@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   edit_icon: {
-    padding: 5,
-    marginLeft: 370,
+    padding: 10,
+    marginLeft: 330,
     marginTop: -90,
     color: "#76A6ED",
   },
