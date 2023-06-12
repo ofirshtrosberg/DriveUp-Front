@@ -13,9 +13,6 @@ import {
 import { IP, PORT } from "@env";
 import { TextInput, Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
-import { printUsersLocal } from "../../AsyncStorageUsers";
-import colors from "../config/colors.js";
-import { ScrollView } from "react-native-gesture-handler";
 import {
   validatePassword,
   validateFullName,
@@ -25,8 +22,9 @@ import {
 } from "../helperFunctions/validationFunctions.js";
 import { BottomSheet } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
-import * as ImageManipulator from "expo-image-manipulator";
 import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
+import { useFonts } from "expo-font";
+import { Arima_700Bold } from "@expo-google-fonts/arima";
 
 export default function EditDriverPage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -231,6 +229,13 @@ export default function EditDriverPage({ navigation, route }) {
         setUpdateImageSuccess(false);
       });
   };
+  const [fontsLoaded] = useFonts({
+    Arima_700Bold,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -266,7 +271,7 @@ export default function EditDriverPage({ navigation, route }) {
           ]}
         >
           <Text style={styles.bottomSheetsTitle}>
-            Choose Youe Profile Picture
+            Choose Your Profile Picture
           </Text>
           <Button onPress={() => takePhoto()} style={styles.bottomSheetsButton}>
             <Text style={styles.bottomSheetsText}>Take a Photo</Text>
@@ -415,7 +420,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   bottomSheetsText: {
-    fontSize: 18,
+    fontSize: 19,
     color: "#FFFFFF",
     textAlign: "center",
     marginTop: 5,
@@ -423,12 +428,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   bottomSheetsTitle: {
-    fontSize: 23,
+    fontSize: 28,
     color: "#061848",
     textAlign: "center",
     marginTop: 10,
-    marginBottom: 25,
-    fontWeight: "bold",
+    marginBottom: 10,
+    fontFamily: "Arima_700Bold",
   },
   backdropStyle: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
