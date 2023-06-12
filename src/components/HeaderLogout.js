@@ -17,7 +17,7 @@ const Header = ({ title }) => {
     <View style={styles.headerContainer}>
       <Text style={styles.title}>{title}</Text>
       <TouchableOpacity onPress={handleLogout}>
-        <Icon name="sign-out" size={30} color="#4682b4" />
+        <Icon name="sign-out" size={30} color="#76A6ED" />
       </TouchableOpacity>
     </View>
   );
