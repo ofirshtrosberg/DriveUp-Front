@@ -64,7 +64,7 @@ export default function DriveOnMapDriverMode() {
     }
   };
   useEffect(() => {
-    console.log(GOOGLE_MAPS_API_KEY);
+    // console.log(GOOGLE_MAPS_API_KEY);
     getDriveDetails();
   }, []);
   if (orderLocations === null) {

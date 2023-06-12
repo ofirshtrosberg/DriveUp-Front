@@ -35,13 +35,14 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
   const [checked, setChecked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessageDetails, setErrorMessageDetails] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [isGeocodingFine, setIsGeocodingFine] = useState(false);
   const [startLat, setStartLat] = useState(0);
   const [destinationLat, setDestinationLat] = useState(0);
   const [startLon, setStartLon] = useState(0);
   const [destinationLon, setDestinationLon] = useState(0);
-  console.log("key", GOOGLE_MAPS_API_KEY);
+  // console.log("key", GOOGLE_MAPS_API_KEY);
   const checkLocationsForMap = async () => {
     setErrorMessage("");
     try {
@@ -114,10 +115,14 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         logout
       );
       setErrorMessage("");
+      setErrorMessageDetails("");
       setShowErrorMessage(false);
       navigation.navigate("OrderResult", { orderId: response });
     } catch (error) {
-      setErrorMessage("Order Failed");
+      setErrorMessage("Order Failed:");
+      setErrorMessageDetails(
+        "addresses must be valid,\ninside Israel and accessible to car"
+      );
       setShowErrorMessage(true);
     }
   };
@@ -157,7 +162,10 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     console.log(currAddress);
   }, [currAddress]);
   useEffect(() => {
-    console.log(errorMessage);
+    console.log("");
+  }, [errorMessageDetails]);
+  useEffect(() => {
+    console.log("error msg:", errorMessage);
   }, [errorMessage]);
   useEffect(() => {
     console.log(showErrorMessage);
@@ -187,11 +195,11 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
     // <PaperProvider theme={theme}>
     // <KeyboardAvoidingView style={styles.container}>
     <View style={styles.container}>
-      <ImageBackground
+      {/* <ImageBackground
         source={require("../assets/orderBackNew.png")}
         resizeMode="cover"
         style={styles.image}
-      >
+      > */}
         <View style={{ flex: 1 }}>
           <GooglePlacesAutocomplete
             placeholder="Start Address"
@@ -265,33 +273,35 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             onChangeText={handleNumberOfPassengersChange}
             placeholder="Number of passengers"
           />
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "absolute",
-              top: 220,
-              left: 0,
-              right: 0,
-            }}
-          >
-            <Checkbox
-              status={checked ? "checked" : "unchecked"}
-              onPress={() => {
-                if (!checked) {
-                  setStartAddress(currAddress);
-                } else {
-                  setStartAddress("");
-                }
-                setChecked(!checked);
+          {currAddress !== "" && (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                position: "absolute",
+                top: 220,
+                left: 0,
+                right: 0,
               }}
-              color="#fff"
-            />
-            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
-              Use current location as start address
-            </Text>
-          </View>
+            >
+              <Checkbox
+                status={checked ? "checked" : "unchecked"}
+                onPress={() => {
+                  if (!checked) {
+                    setStartAddress(currAddress);
+                  } else {
+                    setStartAddress("");
+                  }
+                  setChecked(!checked);
+                }}
+                color="#fff"
+              />
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
+                Use current location as start address
+              </Text>
+            </View>
+          )}
         </View>
         <View
           style={{
@@ -305,10 +315,14 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
           <TouchableOpacity
             onPress={() => {
               setErrorMessage("");
+              setErrorMessageDetails("");
               if (startAddress == "" || destinationAddress == "") {
                 setErrorMessage("Invalid address");
                 setShowErrorMessage(true);
-              } else {
+              }else if(numberOfPassengers==""){
+                 setErrorMessage("Invalid passengers amount");
+              }
+               else {
                 handleAddOrder(startAddress, destinationAddress);
               }
             }}
@@ -381,6 +395,9 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
           {showErrorMessage && (
             <Text style={styles.errorText}>{errorMessage}</Text>
           )}
+          <Text style={{ color: "#fff", marginTop: 5, textAlign:"center" }}>
+            {errorMessageDetails}
+          </Text>
           <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
             <View style={{ flex: 1 }}>
               <PassengerOrderOnMap
@@ -392,7 +409,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             </View>
           </Modal>
         </View>
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
     /* </KeyboardAvoidingView> */
     /* </PaperProvider> */

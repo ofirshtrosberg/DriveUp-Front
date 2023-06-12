@@ -161,7 +161,8 @@ export const passengerOrderDrive = async (
   numberOfPassengers,
   userToken,
   navigation,
-  logout
+  logout,
+  setErrorMessage
 ) => {
   return new Promise((resolve, reject) => {
     fetch(`http://${IP}:${PORT}/passenger/order-drive`, {
@@ -187,6 +188,7 @@ export const passengerOrderDrive = async (
           console.error("your token expired or invalid please login");
           throw new Error("your token expired or invalid please login");
         }
+
         return response.json();
       })
       .then((data) => {
@@ -389,7 +391,7 @@ export const driveDetails = async (userToken, driveId, navigation, logout) => {
       })
       .catch((error) => {
         console.log("drive details error");
-        reject("drive details error",);
+        reject("drive details error");
       });
   });
 };
@@ -513,4 +515,31 @@ export const rejectDrives = async (userToken, navigation, logout) => {
         console.log(error);
       });
   });
+};
+export const rateDriver = (email, rating, userToken, navigation, logout) => {
+  fetch("http://" + IP + ":" + PORT + "/rating", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      rating: rating,
+      email: email,
+    }),
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        clearStackAndNavigate(navigation, "Login");
+        logout();
+        console.error("your token expired or invalid please login");
+        throw new Error("your token expired or invalid please login");
+      }
+      return response.json();
+    })
+    .then((data) => {})
+    .catch((error) => {
+      console.log("error in rateDriver");
+    });
 };
