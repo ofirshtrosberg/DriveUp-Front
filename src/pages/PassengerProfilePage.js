@@ -76,7 +76,7 @@ export default function PassengerProfilePage(props) {
 
   const renderItem = ({ item }) => {
     const formattedTime = format(new Date(item.time), "HH:mm");
-    const formattedDate = format(new Date(item.time), "dd-MM-yyyy");
+    const formattedDate = format(new Date(item.time), "dd/MM/yyyy");
     const handlePressOrder = () => {
       navigation.navigate("OrderDetails", { order: item, imageProfile });
     };
@@ -85,7 +85,7 @@ export default function PassengerProfilePage(props) {
       <View style={styles.listContainer}>
         <View style={styles.info}>
           <Text style={styles.date}>
-            {formattedDate} - {formattedTime}
+            {formattedDate} , {formattedTime}
           </Text>
         </View>
         <TouchableOpacity style={styles.Button} onPress={handlePressOrder}>
@@ -170,13 +170,14 @@ export default function PassengerProfilePage(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
   },
   image: {
+    // flex: 1,
+    position: "absolute",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+    // justifyContent: "center",
   },
 
   avatar: {
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
   },
   orders_list: {
     padding: 10,
-    width: "90%",
+    width: "93%",
     backgroundColor: "#76A6ED",
     height: 140,
     marginTop: 5,
@@ -255,20 +256,20 @@ const styles = StyleSheet.create({
   Button: {
     backgroundColor: "#061848",
     borderRadius: 20,
-    width: 180,
-    marginRight: -10,
-    height: 25,
+    width: 190,
+    marginRight: -12,
+    height: 30,
   },
   textButton: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 15,
     marginTop: 3,
   },
   date: {
     color: "#061848",
-    fontSize: 16.5,
+    fontSize: 18,
     fontWeight: "bold",
     marginLeft: -10,
   },

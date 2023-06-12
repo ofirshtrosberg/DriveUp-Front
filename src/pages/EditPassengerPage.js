@@ -29,8 +29,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import { BottomSheet } from "@rneui/themed";
 
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
 import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
+import { useFonts } from "expo-font";
+import { Arima_700Bold } from "@expo-google-fonts/arima";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 export default function EditProfilePage({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -216,14 +219,25 @@ export default function EditProfilePage({ navigation, route }) {
       });
   };
 
+  const [fontsLoaded] = useFonts({
+    Arima_700Bold,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid={true}
+      extraScrollHeight={220}
+    >
       <ImageBackground
         source={require("../assets/editPassenger.png")}
         resizeMode="cover"
         style={styles.image}
       >
-        <View style={{ margin: 20 }}>
+        <View style={styles.contentContainer}>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
               {newImageProfile ? (
@@ -241,64 +255,71 @@ export default function EditProfilePage({ navigation, route }) {
               )}
             </TouchableOpacity>
           </View>
-        </View>
-        <BottomSheet
-          isVisible={isBottomSheetVisible}
-          style={styles.bottomSheet}
-          backdropStyle={[
-            styles.backdropStyle,
-            { backgroundColor: "rgba(0, 0, 0, 0.65)" },
-          ]}
-        >
-          <Text style={styles.bottomSheetsTitle}>
-            Choose Your Profile Picture
-          </Text>
-          <Button onPress={() => takePhoto()} style={styles.bottomSheetsButton}>
-            <Text style={styles.bottomSheetsText}>Take a Photo</Text>
-          </Button>
-          <Button onPress={() => pickImage()} style={styles.bottomSheetsButton}>
-            <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
-          </Button>
-          <Button
-            onPress={() => deleteProfileImage()}
-            style={styles.bottomSheetsButton}
+          <BottomSheet
+            isVisible={isBottomSheetVisible}
+            style={styles.bottomSheet}
+            backdropStyle={[
+              styles.backdropStyle,
+              { backgroundColor: "rgba(0, 0, 0, 0.65)" },
+            ]}
           >
-            <Text style={styles.bottomSheetsText}>Delete Image</Text>
-          </Button>
+            <Text style={styles.bottomSheetsTitle}>
+              Choose Your Profile Picture
+            </Text>
+            <Button
+              onPress={() => takePhoto()}
+              style={styles.bottomSheetsButton}
+            >
+              <Text style={styles.bottomSheetsText}>Take a Photo</Text>
+            </Button>
+            <Button
+              onPress={() => pickImage()}
+              style={styles.bottomSheetsButton}
+            >
+              <Text style={styles.bottomSheetsText}>Choose From Gallery</Text>
+            </Button>
+            <Button
+              onPress={() => deleteProfileImage()}
+              style={styles.bottomSheetsButton}
+            >
+              <Text style={styles.bottomSheetsText}>Delete Image</Text>
+            </Button>
 
-          <Button
-            onPress={() => handleCloseBottomSheet(true)}
-            style={styles.bottomSheetsButton}
-          >
-            <Text style={styles.bottomSheetsText}>CANCEL</Text>
-          </Button>
-        </BottomSheet>
-        <View style={styles.user_details}>
-          <View style={styles.data_icons_Container}>
-            <FontAwesome name="user-o" size={24} style={styles.user_icon} />
-            <TextInput
-              value={editedName}
-              mode="outlined"
-              label="Name"
-              style={styles.input}
-              onChangeText={handleNameChange}
-            />
+            <Button
+              onPress={() => handleCloseBottomSheet(true)}
+              style={styles.bottomSheetsButton}
+            >
+              <Text style={styles.bottomSheetsText}>CANCEL</Text>
+            </Button>
+          </BottomSheet>
+          <View style={styles.user_details}>
+            <View style={styles.data_icons_Container}>
+              <FontAwesome name="user-o" size={24} style={styles.user_icon} />
+              <TextInput
+                value={editedName}
+                mode="outlined"
+                label="Name"
+                style={styles.input}
+                onChangeText={handleNameChange}
+              />
+            </View>
+            <Button
+              style={styles.save_btn}
+              onPress={() => {
+                if (!validateFullName(editedName)) {
+                  setErrorMessage("Invalid full name");
+                  setSuccessMessage("");
+                } else {
+                  setSuccessMessage("");
+                  setErrorMessage("");
+                  handleUpdate(email, editedName);
+                }
+              }}
+            >
+              <Text style={styles.save_text}>SAVE</Text>
+            </Button>
           </View>
-          <Button
-            style={styles.save_btn}
-            onPress={() => {
-              if (!validateFullName(editedName)) {
-                setErrorMessage("Invalid full name");
-                setSuccessMessage("");
-              } else {
-                setSuccessMessage("");
-                setErrorMessage("");
-                handleUpdate(email, editedName);
-              }
-            }}
-          >
-            <Text style={styles.save_text}>SAVE</Text>
-          </Button>
+
           {isLoading && (
             <ActivityIndicator
               size="large"
@@ -314,12 +335,24 @@ export default function EditProfilePage({ navigation, route }) {
           )}
         </View>
       </ImageBackground>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+    padding: 20,
+  },
+  image: {
+    // flex: 1,
+    position: "absolute",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    justifyContent: "center",
+  },
+  contentContainer: {
+    marginTop: 10,
   },
   photo: {
     height: 100,
@@ -331,13 +364,12 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: 100,
-    marginTop: 50,
+    marginTop: -75,
     marginLeft: 2,
     backgroundColor: "white",
   },
-
   input: {
-    marginBottom: 7,
+    marginBottom: 40,
     marginHorizontal: 20,
     width: 340,
     borderRadius: 15,
@@ -347,10 +379,10 @@ const styles = StyleSheet.create({
   save_btn: {
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 132,
+    marginLeft: 135,
     marginRight: 20,
     width: "35%",
-    marginTop: 60,
+    marginTop: 50,
   },
   save_text: {
     color: "white",
@@ -358,8 +390,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   message: {
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop:20 ,
+    // marginBottom: 50,
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
@@ -369,7 +401,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: -15,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   user_icon: { marginLeft: 10, color: "white" },
   bottomSheet: {
@@ -384,29 +416,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   bottomSheetsText: {
-    fontSize: 18,
+    fontSize: 19,
     color: "#FFFFFF",
     textAlign: "center",
     marginTop: 5,
     marginBottom: 5,
     fontWeight: "bold",
-    fontFamily: "GasoekOne-Regular",
   },
   bottomSheetsTitle: {
-    fontSize: 23,
+    fontSize: 28,
     color: "#061848",
     textAlign: "center",
     marginTop: 10,
-    marginBottom: 25,
-    fontWeight: "bold",
+    marginBottom: 10,
+    fontFamily: "Arima_700Bold",
   },
   backdropStyle: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  image: {
-    flex: 1,
-    position: "absolute",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
 });
