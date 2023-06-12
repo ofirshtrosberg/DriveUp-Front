@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity,
   Image,
   ImageBackground,
   Dimensions,
@@ -20,11 +19,36 @@ import {
 } from "../helperFunctions/accessToBackFunctions";
 import { useFocusEffect } from "@react-navigation/native";
 import UserAvatar from "react-native-user-avatar";
-import { TextInput, Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
-import Modal from "react-native-modal";
-import DriverProfilePage from "./DriverProfilePage";
-
+import { FontAwesome } from "@expo/vector-icons";
+import { RacingSansOne_400Regular } from "@expo-google-fonts/racing-sans-one";
+import { useFonts } from "expo-font";
+import { Limelight_400Regular } from "@expo-google-fonts/limelight";
+import {
+  Arima_100Thin,
+  Arima_200ExtraLight,
+  Arima_300Light,
+  Arima_400Regular,
+  Arima_500Medium,
+  Arima_600SemiBold,
+  Arima_700Bold,
+} from "@expo-google-fonts/arima";
+import {
+  Rubik_300Light,
+  Rubik_400Regular,
+  Rubik_500Medium,
+  Rubik_600SemiBold,
+  Rubik_700Bold,
+  Rubik_800ExtraBold,
+  Rubik_900Black,
+  Rubik_300Light_Italic,
+  Rubik_400Regular_Italic,
+  Rubik_500Medium_Italic,
+  Rubik_600SemiBold_Italic,
+  Rubik_700Bold_Italic,
+  Rubik_800ExtraBold_Italic,
+  Rubik_900Black_Italic,
+} from "@expo-google-fonts/rubik";
 export default function OrderDetailsPage({ route }) {
   const navigation = useNavigation();
   const { order } = route.params;
@@ -61,11 +85,38 @@ export default function OrderDetailsPage({ route }) {
   useEffect(() => {
     console.log(driver);
   }, [driver]);
+
+  const [fontsLoaded] = useFonts({
+    Limelight_400Regular,
+    RacingSansOne_400Regular,
+    Arima_400Regular,
+    Arima_600SemiBold,
+    Arima_500Medium,
+    Arima_700Bold,
+    Arima_300Light,
+    Rubik_300Light,
+    Rubik_400Regular,
+    Rubik_500Medium,
+    Rubik_600SemiBold,
+    Rubik_700Bold,
+    Rubik_800ExtraBold,
+    Rubik_900Black,
+    Rubik_300Light_Italic,
+    Rubik_400Regular_Italic,
+    Rubik_500Medium_Italic,
+    Rubik_600SemiBold_Italic,
+    Rubik_700Bold_Italic,
+    Rubik_800ExtraBold_Italic,
+    Rubik_900Black_Italic,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
+
   const formattedTime = format(new Date(timeDate), "HH:mm");
-  const formattedDate = format(new Date(timeDate), "dd-MM-yyyy");
+  const formattedDate = format(new Date(timeDate), "dd/MM/yyyy");
 
-
-/*                      Rating            */
+  /*                      Rating            */
 
   // const rateDriver = () => {
   //   fetch("http://" + IP + ":" + PORT + "/rating", {
@@ -131,9 +182,8 @@ export default function OrderDetailsPage({ route }) {
         resizeMode="cover"
         style={styles.image}
       >
-        <View style={styles.container}>
+        <View style={styles.dataContainer}>
           <Text style={styles.orderNumber}>Order Number : {order.orderId}</Text>
-
           {imageUri ? (
             <Image source={{ uri: imageUri }} style={styles.avatar} />
           ) : (
@@ -144,16 +194,28 @@ export default function OrderDetailsPage({ route }) {
               textColor={"#061848"}
             />
           )}
-          <Text style={styles.data}>{driver.fullName}</Text>
-
-          <Text style={styles.data}>
-            {formattedDate} - {formattedTime}
-          </Text>
-          <Text style={styles.data}>Sum: {order.cost}</Text>
-          <Text style={styles.data}>Phone: {driver.phoneNumber}</Text>
-
+          <View style={styles.driverData}>
+            <View style={styles.data_icons_Container}>
+              <FontAwesome name="user-o" size={24} style={styles.user_icon} />
+              <Text style={styles.data}>Driver : {driver.fullName}</Text>
+            </View>
+            <Text style={styles.data}>Phone : {driver.phoneNumber}</Text>
+          </View>
+          <View style={styles.orderData}>
+            <Text style={styles.data}>
+              {formattedDate}  ,  {formattedTime}
+            </Text>
+            <View style={styles.data_icons_Container}>
+              <Text style={styles.data}>You pay : {order.cost}</Text>
+              <FontAwesome
+                name="shekel"
+                size={20}
+                color="white"
+                style={{ marginLeft: 5, marginRight: -25, marginBottom: 10 }}
+              />
+            </View>
+          </View>
           {/* <Rating rating={rating} onRatingChange={handleRatingChange} /> */}
-
           {/* <Button onPress={() => rateDriver()}>save</Button> */}
         </View>
       </ImageBackground>
@@ -163,8 +225,8 @@ export default function OrderDetailsPage({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
 
   // ratingContainer: {
@@ -185,31 +247,47 @@ const styles = StyleSheet.create({
   //   margin: 5,
   //   color: "gold",
   // },
-  
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 100,
-    marginTop: 41,
-    marginLeft: 5,
-    backgroundColor: "white",
-    marginBottom: 20,
+  dataContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -170,
   },
-  input: {
-    marginBottom: 7,
-    marginHorizontal: 20,
-    width: 340,
+  avatar: {
+    width: 105,
+    height: 105,
+    borderRadius: 100,
+    marginTop: 40,
+    marginLeft: 3,
+    backgroundColor: "white",
+    marginBottom: 40,
   },
   image: {
     flex: 1,
     justifyContent: "center",
   },
   orderNumber: {
-    color: "white",
-    fontWeight: 700,
-    fontSize: 25,
-    marginTop: 60,
-    marginBottom: 7,
+    fontSize: 30,
+    fontSize: 30,
+    fontFamily: "Arima_700Bold",
+    color: "#B5D0FF",
   },
-  data: { fontSize: 20, color: "white" },
+  data: {
+    fontSize: 20,
+    color: "white",
+    fontFamily: "Rubik_500Medium",
+    marginBottom: 10,
+  },
+  user_icon: {
+    marginLeft: 0,
+    color: "white",
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  data_icons_Container: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 20,
+  },
+  driverData: { marginBottom: 45 },
 });

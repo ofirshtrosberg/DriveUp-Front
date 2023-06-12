@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Modal,
   ImageBackground,
   Dimensions,
 } from "react-native";
@@ -34,6 +33,7 @@ export default function PassengerProfilePage(props) {
       return () => {};
     }, [])
   );
+  
 
   useEffect(() => {
     console.log("image uri");
@@ -72,14 +72,6 @@ export default function PassengerProfilePage(props) {
     }
   };
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const handleImageTap = () => {
-    setIsPopupVisible(true);
-  };
-
-  const closePopup = () => {
-    setIsPopupVisible(false);
-  };
   const sortedData = orders.sort((a, b) => new Date(a.time) - new Date(b.time));
 
   const renderItem = ({ item }) => {
@@ -124,11 +116,6 @@ export default function PassengerProfilePage(props) {
                 />
               )}
             </TouchableOpacity>
-            <Modal visible={isPopupVisible} onRequestClose={closePopup}>
-              <View style={styles.popupContainer}>
-                <Image style={styles.popupImage} />
-              </View>
-            </Modal>
             <Icon
               name="edit"
               size={20}
@@ -247,7 +234,7 @@ const styles = StyleSheet.create({
     height: 140,
     marginTop: 5,
     marginBottom: 10,
-    borderRadius:10,
+    borderRadius: 10,
   },
   edit_icon: {
     padding: 5,
