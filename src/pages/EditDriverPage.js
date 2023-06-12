@@ -56,8 +56,6 @@ export default function EditDriverPage({ navigation, route }) {
     setIsLoading(true);
     setSuccessMessage("");
     setErrorMessage("");
-    if (imageData !== null && imageData !== undefined)
-      await uploadImage(imageData);
     fetch("http://" + IP + ":" + PORT + "/users/update/", {
       method: "PUT",
       headers: {
@@ -140,6 +138,7 @@ export default function EditDriverPage({ navigation, route }) {
 
     if (!newImage.canceled) {
       const imageUri = newImage.assets[0].uri;
+      setImageData({ uri: imageUri, width: 50, height: 50 });
       uploadImage({ uri: imageUri, width: 50, height: 50 });
       setNewImageProfile(imageUri);
     }
@@ -163,6 +162,7 @@ export default function EditDriverPage({ navigation, route }) {
 
     if (!newImage.canceled) {
       setImageData(newImage.assets[0]);
+      uploadImage(newImage.assets[0]);
       setNewImageProfile(newImage.assets[0].uri);
     }
   };

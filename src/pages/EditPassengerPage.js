@@ -54,9 +54,6 @@ export default function EditProfilePage({ navigation, route }) {
     setIsLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
-    if (imageData !== null && imageData !== undefined)
-      await uploadImage(imageData);
-
     fetch("http://" + IP + ":" + PORT + "/users/update", {
       method: "PUT",
       headers: {
@@ -124,7 +121,9 @@ export default function EditProfilePage({ navigation, route }) {
     });
 
     if (!newImage.canceled) {
-      setImageData(newImage.assets[0]);
+      const imageUri = newImage.assets[0].uri;
+      setImageData({ uri: imageUri, width: 50, height: 50 });
+      uploadImage({ uri: imageUri, width: 50, height: 50 });
       setNewImageProfile(newImage.assets[0].uri);
     }
   };
@@ -145,6 +144,7 @@ export default function EditProfilePage({ navigation, route }) {
     });
 
     if (!newImage.canceled) {
+      setImageData(newImage.assets[0]);
       uploadImage(newImage.assets[0]);
       setNewImageProfile(newImage.assets[0].uri);
     }
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   message: {
-    marginTop:20 ,
+    marginTop: 20,
     // marginBottom: 50,
     fontSize: 18,
     fontWeight: "bold",
