@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, ImageBackground, StyleSheet, Text } from "react-native";
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  Dimensions,
+} from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors.js";
 import {
@@ -10,8 +16,14 @@ import {
 } from "../helperFunctions/validationFunctions.js";
 import { IP, PORT } from "@env";
 import { addUserLocal, printUsersLocal } from "../../AsyncStorageUsers";
-import { is } from "date-fns/locale";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 export default function RegisterAsDriverPage({ navigation }) {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Passenger Register",
+    });
+  }, [navigation]);
   const [errorMessage, setErrorMessage] = useState("");
   const handleRegister = (
     email,
@@ -55,7 +67,7 @@ export default function RegisterAsDriverPage({ navigation }) {
   const handleRegisterLocal = async (email, isDriver) => {
     const user = {
       email: email,
-      isDriver: isDriver
+      isDriver: isDriver,
     };
     await addUserLocal(user);
     await printUsersLocal();
@@ -79,85 +91,107 @@ export default function RegisterAsDriverPage({ navigation }) {
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/registerImg.png")}
-      style={{ flex: 1 }}
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid={true}
+      extraScrollHeight={220}
     >
-      <View style={{ flex: 1, marginBottom: 3 }}></View>
-      <View style={{ flex: 3 }}>
-        <TextInput
-          mode="outlined"
-          label="Email"
-          style={styles.input}
-          value={email}
-          onChangeText={handleEmailChange}
-        />
-        <TextInput
-          mode="outlined"
-          label="Password"
-          secureTextEntry
-          style={styles.input}
-          value={password}
-          onChangeText={handlePasswordChange}
-        />
-        <TextInput
-          mode="outlined"
-          label="Phone Number"
-          style={styles.input}
-          value={phone}
-          onChangeText={handlePhoneChange}
-        />
-        <TextInput
-          mode="outlined"
-          label="Full Name"
-          style={styles.input}
-          value={fullName}
-          onChangeText={handleFullNameChange}
-        />
+      <ImageBackground
+        source={require("../assets/register.png")}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        <View style={styles.data}>
+          <TextInput
+            mode="outlined"
+            label="Email"
+            style={styles.input}
+            value={email}
+            onChangeText={handleEmailChange}
+            keyboardType="email-address"
+          />
+          <TextInput
+            mode="outlined"
+            label="Password"
+            secureTextEntry
+            style={styles.input}
+            value={password}
+            onChangeText={handlePasswordChange}
+          />
+          <TextInput
+            mode="outlined"
+            label="Phone Number"
+            style={styles.input}
+            value={phone}
+            onChangeText={handlePhoneChange}
+            keyboardType="phone-pad"
+          />
+          <TextInput
+            mode="outlined"
+            label="Full Name"
+            style={styles.input}
+            value={fullName}
+            onChangeText={handleFullNameChange}
+          />
 
-        <Button
-          mode="contained"
-          buttonColor="#111"
-          onPress={() => {
-            if (!validateEmail(email)) {
-              setErrorMessage("Invalid email");
-            } else if (!validatePassword(password)) {
-              setErrorMessage("Invalid password");
-            } else if (!validatePhoneNumber(phone)) {
-              setErrorMessage("Invalid phone number");
-            } else if (!validateFullName(fullName)) {
-              setErrorMessage("Invalid full name");
-            } else {
-              setErrorMessage("");
-              handleRegister(
-                email.trim(),
-                password.trim(),
-                phone.trim(),
-                fullName.trim(),
-                "",
-                "",
-                ""
-              );
-            }
-          }}
-          style={styles.register_button}
-        >
-          Register
-        </Button>
-        <Text style={styles.error}>{errorMessage}</Text>
-      </View>
-    </ImageBackground>
+          <Button
+            mode="contained"
+            buttonColor="#76A6ED"
+            onPress={() => {
+              if (!validateEmail(email)) {
+                setErrorMessage("Invalid email");
+              } else if (!validatePassword(password)) {
+                setErrorMessage("Invalid password");
+              } else if (!validatePhoneNumber(phone)) {
+                setErrorMessage("Invalid phone number");
+              } else if (!validateFullName(fullName)) {
+                setErrorMessage("Invalid full name");
+              } else {
+                setErrorMessage("");
+                handleRegister(
+                  email.trim(),
+                  password.trim(),
+                  phone.trim(),
+                  fullName.trim(),
+                  "",
+                  "",
+                  ""
+                );
+              }
+            }}
+            style={styles.register_button}
+          >
+            <Text style={styles.registerText}>Register now</Text>{" "}
+          </Button>
+          <Text style={styles.error}>{errorMessage}</Text>
+        </View>
+      </ImageBackground>
+    </KeyboardAwareScrollView>
   );
 }
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+  },
+  image: {
+    // flex: 1,
+    position: "absolute",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    justifyContent: "center",
+  },
+  data: { marginTop: 100 },
   input: {
     marginBottom: 3,
     marginHorizontal: 20,
   },
   register_button: {
-    width: 150,
+    width: 200,
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: 20,
   },
   error: {
     marginTop: 10,
@@ -166,4 +200,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: colors.blue1,
   },
+  registerText: { color: "white", fontSize: 21 ,textAlign:"center"},
 });
