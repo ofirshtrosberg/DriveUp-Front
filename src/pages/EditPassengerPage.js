@@ -358,6 +358,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     fontWeight: "bold",
+    fontFamily: "GasoekOne-Regular",
   },
   bottomSheetsTitle: {
     fontSize: 23,
