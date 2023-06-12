@@ -25,6 +25,7 @@ import * as ImagePicker from "expo-image-picker";
 import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
 import { useFonts } from "expo-font";
 import { Arima_700Bold } from "@expo-google-fonts/arima";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function EditDriverPage({ navigation, route }) {
   React.useLayoutEffect(() => {
@@ -237,13 +238,18 @@ export default function EditDriverPage({ navigation, route }) {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid={true}
+      extraScrollHeight={150}
+    >
       <ImageBackground
         source={require("../assets/editDriver.png")}
         resizeMode="cover"
         style={styles.image}
       >
-        <View style={{ margin: 20 }}>
+        <View style={styles.contentContainer}>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
               {newImageProfile ? (
@@ -366,14 +372,24 @@ export default function EditDriverPage({ navigation, route }) {
           )}
         </View>
       </ImageBackground>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+    padding: 20,
   },
-  containerTop: { alignItems: "center", flex: 1, justifyContent: "center" },
+  image: {
+    position: "absolute",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    justifyContent: "center",
+  },
+  contentContainer: {
+    marginTop: 10,
+  },
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
@@ -445,11 +461,5 @@ const styles = StyleSheet.create({
     marginTop: 18,
     marginLeft: 2,
     backgroundColor: "white",
-  },
-  image: {
-    flex: 1,
-    position: "absolute",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
 });

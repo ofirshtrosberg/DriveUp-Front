@@ -170,7 +170,6 @@ export default function PassengerProfilePage(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -198,14 +197,14 @@ const styles = StyleSheet.create({
   },
   passenger_email: {
     color: "white",
-    fontSize: 20,
+    fontSize: 22,
     marginLeft: 0,
     marginTop: 4,
     marginBottom: 7,
   },
   passenger_phone: {
     color: "white",
-    fontSize: 20,
+    fontSize: 22,
     marginLeft: 15,
     marginTop: 1,
     marginBottom: 5,
