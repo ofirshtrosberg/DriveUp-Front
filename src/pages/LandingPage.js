@@ -53,7 +53,7 @@ export default function LandingPage() {
                 color: "white",
                 textAlign: "center",
                 lineHeight: 50,
-                fontSize: 16,
+                fontSize: 21,
                 fontWeight: "bold",
               }}
             >

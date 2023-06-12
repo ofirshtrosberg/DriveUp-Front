@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 3,
     marginHorizontal: 20,
+    fontSize: 19.5,
   },
   register_button: {
     width: 200,

@@ -127,7 +127,7 @@ export default function LoginPage({ navigation }) {
           value={password}
           onChangeText={handlePasswordChange}
         />
-        <Text style={styles.text}>Don't have an account? Register as:</Text>
+        <Text style={styles.text}>Don't have an account ? Register as :</Text>
         <Text
           onPress={() => navigation.navigate("RegisterAsDriver")}
           style={styles.register}
@@ -142,13 +142,13 @@ export default function LoginPage({ navigation }) {
         </Text>
         <Button
           mode="contained"
-          buttonColor="#111"
+          buttonColor="#76A6ED"
           onPress={() => {
             loginBackend();
           }}
           style={styles.login_button}
         >
-          Login
+          <Text style={styles.login_text}>Login</Text>
         </Button>
         {!navigateNow && <Text style={styles.errorText}>{loginResponse}</Text>}
       </View>
@@ -170,15 +170,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 18,
     color: "#fff",
+    fontWeight: "bold",
   },
   login_button: {
-    width: 100,
+    width: 150,
     alignSelf: "center",
     marginTop: 14,
   },
   input: {
     marginBottom: 7,
     marginHorizontal: 20,
+    fontSize: 20,
   },
   errorText: {
     marginTop: 10,
@@ -187,4 +189,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#fff",
   },
+  login_text: { color: "white", fontSize: 22, textAlign: "center" },
 });

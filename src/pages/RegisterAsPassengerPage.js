@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 3,
     marginHorizontal: 20,
+    fontSize: 19.5,
   },
   register_button: {
     width: 200,
@@ -200,5 +201,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: colors.blue1,
   },
-  registerText: { color: "white", fontSize: 21 ,textAlign:"center"},
+  registerText: { color: "white", fontSize: 21, textAlign: "center" },
 });
