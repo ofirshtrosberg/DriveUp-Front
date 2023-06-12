@@ -82,10 +82,8 @@ export default function EditProfilePage({ navigation, route }) {
       .then((data) => {
         console.log("User update successfully!");
         if (updateImageSuccess === true || imageData === null) {
-          console.log("%%%%%%%%%%%%%");
           clearStackAndNavigate(navigation, "Main");
           navigation.navigate("Profile");
-          // navigation.goBack();
         }
       })
       .catch((error) => {
