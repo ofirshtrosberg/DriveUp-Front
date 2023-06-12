@@ -170,14 +170,13 @@ export default function PassengerProfilePage(props) {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
-    // flex: 1,
-    position: "absolute",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    // justifyContent: "center",
   },
 
   avatar: {
