@@ -32,6 +32,7 @@ export default function PassengerOrderOnMap({
         origin={origin}
         destination={destination}
         apikey={GOOGLE_MAPS_API_KEY}
+        strokeWidth={3}
       />
     </MapView>
   );
