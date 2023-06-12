@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import MapView, { Marker, Callout } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { AuthContext } from "../../AuthContext";
@@ -21,6 +22,7 @@ import {
   getUserByEmail,
   getEstimatedTime,
   downloadImage,
+  rateDriver,
 } from "../helperFunctions/accessToBackFunctions";
 function calculateLatLonDelta(orderLocations) {
   const latitudes = orderLocations.map((location) => location.address.latitude);
@@ -56,6 +58,35 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
   const [driverImageUrl, setDriverImageUrl] = useState("");
   const [estimatedTime, setEstimatedTime] = useState("");
   const [imageUri, setImageUri] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [alreadyRateDriver, setAlreadyRateDriver] = useState(false);
+  const handleRatingChange = (value) => {
+    setRating(value);
+  };
+  const Rating = ({ rating, onRatingChange }) => {
+    const handleClick = (value) => {
+      onRatingChange(value);
+    };
+    const renderStars = () => {
+      const stars = [];
+      for (let i = 1; i <= 5; i++) {
+        const starIcon = i <= rating ? styles.filledStar : styles.emptyStar;
+        stars.push(
+          <Icon
+            key={i}
+            name="star"
+            size={30}
+            style={starIcon}
+            onPress={() => handleClick(i)}
+          />
+        );
+      }
+      console.log("rating", rating);
+      return stars;
+    };
+    return <View style={styles.ratingContainer}>{renderStars()}</View>;
+  };
+
   const getDriveDetails = async () => {
     try {
       const driveEstimatedTime = await getEstimatedTime(
@@ -106,6 +137,9 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
   useEffect(() => {
     console.log(driverEmail);
   }, [driverEmail]);
+  useEffect(() => {
+    console.log("rated driver? ", alreadyRateDriver);
+  }, [alreadyRateDriver]);
   useEffect(() => {
     console.log("");
   }, [imageUri]);
@@ -229,14 +263,6 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
           <Text style={styles.boldText}>
             Driver will arrive at: {estimatedTime}
           </Text>
-          {/* <Button
-            mode="contained"
-            buttonColor="#8569F6"
-            style={{ marginHorizontal: 70, marginTop: 10 }}
-            onPress={() => {}}
-          >
-            Cancel Order
-          </Button> */}
         </View>
       </View>
       <Modal
@@ -265,6 +291,19 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
           </View>
         </View>
       </Modal>
+      {!alreadyRateDriver && (
+        <Rating rating={rating} onRatingChange={handleRatingChange} />
+      )}
+      {!alreadyRateDriver && (
+        <Button
+          onPress={() => {
+            rateDriver(driverEmail, rating, userToken, navigation, logout);
+            setAlreadyRateDriver(true);
+          }}
+        >
+          save
+        </Button>
+      )}
     </View>
   );
 }
@@ -317,10 +356,28 @@ const styles = StyleSheet.create({
     right: 10,
     padding: 10,
     backgroundColor: "transparent",
-    zIndex:10000
+    zIndex: 10000,
   },
   closeButtonText: {
     fontSize: 16,
     color: "black",
+  },
+  ratingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  emptyStar: {
+    width: 30,
+    height: 30,
+    margin: 5,
+    color: "gray",
+  },
+  filledStar: {
+    width: 30,
+    height: 30,
+    margin: 5,
+    color: "gold",
   },
 });
