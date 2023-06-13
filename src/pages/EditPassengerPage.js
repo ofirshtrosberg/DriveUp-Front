@@ -84,6 +84,8 @@ export default function EditProfilePage({ navigation, route }) {
         if (updateImageSuccess === true || imageData === null) {
           clearStackAndNavigate(navigation, "Main");
           navigation.navigate("Profile");
+        } else if (imageData !== null) {
+          setErrorMessage("Try to save again");
         }
       })
       .catch((error) => {
@@ -233,7 +235,7 @@ export default function EditProfilePage({ navigation, route }) {
       extraScrollHeight={150}
     >
       <ImageBackground
-        source={require("../assets/editPassenger.png")}
+        source={require("../assets/editPageNew.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -303,8 +305,8 @@ export default function EditProfilePage({ navigation, route }) {
                 onChangeText={handleNameChange}
               />
             </View>
-            <Button
-              style={styles.save_btn}
+
+            <TouchableOpacity
               onPress={() => {
                 if (!validateFullName(editedName)) {
                   setErrorMessage("Invalid full name");
@@ -315,9 +317,31 @@ export default function EditProfilePage({ navigation, route }) {
                   handleUpdate(email, editedName);
                 }
               }}
+              style={{
+                width: 150,
+                height: 50,
+                borderRadius: 20,
+                overflow: "hidden",
+                alignSelf: "center",
+              }}
             >
-              <Text style={styles.save_text}>SAVE</Text>
-            </Button>
+              <ImageBackground
+                source={require("../assets/btnOrder.png")}
+                style={{ width: "100%", height: "100%" }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    lineHeight: 50,
+                    fontSize: 20,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Save
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
           </View>
 
           {isLoading && (
@@ -371,7 +395,7 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 40,
     marginHorizontal: 20,
-    width: 340,
+    width: 310,
     borderRadius: 15,
     fontSize: 20,
   },
@@ -382,11 +406,13 @@ const styles = StyleSheet.create({
     marginLeft: 135,
     marginRight: 20,
     width: "35%",
+    height: 50,
     marginTop: 50,
+    backgroundColor: "#76A6ED",
   },
   save_text: {
-    color: "white",
-    fontSize: 22,
+    color: "black",
+    fontSize: 18,
     fontWeight: "bold",
   },
   message: {
@@ -402,8 +428,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: -15,
     marginBottom: 5,
+    justifyContent: "center",
   },
-  user_icon: { marginLeft: 10, color: "white" },
+  user_icon: { marginLeft: 10, color: "white", marginBottom:30 },
   bottomSheet: {
     backgroundColor: "rgba(118, 166, 237, 0.9)",
     height: 320,
