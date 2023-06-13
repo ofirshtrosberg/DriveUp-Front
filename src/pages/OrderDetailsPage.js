@@ -62,7 +62,15 @@ export default function OrderDetailsPage({ route }) {
     Rubik_500Medium,
   });
   if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
+    return (
+      <ImageBackground
+        source={require("../assets/orderdetails.png")}
+        resizeMode="cover"
+        style={{ width: "100%", height: "100%",justifyContent: "center", alignItems: "center" }}
+      >
+        <Text style={{ color:"white" , fontSize:20}}>Loading...</Text>
+      </ImageBackground>
+    );
   }
 
   const formattedTime = format(new Date(timeDate), "HH:mm");
@@ -140,13 +148,12 @@ const styles = StyleSheet.create({
   dataIconsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: Dimensions.get("window").width * 0.075,
+    marginLeft: Dimensions.get("window").width * 0.05,
     marginTop: Dimensions.get("window").height * 0.04,
   },
 
   orderNumber: {
     marginTop: Dimensions.get("window").height * 0.02,
-
     fontSize: 30,
     fontFamily: "Arima_700Bold",
     color: "#B5D0FF",
@@ -168,5 +175,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 20,
   },
-  driverData: { marginBottom: Dimensions.get("window").height * 0.05 },
+  driverData: {
+    marginBottom: Dimensions.get("window").height * 0.05,
+    marginLeft: Dimensions.get("window").width * 0.05,
+  },
 });
