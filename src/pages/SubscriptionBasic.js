@@ -85,7 +85,12 @@ export default function SubscriptionBasic() {
         style={styles.image}
       >
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop:140 }}
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 140,
+          }}
         >
           <View
             style={{
@@ -133,7 +138,7 @@ export default function SubscriptionBasic() {
               style={{
                 backgroundColor: "#fff",
                 borderRadius: 10,
-                marginRight: 3,
+                marginRight: 5,
               }}
             >
               <Picker
@@ -188,7 +193,7 @@ export default function SubscriptionBasic() {
               borderRadius: 20,
               overflow: "hidden",
               alignSelf: "center",
-              marginTop:15,
+              marginTop: 15,
             }}
           >
             <ImageBackground
@@ -234,7 +239,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     color: "#fff",
-    marginTop:10,
+    marginTop: 10,
   },
   image: {
     flex: 1,
