@@ -20,7 +20,7 @@ import { IP, PORT } from "@env";
 import * as FileSystem from "expo-file-system";
 import { AuthContext } from "../../AuthContext";
 import { useFonts } from "expo-font";
-import { Arima_600SemiBold } from "@expo-google-fonts/arima";
+import { Arima_600SemiBold, Arima_700Bold } from "@expo-google-fonts/arima";
 
 import { downloadImage } from "../helperFunctions/accessToBackFunctions";
 export default function DriverProfilePage(props) {
@@ -94,10 +94,20 @@ export default function DriverProfilePage(props) {
 
   const [fontsLoaded] = useFonts({
     Arima_600SemiBold,
+    Arima_700Bold,
   });
   if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
+    return (
+      <ImageBackground
+        source={require("../assets/profilePage.png")}
+        resizeMode="cover"
+        style={{ width: "100%", height: "100%",justifyContent: "center", alignItems: "center" }}
+      >
+        <Text style={{ color:"white" , fontSize:20}}>Loading...</Text>
+      </ImageBackground>
+    );
   }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -112,86 +122,86 @@ export default function DriverProfilePage(props) {
             style={{ marginTop: 270 }}
           />
         ) : ( */}
-          <View style={styles.contentContainer}>
-            <View style={styles.avatarContainer}>
-              <TouchableOpacity>
-                {imageUri ? (
-                  <Image source={{ uri: imageUri }} style={styles.avatar} />
-                ) : (
-                  // <View style={styles.defaultAvatar}>
-                  //   <Text style={styles.defaultAvatarText}>{fullName[0]}</Text>
-                  // </View>
-                  <UserAvatar
-                    size={110}
-                    name={fullName}
-                    style={styles.avatar}
-                    textColor={"#061848"}
-                  />
-                )}
-              </TouchableOpacity>
-              {forOrder === "false" && (
-                <Icon
-                  name="edit"
-                  size={20}
-                  style={styles.editIcon}
-                  onPress={() => {
-                    navigation.navigate("EditDriver", {
-                      fullName,
-                      phoneNumber,
-                      email,
-                      carModel,
-                      plateNumber,
-                      password,
-                      carColor,
-                      imageProfile,
-                      imageUri,
-                    });
-                  }}
+        <View style={styles.contentContainer}>
+          <View style={styles.avatarContainer}>
+            <TouchableOpacity>
+              {imageUri ? (
+                <Image source={{ uri: imageUri }} style={styles.avatar} />
+              ) : (
+                // <View style={styles.defaultAvatar}>
+                //   <Text style={styles.defaultAvatarText}>{fullName[0]}</Text>
+                // </View>
+                <UserAvatar
+                  size={110}
+                  name={fullName}
+                  style={styles.avatar}
+                  textColor={"#061848"}
                 />
               )}
-            </View>
-            <Text style={styles.driverName}>{fullName} </Text>
-            <View style={styles.dataIconsContainer}>
+            </TouchableOpacity>
+            {forOrder === "false" && (
               <Icon
-                name="envelope"
-                size={30}
-                color="#608cd7"
-                style={styles.emailIcon}
-              />
-              <Text style={styles.driverEmail}>{email} </Text>
-            </View>
-            <View style={styles.dataIconsContainer}>
-              <Icon
-                name="phone"
+                name="edit"
                 size={20}
-                color="#608cd7"
-                style={styles.phoneIcon}
+                style={styles.editIcon}
+                onPress={() => {
+                  navigation.navigate("EditDriver", {
+                    fullName,
+                    phoneNumber,
+                    email,
+                    carModel,
+                    plateNumber,
+                    password,
+                    carColor,
+                    imageProfile,
+                    imageUri,
+                  });
+                }}
               />
-              <Text style={styles.driverPhone}>{phoneNumber} </Text>
-            </View>
-
-            <Text style={styles.driverCarModel}>My car : {carModel}</Text>
-            <Text style={styles.driverCarModel}>Car Number: {plateNumber}</Text>
-            {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
-            {/* <View style={styles.review_list}></View> */}
-            <View>
-              {forOrder === "false" && (
-                <Button
-                  style={styles.subButton}
-                  mode="contained"
-                  buttonColor="#111"
-                  onPress={() => {
-                    navigation.navigate("Subscription");
-                  }}
-                >
-                  <Text style={styles.subButtonText}>Subscription</Text>
-                </Button>
-              )}
-              {rating !== "" && (
-                <Text style={styles.rating}>rating: {formattedRating}</Text>
-              )}
-            </View>
+            )}
           </View>
+          <Text style={styles.driverName}>{fullName} </Text>
+          <View style={styles.dataIconsContainer}>
+            <Icon
+              name="envelope"
+              size={30}
+              color="#608cd7"
+              style={styles.emailIcon}
+            />
+            <Text style={styles.driverEmail}>{email} </Text>
+          </View>
+          <View style={styles.dataIconsContainer}>
+            <Icon
+              name="phone"
+              size={20}
+              color="#608cd7"
+              style={styles.phoneIcon}
+            />
+            <Text style={styles.driverPhone}>{phoneNumber} </Text>
+          </View>
+
+          <Text style={styles.driverCarModel}>My car : {carModel}</Text>
+          <Text style={styles.driverCarModel}>Car Number: {plateNumber}</Text>
+          {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
+          {/* <View style={styles.review_list}></View> */}
+          <View>
+            {forOrder === "false" && (
+              <Button
+                style={styles.subButton}
+                mode="contained"
+                buttonColor="#111"
+                onPress={() => {
+                  navigation.navigate("Subscription");
+                }}
+              >
+                <Text style={styles.subButtonText}>Subscription</Text>
+              </Button>
+            )}
+            {rating !== "" && (
+              <Text style={styles.rating}>rating: {formattedRating}</Text>
+            )}
+          </View>
+        </View>
         {/* )} */}
       </ImageBackground>
     </View>

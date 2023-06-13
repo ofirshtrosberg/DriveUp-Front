@@ -103,8 +103,17 @@ export default function PassengerProfilePage(props) {
     Arima_600SemiBold,
   });
   if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
+    return (
+      <ImageBackground
+        source={require("../assets/profilePage.png")}
+        resizeMode="cover"
+        style={{ width: "100%", height: "100%",justifyContent: "center", alignItems: "center" }}
+      >
+        <Text style={{ color:"white" , fontSize:20}}>Loading...</Text>
+      </ImageBackground>
+    );
   }
+
   return (
     <View style={styles.container}>
       <ImageBackground

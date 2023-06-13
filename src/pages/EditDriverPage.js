@@ -237,8 +237,17 @@ export default function EditDriverPage({ navigation, route }) {
     Arima_700Bold,
   });
   if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
+    return (
+      <ImageBackground
+        source={require("../assets/editPageNew.png")}
+        resizeMode="cover"
+        style={{ width: "100%", height: "100%",justifyContent: "center", alignItems: "center" }}
+      >
+        <Text style={{ color:"white" , fontSize:20}}>Loading...</Text>
+      </ImageBackground>
+    );
   }
+
 
   return (
     <KeyboardAwareScrollView
