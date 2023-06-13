@@ -105,13 +105,13 @@ export default function DriverProfilePage(props) {
         resizeMode="cover"
         style={styles.image}
       >
-        {isLoading ? (
+        {/* {isLoading ? (
           <ActivityIndicator
             size={50}
             color="#76A6ED"
             style={{ marginTop: 270 }}
           />
-        ) : (
+        ) : ( */}
           <View style={styles.contentContainer}>
             <View style={styles.avatarContainer}>
               <TouchableOpacity>
@@ -192,7 +192,7 @@ export default function DriverProfilePage(props) {
               )}
             </View>
           </View>
-        )}
+        {/* )} */}
       </ImageBackground>
     </View>
   );
