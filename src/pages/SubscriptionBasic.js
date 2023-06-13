@@ -1,7 +1,5 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { useFonts } from "expo-font";
-import { Lobster_400Regular } from "@expo-google-fonts/lobster";
 import {
   Text,
   View,
@@ -79,12 +77,6 @@ export default function SubscriptionBasic() {
   const handleCvvChange = (text) => {
     setCvv(text);
   };
-  const [fontsLoaded] = useFonts({
-    Lobster_400Regular,
-  });
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
-  }
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -92,9 +84,8 @@ export default function SubscriptionBasic() {
         resizeMode="cover"
         style={styles.image}
       >
-        <View style={{ flex: 1 }}></View>
         <View
-          style={{ flex: 3, justifyContent: "center", alignItems: "center" }}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop:140 }}
         >
           <View
             style={{
@@ -196,9 +187,8 @@ export default function SubscriptionBasic() {
               height: 50,
               borderRadius: 20,
               overflow: "hidden",
-              position: "absolute",
-              bottom: 30,
               alignSelf: "center",
+              marginTop:15,
             }}
           >
             <ImageBackground
@@ -228,21 +218,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  title: {
-    fontFamily: "Lobster_400Regular",
-    fontSize: 50,
-    fontWeight: "normal",
-    color: "#fff",
-  },
   text: {
     fontSize: 19,
-    color: "#fff",
-  },
-  subscription: {
-    marginTop: 4,
-    fontFamily: "Lobster_400Regular",
-    fontSize: 30,
-    fontWeight: "normal",
     color: "#fff",
   },
   input: {
@@ -257,8 +234,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     color: "#fff",
-    position: "absolute",
-    top: 557,
+    marginTop:10,
   },
   image: {
     flex: 1,

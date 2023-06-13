@@ -92,11 +92,21 @@ export default function DriverRoutesOffersPage() {
     setIsLoading(true);
     try {
       setErrorMessage("");
-      const res = await updateCurrentLocation();
+      // const res = await updateCurrentLocation();
+      // const response = await requestDrives(
+      //   userToken,
+      //   res.lat,
+      //   res.lon,
+      //   limits,
+      //   navigation,
+      //   logout
+      // );
+
+      // for 20/6:
       const response = await requestDrives(
         userToken,
-        res.lat,
-        res.lon,
+        31.968773,
+        34.770963,
         limits,
         navigation,
         logout

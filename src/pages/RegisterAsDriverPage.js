@@ -61,7 +61,12 @@ export default function RegisterAsDriverPage({ navigation }) {
       }),
     })
       .then((response) => {
+        if (response.status === 400) {
+          setErrorMessage("Email/phone number is already exist");
+          throw new Error("Email/phone number is already exist");
+        }
         if (!response.ok) {
+          setErrorMessage("Registration failed");
           throw new Error("Registration failed");
         }
         response.json();
@@ -69,9 +74,7 @@ export default function RegisterAsDriverPage({ navigation }) {
       .then((data) => {
         handleRegisterLocal(email, true);
       })
-      .catch((error) => {
-        setErrorMessage("Registration failed!");
-      });
+      .catch((error) => {});
   };
   const handleRegisterLocal = async (email, isDriver) => {
     const user = {
