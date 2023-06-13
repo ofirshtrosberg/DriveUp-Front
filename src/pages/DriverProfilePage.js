@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { Button } from "react-native-paper";
 import UserAvatar from "react-native-user-avatar";
@@ -45,12 +46,20 @@ export default function DriverProfilePage(props) {
     forOrder,
     imageProfile,
   } = props;
+  const [isLoading, setIsLoading] = useState(true);
   const [imageUri, setImageUri] = useState(null);
   const [rating, setRating] = useState("Not available");
   const formattedRating = parseFloat(rating).toFixed(2);
-
   const { userToken, login, logout } = useContext(AuthContext);
-
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      downloadImageGetRating().then(() => {
+        setIsLoading(false);
+      });
+      return () => {};
+    }, [])
+  );
   const downloadImageGetRating = async () => {
     try {
       getRating(email);
@@ -58,12 +67,6 @@ export default function DriverProfilePage(props) {
         await downloadImage(imageProfile, setImageUri);
     } catch (error) {}
   };
-  useFocusEffect(
-    React.useCallback(() => {
-      downloadImageGetRating();
-      return () => {};
-    }, [])
-  );
 
   useEffect(() => {
     console.log("");
@@ -117,136 +120,160 @@ export default function DriverProfilePage(props) {
         resizeMode="cover"
         style={styles.image}
       >
-        <View style={styles.container}>
-          <View style={{ alignItems: "center" }}>
-            <TouchableOpacity>
-              {imageUri ? (
-                <Image source={{ uri: imageUri }} style={styles.avatar} />
-              ) : (
-                <UserAvatar
-                  size={110}
-                  name={fullName}
-                  style={styles.avatar}
-                  textColor={"#061848"}
+        {isLoading ? (
+          <ActivityIndicator
+            size={50}
+            color="#76A6ED"
+            style={{ marginTop: 270 }}
+          />
+        ) : (
+          <View style={styles.contentContainer}>
+            <View style={styles.avatarContainer}>
+              <TouchableOpacity>
+                {imageUri ? (
+                  <Image source={{ uri: imageUri }} style={styles.avatar} />
+                ) : (
+                  // <View style={styles.defaultAvatar}>
+                  //   <Text style={styles.defaultAvatarText}>{fullName[0]}</Text>
+                  // </View>
+                  <UserAvatar
+                    size={110}
+                    name={fullName}
+                    style={styles.avatar}
+                    textColor={"#061848"}
+                  />
+                )}
+              </TouchableOpacity>
+              {forOrder === "false" && (
+                <Icon
+                  name="edit"
+                  size={20}
+                  style={styles.editIcon}
+                  onPress={() => {
+                    navigation.navigate("EditDriver", {
+                      fullName,
+                      phoneNumber,
+                      email,
+                      carModel,
+                      plateNumber,
+                      password,
+                      carColor,
+                      imageProfile,
+                      imageUri,
+                    });
+                  }}
                 />
               )}
-            </TouchableOpacity>
-            {forOrder === "false" && (
+            </View>
+            <Text style={styles.driverName}>{fullName} </Text>
+            <View style={styles.dataIconsContainer}>
               <Icon
-                name="edit"
+                name="envelope"
+                size={30}
+                color="#608cd7"
+                style={styles.emailIcon}
+              />
+              <Text style={styles.driverEmail}>{email} </Text>
+            </View>
+            <View style={styles.dataIconsContainer}>
+              <Icon
+                name="phone"
                 size={20}
-                style={styles.edit_icon}
-                onPress={() => {
-                  navigation.navigate("EditDriver", {
-                    fullName,
-                    phoneNumber,
-                    email,
-                    carModel,
-                    plateNumber,
-                    password,
-                    carColor,
-                    imageProfile,
-                    imageUri,
-                  });
-                }}
-              ></Icon>
-            )}
-          </View>
-          <Text style={styles.driver_name}>{fullName} </Text>
-          <View style={styles.data_icons_Container}>
-            <Icon
-              name="envelope"
-              size={30}
-              color="#608cd7"
-              style={styles.email_icon}
-            />
-            <Text style={styles.driver_email}>{email} </Text>
-          </View>
-          <View style={styles.data_icons_Container}>
-            <Icon
-              name="phone"
-              size={20}
-              color="#608cd7"
-              style={styles.phone_icon}
-            />
-            <Text style={styles.driver_phone}>{phoneNumber} </Text>
-          </View>
+                color="#608cd7"
+                style={styles.phoneIcon}
+              />
+              <Text style={styles.driverPhone}>{phoneNumber} </Text>
+            </View>
 
-          <Text style={styles.driver_carModel}>My car : {carModel}</Text>
-          <Text style={styles.driver_carModel}>Car Number: {plateNumber} </Text>
-          {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
-          {/* <View style={styles.review_list}></View> */}
-          <View>
-            {forOrder === "false" && (
-              <Button
-                style={styles.sub_btn}
-                mode="contained"
-                buttonColor="#111"
-                onPress={() => {
-                  navigation.navigate("Subscription");
-                }}
-              >
-                <Text style={styles.sub_text}>Subscription</Text>
-              </Button>
-            )}
-            {rating !== "" && (
-              <Text style={styles.rating}>rating: {formattedRating}</Text>
-            )}
+            <Text style={styles.driverCarModel}>My car : {carModel}</Text>
+            <Text style={styles.driverCarModel}>
+              Car Number: {plateNumber}{" "}
+            </Text>
+            {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
+            {/* <View style={styles.review_list}></View> */}
+            <View>
+              {forOrder === "false" && (
+                <Button
+                  style={styles.subButton}
+                  mode="contained"
+                  buttonColor="#111"
+                  onPress={() => {
+                    navigation.navigate("Subscription");
+                  }}
+                >
+                  <Text style={styles.subButtonText}>Subscription</Text>
+                </Button>
+              )}
+              {rating !== "" && (
+                <Text style={styles.rating}>rating: {formattedRating}</Text>
+              )}
+            </View>
           </View>
-        </View>
+        )}
       </ImageBackground>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "column",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  contentContainer: {
     justifyContent: "center",
     alignItems: "center",
   },
-  image: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+  avatarContainer: {
+    alignItems: "center",
   },
   avatar: {
-    width: 125,
-    height: 125,
-    borderRadius: 100,
-    marginTop: 102.5,
-    marginLeft: 9,
+    width: Dimensions.get("window").width * 0.3,
+    height: Dimensions.get("window").width * 0.3,
+    borderRadius: (Dimensions.get("window").width * 0.3) / 2,
+    marginTop: Dimensions.get("window").height * 0.05,
     backgroundColor: "white",
   },
-  driver_name: {
+  editIcon: {
+    marginTop: Dimensions.get("window").height * -0.075,
+    marginLeft: Dimensions.get("window").width * 0.7,
+    color: "#76A6ED",
+  },
+  driverName: {
     color: "white",
     fontSize: 26,
-    marginLeft: 10,
-    marginTop: 55,
-    width: 400,
+    marginTop: Dimensions.get("window").height * 0.055,
+    width: Dimensions.get("window").width * 0.9,
     textAlign: "center",
-    // fontWeight: "600",
     fontFamily: "Arima_700Bold",
   },
   rating: {
     color: "white",
     fontSize: 26,
-    marginLeft: 10,
-    marginTop: 30,
-    width: 400,
+    marginTop: Dimensions.get("window").height * 0.03,
+    width: Dimensions.get("window").width * 0.9,
     textAlign: "center",
     fontFamily: "Arima_600SemiBold",
   },
-  data_icons_Container: {
+  dataIconsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 0,
-    marginRight: 30,
+    marginRight: Dimensions.get("window").width * 0.075,
   },
-  email_icon: { marginLeft: -10, marginRight: 20, color: "#76A6ED" },
-  phone_icon: {
+  emailIcon: {
+    marginLeft: -10,
+    marginRight: 20,
+    color: "#76A6ED",
+  },
+  phoneIcon: {
     transform: [{ rotate: "95deg" }],
     marginTop: -5,
     color: "#76A6ED",
   },
-  driver_phone: {
+  driverPhone: {
     color: "white",
     fontSize: 22,
     marginLeft: 15,
@@ -254,42 +281,126 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: "Arima_700Bold",
   },
-  driver_email: {
+  driverEmail: {
     color: "white",
     fontSize: 22,
-    marginLeft: 0,
     marginTop: 4,
     marginBottom: 7,
     fontFamily: "Arima_700Bold",
   },
-  driver_carModel: {
+  driverCarModel: {
     color: "white",
     fontSize: 24,
-    marginRight: 0,
-    marginTop: 4,
+    marginTop: Dimensions.get("window").height * 0.01,
     marginBottom: 5,
   },
-  driver_plateNumber: {
-    color: "black",
-    fontSize: 22,
-    marginLeft: 160,
-    marginTop: 4,
-    marginBottom: 10,
-  },
-  edit_icon: {
-    padding: 10,
-    marginLeft: 330,
-    marginTop: -90,
-    color: "#76A6ED",
-  },
-  sub_btn: {
+  subButton: {
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 130,
-    width: "50%",
+    width: Dimensions.get("window").width * 0.5,
     backgroundColor: "#76A6ED",
-    marginTop: 20,
+    marginTop: Dimensions.get("window").height * 0.02,
+    marginLeft: Dimensions.get("window").width * 0.2,
   },
-
-  sub_text: { fontSize: 20, color: "#061848", fontWeight: "bold" },
+  subButtonText: {
+    fontSize: 20,
+    color: "#061848",
+    fontWeight: "bold",
+  },
 });
+
+// const styles = StyleSheet.create({
+//   container: {
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   image: {
+//     width: Dimensions.get("window").width,
+//     height: Dimensions.get("window").height,
+//   },
+//   avatar: {
+//     width: 125,
+//     height: 125,
+//     borderRadius: 100,
+//     marginTop: 102.5,
+//     marginLeft: 9,
+//     backgroundColor: "white",
+//   },
+//   driver_name: {
+//     color: "white",
+//     fontSize: 26,
+//     marginLeft: 10,
+//     marginTop: 55,
+//     width: 400,
+//     textAlign: "center",
+//     // fontWeight: "600",
+//     fontFamily: "Arima_700Bold",
+//   },
+//   rating: {
+//     color: "white",
+//     fontSize: 26,
+//     marginLeft: 10,
+//     marginTop: 30,
+//     width: 400,
+//     textAlign: "center",
+//     fontFamily: "Arima_600SemiBold",
+//   },
+// data_icons_Container: {
+//   flexDirection: "row",
+//   alignItems: "center",
+//   marginBottom: 0,
+//   marginRight: 30,
+// },
+// email_icon: { marginLeft: -10, marginRight: 20, color: "#76A6ED" },
+// phone_icon: {
+//   transform: [{ rotate: "95deg" }],
+//   marginTop: -5,
+//   color: "#76A6ED",
+// },
+// driver_phone: {
+//   color: "white",
+//   fontSize: 22,
+//   marginLeft: 15,
+//   marginTop: 1,
+//   marginBottom: 5,
+//   fontFamily: "Arima_700Bold",
+// },
+// driver_email: {
+//   color: "white",
+//   fontSize: 22,
+//   marginLeft: 0,
+//   marginTop: 4,
+//   marginBottom: 7,
+//   fontFamily: "Arima_700Bold",
+// },
+// driver_carModel: {
+//   color: "white",
+//   fontSize: 24,
+//   marginRight: 0,
+//   marginTop: 4,
+//   marginBottom: 5,
+// },
+// driver_plateNumber: {
+//   color: "black",
+//   fontSize: 22,
+//   marginLeft: 160,
+//   marginTop: 4,
+//   marginBottom: 10,
+// },
+// edit_icon: {
+//   padding: 10,
+//   marginLeft: 330,
+//   marginTop: -90,
+//   color: "#76A6ED",
+// },
+// sub_btn: {
+//   justifyContent: "center",
+//   alignItems: "center",
+//   marginLeft: 130,
+//   width: "50%",
+//   backgroundColor: "#76A6ED",
+//   marginTop: 20,
+// },
+
+// sub_text: { fontSize: 20, color: "#061848", fontWeight: "bold" },
+// });

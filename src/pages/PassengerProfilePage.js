@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import UserAvatar from "react-native-user-avatar";
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native-paper";
 import { IP, PORT } from "@env";
 import { AuthContext } from "../../AuthContext";
 import { format } from "date-fns";
@@ -23,17 +23,19 @@ export default function PassengerProfilePage(props) {
   const { email, fullName, phoneNumber, password, imageProfile } = props;
   const { userToken, login, logout } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [imageUri, setImageUri] = useState(null);
   useFocusEffect(
     React.useCallback(() => {
+      setIsLoading(true);
       if (imageProfile !== "" && imageProfile !== null)
         downloadImage(imageProfile, setImageUri);
-      getOrderHistory();
+      getOrderHistory().then(() => {
+        setIsLoading(false);
+      });
       return () => {};
     }, [])
   );
-  
 
   useEffect(() => {
     console.log("image uri");
@@ -102,68 +104,76 @@ export default function PassengerProfilePage(props) {
         resizeMode="cover"
         style={styles.image}
       >
-        <View style={styles.container}>
-          <View style={{ alignItems: "center" }}>
-            <TouchableOpacity>
-              {imageUri ? (
-                <Image source={{ uri: imageUri }} style={styles.avatar} />
-              ) : (
-                <UserAvatar
-                  size={110}
-                  name={fullName}
-                  style={styles.avatar}
-                  textColor={"#061848"}
-                />
-              )}
-            </TouchableOpacity>
-            <Icon
-              name="edit"
-              size={20}
-              style={styles.edit_icon}
-              onPress={() => {
-                navigation.navigate("EditPassenger", {
-                  fullName,
-                  email,
-                  imageProfile,
-                  password,
-                  imageUri,
-                });
-              }}
-            ></Icon>
-          </View>
-          <Text style={styles.passenger_name}>{fullName} </Text>
-          <View style={styles.data_icons_Container}>
-            <Icon
-              name="envelope"
-              size={30}
-              color="#76A6ED"
-              style={styles.email_icon}
-            />
-            <Text style={styles.passenger_email}>{email} </Text>
-          </View>
-          <View style={styles.data_icons_Container}>
-            <Icon
-              name="phone"
-              size={20}
-              color="#76A6ED"
-              style={styles.phone_icon}
-            />
-            <Text style={styles.passenger_phone}>{phoneNumber} </Text>
-          </View>
-          {orders.length > 0 && (
-            <>
-              <Text style={styles.orders_title}>Orders History </Text>
+        {isLoading ? (
+          <ActivityIndicator
+            size={50}
+            color="#76A6ED"
+            style={{ marginTop: 270 }}
+          />
+        ) : (
+          <View style={styles.container}>
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity>
+                {imageUri ? (
+                  <Image source={{ uri: imageUri }} style={styles.avatar} />
+                ) : (
+                  <UserAvatar
+                    size={110}
+                    name={fullName}
+                    style={styles.avatar}
+                    textColor={"#061848"}
+                  />
+                )}
+              </TouchableOpacity>
+              <Icon
+                name="edit"
+                size={20}
+                style={styles.edit_icon}
+                onPress={() => {
+                  navigation.navigate("EditPassenger", {
+                    fullName,
+                    email,
+                    imageProfile,
+                    password,
+                    imageUri,
+                  });
+                }}
+              ></Icon>
+            </View>
+            <Text style={styles.passenger_name}>{fullName} </Text>
+            <View style={styles.data_icons_Container}>
+              <Icon
+                name="envelope"
+                size={30}
+                color="#76A6ED"
+                style={styles.email_icon}
+              />
+              <Text style={styles.passenger_email}>{email} </Text>
+            </View>
+            <View style={styles.data_icons_Container}>
+              <Icon
+                name="phone"
+                size={20}
+                color="#76A6ED"
+                style={styles.phone_icon}
+              />
+              <Text style={styles.passenger_phone}>{phoneNumber} </Text>
+            </View>
+            {orders.length > 0 && (
+              <>
+                <Text style={styles.orders_title}>Orders History </Text>
 
-              <View style={styles.orders_list}>
-                <FlatList
-                  data={sortedData}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item.orderId.toString()}
-                />
-              </View>
-            </>
-          )}
-        </View>
+                <View style={styles.orders_list}>
+                  <FlatList
+                    data={sortedData}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.orderId.toString()}
+                  />
+                </View>
+              </>
+            )}
+          </View>
+        )}
       </ImageBackground>
     </View>
   );
