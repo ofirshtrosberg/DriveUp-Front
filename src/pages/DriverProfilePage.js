@@ -20,18 +20,8 @@ import { IP, PORT } from "@env";
 import * as FileSystem from "expo-file-system";
 import { AuthContext } from "../../AuthContext";
 import { useFonts } from "expo-font";
-import {
-  Arima_700Bold,
-  Arima_400Regular,
-  Arima_500Medium,
-  Arima_600SemiBold,
-} from "@expo-google-fonts/arima";
-import {
-  Rubik_300Light,
-  Rubik_400Regular,
-  Rubik_500Medium,
-  Rubik_600SemiBold,
-} from "@expo-google-fonts/rubik";
+import { Arima_600SemiBold } from "@expo-google-fonts/arima";
+
 import { downloadImage } from "../helperFunctions/accessToBackFunctions";
 export default function DriverProfilePage(props) {
   const navigation = useNavigation();
@@ -103,12 +93,7 @@ export default function DriverProfilePage(props) {
   }, [rating]);
 
   const [fontsLoaded] = useFonts({
-    Arima_700Bold,
-    Arima_400Regular,
-    Arima_500Medium,
     Arima_600SemiBold,
-    Rubik_400Regular,
-    Rubik_500Medium,
   });
   if (!fontsLoaded) {
     return <Text>Loading...</Text>;
@@ -186,9 +171,7 @@ export default function DriverProfilePage(props) {
             </View>
 
             <Text style={styles.driverCarModel}>My car : {carModel}</Text>
-            <Text style={styles.driverCarModel}>
-              Car Number: {plateNumber}{" "}
-            </Text>
+            <Text style={styles.driverCarModel}>Car Number: {plateNumber}</Text>
             {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
             {/* <View style={styles.review_list}></View> */}
             <View>
@@ -278,21 +261,19 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginLeft: 15,
     marginTop: 1,
-    marginBottom: 5,
-    fontFamily: "Arima_700Bold",
+    marginBottom: 0,
   },
   driverEmail: {
     color: "white",
     fontSize: 22,
     marginTop: 4,
     marginBottom: 7,
-    fontFamily: "Arima_700Bold",
   },
   driverCarModel: {
     color: "white",
-    fontSize: 24,
+    fontSize: 22,
     marginTop: Dimensions.get("window").height * 0.01,
-    marginBottom: 5,
+    marginBottom: 2,
   },
   subButton: {
     justifyContent: "center",
