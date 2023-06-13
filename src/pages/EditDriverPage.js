@@ -47,6 +47,7 @@ export default function EditDriverPage({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(false);
   const [updateImageSuccess, setUpdateImageSuccess] = useState(false);
   const [imageData, setImageData] = useState(null);
+  const [finishUploadImage, setFinishUploadImage] = useState(false);
   const handleUpdate = async (
     email,
     editedName,
@@ -90,6 +91,8 @@ export default function EditDriverPage({ navigation, route }) {
         if (updateImageSuccess === true || imageData === null) {
           clearStackAndNavigate(navigation, "Main");
           navigation.navigate("Profile");
+        } else if (imageData !== null) {
+          setErrorMessage("Try to save again");
         }
       })
       .catch((error) => {
@@ -245,7 +248,7 @@ export default function EditDriverPage({ navigation, route }) {
       extraScrollHeight={150}
     >
       <ImageBackground
-        source={require("../assets/editDriver.png")}
+        source={require("../assets/editPageNew.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -327,8 +330,7 @@ export default function EditDriverPage({ navigation, route }) {
             style={styles.input}
             onChangeText={handlePlateNumberChange}
           />
-          <Button
-            style={styles.save_btn}
+          <TouchableOpacity
             onPress={() => {
               if (!validateFullName(editedName)) {
                 setErrorMessage("Invalid full name");
@@ -354,9 +356,33 @@ export default function EditDriverPage({ navigation, route }) {
                 );
               }
             }}
+            style={{
+              width: 150,
+              height: 50,
+              borderRadius: 20,
+              overflow: "hidden",
+              alignSelf: "center",
+              marginTop: 10,
+            }}
           >
-            <Text style={styles.save_text}>SAVE</Text>
-          </Button>
+            <ImageBackground
+              source={require("../assets/btnOrder.png")}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  lineHeight: 50,
+                  fontSize: 20,
+                  fontWeight: "bold",
+                }}
+              >
+                Save
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
+
           {isLoading && (
             <ActivityIndicator
               size="large"

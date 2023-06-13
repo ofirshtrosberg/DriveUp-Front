@@ -3,7 +3,7 @@ const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#5F84A2",
+    primary: "#76A6ED",
     accent: "#fff",
   },
 };
