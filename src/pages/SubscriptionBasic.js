@@ -159,7 +159,7 @@ export default function SubscriptionBasic() {
               style={{
                 backgroundColor: "#fff",
                 borderRadius: 10,
-                borderWidth: 3,
+                // borderWidth: 3,
               }}
             >
               <Picker
