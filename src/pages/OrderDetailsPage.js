@@ -8,10 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { IP, PORT } from "@env";
-import { useSpacingFunc } from "@react-native-material/core";
 import { AuthContext } from "../../AuthContext";
-import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
 import { format } from "date-fns";
 import {
   downloadImage,
@@ -21,34 +18,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import UserAvatar from "react-native-user-avatar";
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
-import { RacingSansOne_400Regular } from "@expo-google-fonts/racing-sans-one";
 import { useFonts } from "expo-font";
-import { Limelight_400Regular } from "@expo-google-fonts/limelight";
-import {
-  Arima_100Thin,
-  Arima_200ExtraLight,
-  Arima_300Light,
-  Arima_400Regular,
-  Arima_500Medium,
-  Arima_600SemiBold,
-  Arima_700Bold,
-} from "@expo-google-fonts/arima";
-import {
-  Rubik_300Light,
-  Rubik_400Regular,
-  Rubik_500Medium,
-  Rubik_600SemiBold,
-  Rubik_700Bold,
-  Rubik_800ExtraBold,
-  Rubik_900Black,
-  Rubik_300Light_Italic,
-  Rubik_400Regular_Italic,
-  Rubik_500Medium_Italic,
-  Rubik_600SemiBold_Italic,
-  Rubik_700Bold_Italic,
-  Rubik_800ExtraBold_Italic,
-  Rubik_900Black_Italic,
-} from "@expo-google-fonts/rubik";
+import { Arima_700Bold } from "@expo-google-fonts/arima";
+import { Rubik_500Medium } from "@expo-google-fonts/rubik";
 export default function OrderDetailsPage({ route }) {
   const navigation = useNavigation();
   const { order } = route.params;
@@ -86,27 +58,8 @@ export default function OrderDetailsPage({ route }) {
   }, [driver]);
 
   const [fontsLoaded] = useFonts({
-    Limelight_400Regular,
-    RacingSansOne_400Regular,
-    Arima_400Regular,
-    Arima_600SemiBold,
-    Arima_500Medium,
     Arima_700Bold,
-    Arima_300Light,
-    Rubik_300Light,
-    Rubik_400Regular,
     Rubik_500Medium,
-    Rubik_600SemiBold,
-    Rubik_700Bold,
-    Rubik_800ExtraBold,
-    Rubik_900Black,
-    Rubik_300Light_Italic,
-    Rubik_400Regular_Italic,
-    Rubik_500Medium_Italic,
-    Rubik_600SemiBold_Italic,
-    Rubik_700Bold_Italic,
-    Rubik_800ExtraBold_Italic,
-    Rubik_900Black_Italic,
   });
   if (!fontsLoaded) {
     return <Text>Loading...</Text>;
@@ -122,20 +75,22 @@ export default function OrderDetailsPage({ route }) {
         resizeMode="cover"
         style={styles.image}
       >
-        <View style={styles.dataContainer}>
+        <View style={styles.contentContainer}>
           <Text style={styles.orderNumber}>Order Number : {order.orderId}</Text>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.avatar} />
-          ) : (
-            <UserAvatar
-              size={110}
-              name={driver.fullName}
-              style={styles.avatar}
-              textColor={"#061848"}
-            />
-          )}
+          <View style={styles.avatarContainer}>
+            {imageUri ? (
+              <Image source={{ uri: imageUri }} style={styles.avatar} />
+            ) : (
+              <UserAvatar
+                size={110}
+                name={driver.fullName}
+                style={styles.avatar}
+                textColor={"#061848"}
+              />
+            )}
+          </View>
           <View style={styles.driverData}>
-            <View style={styles.data_icons_Container}>
+            <View style={styles.dataIconsContainer}>
               <FontAwesome name="user-o" size={24} style={styles.user_icon} />
               <Text style={styles.data}>Driver : {driver.fullName}</Text>
             </View>
@@ -143,7 +98,7 @@ export default function OrderDetailsPage({ route }) {
           </View>
           <View style={styles.orderData}>
             <Text style={styles.data}>
-              {formattedDate}  ,  {formattedTime}
+              {formattedDate} , {formattedTime}
             </Text>
             <View style={styles.data_icons_Container}>
               <Text style={styles.data}>You pay : {order.cost}</Text>
@@ -162,31 +117,36 @@ export default function OrderDetailsPage({ route }) {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
-  },
-  dataContainer: {
     flexDirection: "column",
+  },
+  contentContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: -170,
+  },
+  avatarContainer: {
+    alignItems: "center",
   },
   avatar: {
-    width: 105,
-    height: 105,
-    borderRadius: 100,
-    marginTop: 40,
-    marginLeft: 3,
+    width: Dimensions.get("window").width * 0.27,
+    height: Dimensions.get("window").width * 0.27,
+    borderRadius: (Dimensions.get("window").width * 0.3) / 2,
+    marginTop: Dimensions.get("window").height * 0.055,
     backgroundColor: "white",
-    marginBottom: 40,
   },
   image: {
-    flex: 1,
-    justifyContent: "center",
+    width: "100%",
+    height: "100%",
   },
+  dataIconsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: Dimensions.get("window").width * 0.075,
+    marginTop: Dimensions.get("window").height * 0.04,
+  },
+
   orderNumber: {
-    fontSize: 30,
+    marginTop: Dimensions.get("window").height * 0.02,
+
     fontSize: 30,
     fontFamily: "Arima_700Bold",
     color: "#B5D0FF",
@@ -208,5 +168,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 20,
   },
-  driverData: { marginBottom: 45 },
+  driverData: { marginBottom: Dimensions.get("window").height * 0.05 },
 });
