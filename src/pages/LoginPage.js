@@ -91,7 +91,7 @@ export default function LoginPage({ navigation }) {
         }
       })
       .catch((error) => {
-        console.log("loginBackend error");
+        console.log("loginBackend error", error);
       });
   };
 

@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
-    color: colors.blue1,
+    color: "#fff",
   },
   data: { marginTop: 100 },
   registerText: { color: "white", fontSize: 21, textAlign: "center" },
