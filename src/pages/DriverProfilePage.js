@@ -126,9 +126,6 @@ export default function DriverProfilePage(props) {
               {imageUri ? (
                 <Image source={{ uri: imageUri }} style={styles.avatar} />
               ) : (
-                // <View style={styles.defaultAvatar}>
-                //   <Text style={styles.defaultAvatarText}>{fullName[0]}</Text>
-                // </View>
                 <UserAvatar
                   size={110}
                   name={fullName}
@@ -185,35 +182,45 @@ export default function DriverProfilePage(props) {
             <Text style={styles.driverCarModelTitle}>My Car:</Text>
             <Text style={styles.driverCarModel}>{carModel}</Text>
           </View>
+          {/* {isLoading && (
+            <View style={{ alignItems: "center" }}>
+            
+              <Text style={{ marginTop: 50, color: "white", fontSize: 22 }}>
+                Loading image & rating...
+              </Text>
+            </View>
+          ) : ( */}
+          <View>
+            {forOrder === "false" && (
+              <Button
+                style={styles.subButton}
+                mode="contained"
+                buttonColor="#111"
+                onPress={() => {
+                  navigation.navigate("Subscription");
+                }}
+              >
+                <Text style={styles.subButtonText}>Subscription</Text>
+              </Button>
+            )}
+          </View>
           {isLoading ? (
             <View style={{ alignItems: "center" }}>
-              <ActivityIndicator
-                size={50}
-                color="#76A6ED"
-                style={{ marginTop: 65 }}
-              />
-              <Text style={{ marginTop: 5, color: "white", fontSize: 22 }}>
+              <Text
+                style={{
+                  marginTop: 20,
+                  color: "white",
+                  fontSize: 24,
+                  fontWeight: 700,
+                }}
+              >
                 Loading image & rating...
               </Text>
             </View>
           ) : (
-            <View>
-              {forOrder === "false" && (
-                <Button
-                  style={styles.subButton}
-                  mode="contained"
-                  buttonColor="#111"
-                  onPress={() => {
-                    navigation.navigate("Subscription");
-                  }}
-                >
-                  <Text style={styles.subButtonText}>Subscription</Text>
-                </Button>
-              )}
-              {rating !== "" && (
-                <Text style={styles.rating}>rating: {formattedRating}</Text>
-              )}
-            </View>
+            rating !== "" && (
+              <Text style={styles.rating}>rating: {formattedRating}</Text>
+            )
           )}
         </View>
       </ImageBackground>
@@ -307,14 +314,13 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     marginLeft: Dimensions.get("window").width * 0.02,
   },
-
   subButton: {
     justifyContent: "center",
     alignItems: "center",
     width: Dimensions.get("window").width * 0.5,
     backgroundColor: "#76A6ED",
     marginTop: Dimensions.get("window").height * 0.02,
-    marginLeft: Dimensions.get("window").width * 0.2,
+    // marginLeft: Dimensions.get("window").width * 0.0,
   },
   subButtonText: {
     fontSize: 20,
@@ -322,99 +328,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   image: {
-//     width: Dimensions.get("window").width,
-//     height: Dimensions.get("window").height,
-//   },
-//   avatar: {
-//     width: 125,
-//     height: 125,
-//     borderRadius: 100,
-//     marginTop: 102.5,
-//     marginLeft: 9,
-//     backgroundColor: "white",
-//   },
-//   driver_name: {
-//     color: "white",
-//     fontSize: 26,
-//     marginLeft: 10,
-//     marginTop: 55,
-//     width: 400,
-//     textAlign: "center",
-//     // fontWeight: "600",
-//     fontFamily: "Arima_700Bold",
-//   },
-//   rating: {
-//     color: "white",
-//     fontSize: 26,
-//     marginLeft: 10,
-//     marginTop: 30,
-//     width: 400,
-//     textAlign: "center",
-//     fontFamily: "Arima_600SemiBold",
-//   },
-// data_icons_Container: {
-//   flexDirection: "row",
-//   alignItems: "center",
-//   marginBottom: 0,
-//   marginRight: 30,
-// },
-// email_icon: { marginLeft: -10, marginRight: 20, color: "#76A6ED" },
-// phone_icon: {
-//   transform: [{ rotate: "95deg" }],
-//   marginTop: -5,
-//   color: "#76A6ED",
-// },
-// driver_phone: {
-//   color: "white",
-//   fontSize: 22,
-//   marginLeft: 15,
-//   marginTop: 1,
-//   marginBottom: 5,
-//   fontFamily: "Arima_700Bold",
-// },
-// driver_email: {
-//   color: "white",
-//   fontSize: 22,
-//   marginLeft: 0,
-//   marginTop: 4,
-//   marginBottom: 7,
-//   fontFamily: "Arima_700Bold",
-// },
-// driver_carModel: {
-//   color: "white",
-//   fontSize: 24,
-//   marginRight: 0,
-//   marginTop: 4,
-//   marginBottom: 5,
-// },
-// driver_plateNumber: {
-//   color: "black",
-//   fontSize: 22,
-//   marginLeft: 160,
-//   marginTop: 4,
-//   marginBottom: 10,
-// },
-// edit_icon: {
-//   padding: 10,
-//   marginLeft: 330,
-//   marginTop: -90,
-//   color: "#76A6ED",
-// },
-// sub_btn: {
-//   justifyContent: "center",
-//   alignItems: "center",
-//   marginLeft: 130,
-//   width: "50%",
-//   backgroundColor: "#76A6ED",
-//   marginTop: 20,
-// },
-
-// sub_text: { fontSize: 20, color: "#061848", fontWeight: "bold" },
-// });
