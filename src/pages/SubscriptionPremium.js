@@ -7,9 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { useFonts } from "expo-font";
 import { Button } from "react-native-paper";
-import { Lobster_400Regular } from "@expo-google-fonts/lobster";
 import { useNavigation } from "@react-navigation/native";
 import { deleteSubscription } from "../helperFunctions/accessToBackFunctions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -27,12 +25,6 @@ export default function SubscriptionPremium() {
       console.log("Error deleting subscription");
     }
   };
-  const [fontsLoaded] = useFonts({
-    Lobster_400Regular,
-  });
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
-  }
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -79,19 +71,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  title: {
-    fontFamily: "Lobster_400Regular",
-    fontSize: 50,
-    fontWeight: "normal",
-  },
   text: {
     fontSize: 19,
-  },
-  subscription: {
-    marginTop: 4,
-    fontFamily: "Lobster_400Regular",
-    fontSize: 30,
-    fontWeight: "normal",
   },
   subscriptionBtn: {
     marginTop: 400,
