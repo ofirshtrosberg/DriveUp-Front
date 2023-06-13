@@ -234,13 +234,13 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width * 0.3,
     height: Dimensions.get("window").width * 0.3,
     borderRadius: (Dimensions.get("window").width * 0.3) / 2,
-    marginTop: Dimensions.get("window").height * 0.05,
+    marginTop: Dimensions.get("window").height * 0.1,
     backgroundColor: "white",
   },
   editIcon: {
     marginTop: Dimensions.get("window").height * -0.075,
     marginLeft: Dimensions.get("window").width * 0.7,
-    color: "#76A6ED",
+    color: "#fff",
   },
   driverName: {
     color: "white",

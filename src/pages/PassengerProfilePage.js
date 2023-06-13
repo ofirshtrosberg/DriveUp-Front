@@ -249,7 +249,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 330,
     marginTop: -90,
+<<<<<<< HEAD
     color: "white",
+=======
+>>>>>>> master
   },
   listContainer: {
     flexDirection: "row",
