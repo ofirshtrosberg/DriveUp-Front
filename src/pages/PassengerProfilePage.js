@@ -18,6 +18,9 @@ import { IP, PORT } from "@env";
 import { AuthContext } from "../../AuthContext";
 import { format } from "date-fns";
 import { downloadImage } from "../helperFunctions/accessToBackFunctions";
+import { Arima_600SemiBold } from "@expo-google-fonts/arima";
+import { useFonts } from "expo-font";
+
 export default function PassengerProfilePage(props) {
   const navigation = useNavigation();
   const { email, fullName, phoneNumber, password, imageProfile } = props;
@@ -96,7 +99,12 @@ export default function PassengerProfilePage(props) {
       </View>
     );
   };
-
+  const [fontsLoaded] = useFonts({
+    Arima_600SemiBold,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -203,7 +211,7 @@ const styles = StyleSheet.create({
     marginTop: 70,
     width: 400,
     textAlign: "center",
-    fontWeight: "600",
+    fontFamily: "Arima_600SemiBold",
   },
   passenger_email: {
     color: "white",
@@ -228,12 +236,13 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   orders_title: {
-    fontSize: 20,
+    fontSize: 22,
     padding: 10,
     marginTop: 5,
     marginBottom: 0,
     textDecorationLine: "underline",
-    fontWeight: "400",
+    fontStyle: "italic",
+    fontWeight: "600",
     color: "white",
   },
   orders_list: {
