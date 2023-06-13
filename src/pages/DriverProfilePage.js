@@ -101,9 +101,14 @@ export default function DriverProfilePage(props) {
       <ImageBackground
         source={require("../assets/profilePage.png")}
         resizeMode="cover"
-        style={{ width: "100%", height: "100%",justifyContent: "center", alignItems: "center" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <Text style={{ color:"white" , fontSize:20}}>Loading...</Text>
+        <Text style={{ color: "white", fontSize: 20 }}>Loading...</Text>
       </ImageBackground>
     );
   }
@@ -115,13 +120,6 @@ export default function DriverProfilePage(props) {
         resizeMode="cover"
         style={styles.image}
       >
-        {/* {isLoading ? (
-          <ActivityIndicator
-            size={50}
-            color="#76A6ED"
-            style={{ marginTop: 270 }}
-          />
-        ) : ( */}
         <View style={styles.contentContainer}>
           <View style={styles.avatarContainer}>
             <TouchableOpacity>
@@ -179,30 +177,45 @@ export default function DriverProfilePage(props) {
             />
             <Text style={styles.driverPhone}>{phoneNumber} </Text>
           </View>
-
-          <Text style={styles.driverCarModel}>My car : {carModel}</Text>
-          <Text style={styles.driverCarModel}>Car Number: {plateNumber}</Text>
-          {/* <Text style={styles.driver_plateNumber}>Car Number: {plateNumber} </Text> */}
-          {/* <View style={styles.review_list}></View> */}
-          <View>
-            {forOrder === "false" && (
-              <Button
-                style={styles.subButton}
-                mode="contained"
-                buttonColor="#111"
-                onPress={() => {
-                  navigation.navigate("Subscription");
-                }}
-              >
-                <Text style={styles.subButtonText}>Subscription</Text>
-              </Button>
-            )}
-            {rating !== "" && (
-              <Text style={styles.rating}>rating: {formattedRating}</Text>
-            )}
+          <View style={styles.CarModelContainer}>
+            <Text style={styles.driverCarModelTitle}>Car Number:</Text>
+            <Text style={styles.driverCarModel}>{plateNumber}</Text>
           </View>
+          <View style={styles.CarModelContainer}>
+            <Text style={styles.driverCarModelTitle}>My Car:</Text>
+            <Text style={styles.driverCarModel}>{carModel}</Text>
+          </View>
+          {isLoading ? (
+            <View style={{ alignItems: "center" }}>
+              <ActivityIndicator
+                size={50}
+                color="#76A6ED"
+                style={{ marginTop: 65 }}
+              />
+              <Text style={{ marginTop: 5, color: "white", fontSize: 22 }}>
+                Loading image & rating...
+              </Text>
+            </View>
+          ) : (
+            <View>
+              {forOrder === "false" && (
+                <Button
+                  style={styles.subButton}
+                  mode="contained"
+                  buttonColor="#111"
+                  onPress={() => {
+                    navigation.navigate("Subscription");
+                  }}
+                >
+                  <Text style={styles.subButtonText}>Subscription</Text>
+                </Button>
+              )}
+              {rating !== "" && (
+                <Text style={styles.rating}>rating: {formattedRating}</Text>
+              )}
+            </View>
+          )}
         </View>
-        {/* )} */}
       </ImageBackground>
     </View>
   );
@@ -279,12 +292,22 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 7,
   },
+  CarModelContainer: { flexDirection: "row" },
+  driverCarModelTitle: {
+    color: "white",
+    fontSize: 22,
+    marginTop: Dimensions.get("window").height * 0.01,
+    marginBottom: 2,
+    textDecorationLine: "underline",
+  },
   driverCarModel: {
     color: "white",
     fontSize: 22,
     marginTop: Dimensions.get("window").height * 0.01,
     marginBottom: 2,
+    marginLeft: Dimensions.get("window").width * 0.02,
   },
+
   subButton: {
     justifyContent: "center",
     alignItems: "center",
