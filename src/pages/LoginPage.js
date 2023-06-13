@@ -142,7 +142,7 @@ export default function LoginPage({ navigation }) {
         </Text>
         <Button
           mode="contained"
-          buttonColor="#76A6ED"
+          buttonColor="#7695F3"
           onPress={() => {
             loginBackend();
           }}
@@ -158,7 +158,7 @@ export default function LoginPage({ navigation }) {
 
 const styles = StyleSheet.create({
   register: {
-    color: colors.blue2,
+    color: "#6DACEF",
     fontWeight: "bold",
     marginTop: 3,
     display: "flex",
@@ -189,5 +189,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#fff",
   },
-  login_text: { color: "white", fontSize: 22, textAlign: "center" },
+  login_text: {
+    color: "#061848",
+    fontSize: 22,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
 });
