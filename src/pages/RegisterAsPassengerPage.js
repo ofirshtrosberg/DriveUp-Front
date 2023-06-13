@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: "center",
-    color: colors.blue1,
+    color: "#fff",
   },
   registerText: { color: "white", fontSize: 21, textAlign: "center" },
 });
