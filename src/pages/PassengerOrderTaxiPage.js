@@ -337,7 +337,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             alignSelf: "center",
             borderRadius: 20,
             overflow: "hidden",
-            // marginTop: 30,
+            marginTop: 45,
             // marginLeft: 200,
           }}
         >
@@ -362,6 +362,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         <TouchableOpacity
           onPress={() => {
             setErrorMessage("");
+            setErrorMessageDetails("");
             if (startAddress == "" || destinationAddress == "") {
               setErrorMessage("Invalid address");
               setShowErrorMessage(true);

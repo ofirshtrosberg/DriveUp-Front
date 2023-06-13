@@ -61,7 +61,7 @@ export default function PassengerOrderResult() {
       }
     };
 
-    interval = setInterval(checkDriveWithInterval, 7000);
+    interval = setInterval(checkDriveWithInterval, 2000);
     checkDriveWithInterval();
 
     return () => clearInterval(interval);
