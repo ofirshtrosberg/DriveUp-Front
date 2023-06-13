@@ -250,10 +250,13 @@ const styles = StyleSheet.create({
     marginLeft: 330,
     marginTop: -90,
 <<<<<<< HEAD
+<<<<<<< HEAD
     color: "white",
 =======
 >>>>>>> master
+=======
     color: "#fff",
+>>>>>>> 8990cfcd5cd82eec5d7b6ff88dab42d8895887e8
   },
   listContainer: {
     flexDirection: "row",
