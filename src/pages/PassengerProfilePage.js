@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
     color: "white",
 =======
 >>>>>>> master
+    color: "#fff",
   },
   listContainer: {
     flexDirection: "row",
