@@ -60,6 +60,12 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
   const [imageUri, setImageUri] = useState(null);
   const [rating, setRating] = useState(0);
   const [alreadyRateDriver, setAlreadyRateDriver] = useState(false);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Order Result",
+    });
+  }, [navigation]);
   const handleRatingChange = (value) => {
     setRating(value);
   };
@@ -291,6 +297,7 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
           </View>
         </View>
       </Modal>
+      <Text style={styles.rateTitle}> Rate your driver </Text>
       {!alreadyRateDriver && (
         <Rating rating={rating} onRatingChange={handleRatingChange} />
       )}
@@ -301,7 +308,7 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
             setAlreadyRateDriver(true);
           }}
         >
-          save
+          <Text style={{ color: "white", fontSize: 18 }}>SAVE</Text>
         </Button>
       )}
     </View>
@@ -372,12 +379,21 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     margin: 5,
-    color: "gray",
+    color: "#76A6ED",
   },
   filledStar: {
     width: 30,
     height: 30,
     margin: 5,
     color: "gold",
+  },
+  rateTitle: {
+    color: "#76A6ED",
+    fontSize: 22,
+    marginLeft: 120,
+    marginTop: -10,
+    textDecorationLine: "underline",
+    marginBottom: -10,
+    fontWeight: 500,
   },
 });
