@@ -70,7 +70,7 @@ export default function DriveOnMapDriverMode() {
   if (orderLocations === null) {
     return (
       <ImageBackground
-        source={require("../assets/backgroundDriveup.png")}
+        source={require("../assets/orderBackNew2.png")}
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
       >
         <View>

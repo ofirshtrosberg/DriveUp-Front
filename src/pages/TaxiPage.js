@@ -12,7 +12,7 @@ import { useEffect } from "react";
 export default function TaxiPage({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Order Taxi",
+      headerTitle: "Taxi Page",
       headerRight: () => <HeaderLogout />,
     });
   }, [navigation]);
