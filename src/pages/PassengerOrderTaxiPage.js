@@ -231,6 +231,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             },
             listView: {
               zIndex: 10000,
+              maxHeight: 130,
             },
           }}
         />
@@ -258,6 +259,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             },
             listView: {
               zIndex: 9998,
+              maxHeight: 130,
             },
           }}
         />
