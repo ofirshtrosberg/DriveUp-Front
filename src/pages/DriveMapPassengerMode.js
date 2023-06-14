@@ -297,19 +297,19 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
           </View>
         </View>
       </Modal>
-      <Text style={styles.rateTitle}> Rate your driver </Text>
       {!alreadyRateDriver && (
-        <Rating rating={rating} onRatingChange={handleRatingChange} />
-      )}
-      {!alreadyRateDriver && (
-        <Button
-          onPress={() => {
-            rateDriver(driverEmail, rating, userToken, navigation, logout);
-            setAlreadyRateDriver(true);
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 18 }}>SAVE</Text>
-        </Button>
+        <>
+          <Text style={styles.rateTitle}> Rate your driver </Text>
+          <Rating rating={rating} onRatingChange={handleRatingChange} />
+          <Button
+            onPress={() => {
+              rateDriver(driverEmail, rating, userToken, navigation, logout);
+              setAlreadyRateDriver(true);
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 18 }}>SAVE</Text>
+          </Button>
+        </>
       )}
     </View>
   );
