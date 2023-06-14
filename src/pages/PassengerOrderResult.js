@@ -72,7 +72,7 @@ export default function PassengerOrderResult() {
         <DriveMapPassengerMode driveId={driveId} orderId={orderId} />
       ) : (
         <ImageBackground
-          source={require("../assets/backgroundDriveup.png")}
+          source={require("../assets/orderBackNew2.png")}
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <View>
@@ -87,7 +87,7 @@ export default function PassengerOrderResult() {
           </View>
           <Button
             mode="contained"
-            buttonColor="#8569F6"
+            buttonColor="#7B96F0"
             style={{ marginHorizontal: 70, marginTop: 20 }}
             onPress={() => {
               cancelOrderCheck();

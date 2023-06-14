@@ -313,9 +313,10 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
         style={{
           flex: 1,
           position: "absolute",
-          top: 350,
+          top: 320,
           left: 0,
           right: 0,
+          zIndex: 10,
         }}
       >
         <TouchableOpacity
@@ -337,7 +338,8 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
             alignSelf: "center",
             borderRadius: 20,
             overflow: "hidden",
-            marginTop: 45,
+            marginTop: 20,
+            // zIndex: 11,
             // marginLeft: 200,
           }}
         >
@@ -352,6 +354,7 @@ export default function PassengerOrderTaxiPage({ currentUserEmail }) {
                 lineHeight: 50,
                 fontSize: 16,
                 fontWeight: "bold",
+                // zIndex: 13,
               }}
             >
               Order now

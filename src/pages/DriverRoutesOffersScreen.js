@@ -208,7 +208,7 @@ export default function DriverRoutesOffersPage() {
               }}
             >
               <ImageBackground
-                source={require("../assets/buttonBack.jpeg")}
+                source={require("../assets/btnOrder.png")}
                 style={{ width: "100%", height: "100%" }}
               >
                 <Text
@@ -338,38 +338,36 @@ export default function DriverRoutesOffersPage() {
                 </View>
               </ImageBackground>
             </Modal>
-            {!useLimits && (
-              <TouchableOpacity
-                onPress={() => {
-                  fetchSuggestions();
-                }}
-                style={{
-                  width: 200,
-                  height: 50,
-                  alignSelf: "center",
-                  borderRadius: 20,
-                  overflow: "hidden",
-                  marginTop: 20,
-                }}
+            <TouchableOpacity
+              onPress={() => {
+                fetchSuggestions();
+              }}
+              style={{
+                width: 200,
+                height: 50,
+                alignSelf: "center",
+                borderRadius: 20,
+                overflow: "hidden",
+                marginTop: 20,
+              }}
+            >
+              <ImageBackground
+                source={require("../assets/btnOrder.png")}
+                style={{ width: "100%", height: "100%" }}
               >
-                <ImageBackground
-                  source={require("../assets/buttonBack.jpeg")}
-                  style={{ width: "100%", height: "100%" }}
+                <Text
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    lineHeight: 50,
+                    fontSize: 16,
+                    fontWeight: "bold",
+                  }}
                 >
-                  <Text
-                    style={{
-                      color: "white",
-                      textAlign: "center",
-                      lineHeight: 50,
-                      fontSize: 16,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Load drive suggestions
-                  </Text>
-                </ImageBackground>
-              </TouchableOpacity>
-            )}
+                  Load drive suggestions
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 setIsLoading(true);
@@ -386,7 +384,7 @@ export default function DriverRoutesOffersPage() {
               }}
             >
               <ImageBackground
-                source={require("../assets/buttonBack.jpeg")}
+                source={require("../assets/btnOrder.png")}
                 style={{ width: "100%", height: "100%" }}
               >
                 <Text
