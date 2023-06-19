@@ -2,14 +2,17 @@ import { IP, PORT } from "@env";
 import * as FileSystem from "expo-file-system";
 export const downloadImage = async (imageProfile, setImageUri) => {
   try {
+    const imageNum = imageProfile.split("/")[2];
+    console.log("download image");
     const response = await fetch("http://" + IP + ":" + PORT + imageProfile);
     if (!response.ok) {
       throw new Error("Failed to download image");
     }
     const timestamp = Date.now();
-    const imageUri = `${FileSystem.documentDirectory}image_${timestamp}.png`;
+    const imageUri = `${FileSystem.documentDirectory}image_${imageNum}.png`;
     await FileSystem.downloadAsync(response.url, imageUri);
     setImageUri(imageUri);
+    console.log("image uri in download img", imageUri);
   } catch (error) {
     console.log("downloadImage failed");
   }

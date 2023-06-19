@@ -237,7 +237,7 @@ export default function DriveMapPassengerMode({ driveId, orderId }) {
       </MapView>
       <View style={styles.bottomView}>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          {imageUri ? (
+          {imageUri !== null && imageUri !== "" && imageUri !== undefined ? (
             <Image
               style={styles.driverImage}
               source={{ uri: imageUri }}

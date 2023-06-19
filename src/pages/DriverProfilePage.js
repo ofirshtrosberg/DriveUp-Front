@@ -43,10 +43,9 @@ export default function DriverProfilePage(props) {
   const { userToken, login, logout } = useContext(AuthContext);
   useFocusEffect(
     React.useCallback(() => {
+      console.log("(((", imageProfile);
       setIsLoading(true);
-      downloadImageGetRating().then(() => {
-        setIsLoading(false);
-      });
+      downloadImageGetRating();
       return () => {};
     }, [])
   );
@@ -55,12 +54,16 @@ export default function DriverProfilePage(props) {
       getRating(email);
       if (imageProfile !== "" && imageProfile !== null)
         await downloadImage(imageProfile, setImageUri);
+      setIsLoading(false);
     } catch (error) {}
   };
 
   useEffect(() => {
-    console.log("");
+    console.log("aaaaaa ", imageUri);
   }, [imageUri]);
+  useEffect(() => {
+    console.log("in profile", imageProfile);
+  }, [imageProfile]);
 
   const getRating = (email) => {
     fetch("http://" + IP + ":" + PORT + "/rating/" + email, {
@@ -123,7 +126,9 @@ export default function DriverProfilePage(props) {
         <View style={styles.contentContainer}>
           <View style={styles.avatarContainer}>
             <TouchableOpacity>
-              {imageUri ? (
+              {imageUri !== null &&
+              imageUri !== "" &&
+              imageUri !== undefined ? (
                 <Image source={{ uri: imageUri }} style={styles.avatar} />
               ) : (
                 <UserAvatar
