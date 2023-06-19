@@ -111,7 +111,7 @@ export default function OrderDetailsPage({ route }) {
             <View style={styles.data_icons_Container}>
               <Text style={styles.data}>You pay : {order.cost}</Text>
               <FontAwesome
-                name="shekel"
+                name="dollar"
                 size={20}
                 color="white"
                 style={{ marginLeft: 5, marginRight: -25, marginBottom: 10 }}
