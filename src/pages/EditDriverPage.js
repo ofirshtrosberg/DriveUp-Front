@@ -200,10 +200,12 @@ export default function EditDriverPage({ navigation, route }) {
         setUpdateImageSuccess(true);
       } else {
         console.log("Failed to upload image.");
+        setErrorMessage("Failed to upload image");
         setUpdateImageSuccess(false);
       }
     } catch (error) {
       console.log("Error occurred during image upload");
+      setErrorMessage("Failed to upload image");
       setUpdateImageSuccess(false);
     }
   };
@@ -230,6 +232,7 @@ export default function EditDriverPage({ navigation, route }) {
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
+        setErrorMessage("Failed to delete image");
         setUpdateImageSuccess(false);
       });
   };
@@ -241,13 +244,17 @@ export default function EditDriverPage({ navigation, route }) {
       <ImageBackground
         source={require("../assets/editPageNew.png")}
         resizeMode="cover"
-        style={{ width: "100%", height: "100%",justifyContent: "center", alignItems: "center" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <Text style={{ color:"white" , fontSize:20}}>Loading...</Text>
+        <Text style={{ color: "white", fontSize: 20 }}>Loading...</Text>
       </ImageBackground>
     );
   }
-
 
   return (
     <KeyboardAwareScrollView

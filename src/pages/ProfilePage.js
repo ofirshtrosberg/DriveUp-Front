@@ -39,6 +39,7 @@ export default function ProfilePage({ navigation }) {
           navigation,
           logout
         );
+        console.log(fetchedUser);
         setImageProfile(fetchedUser.imageUrl);
         setEmail(value);
         setUser(fetchedUser);
