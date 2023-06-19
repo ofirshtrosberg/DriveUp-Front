@@ -6,6 +6,7 @@ import { TextInput, Button } from "react-native-paper";
 import colors from "../config/colors";
 import { IP, PORT } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { clearStackAndNavigate } from "../helperFunctions/accessToBackFunctions";
 import {
   isUserExistLocal,
   addUserLocal,
@@ -87,7 +88,7 @@ export default function LoginPage({ navigation }) {
           handleLoginLocal(data.access_token);
           setEmail("");
           setPassword("");
-          navigation.navigate("Home");
+          clearStackAndNavigate(navigation, "Main");
         }
       })
       .catch((error) => {
