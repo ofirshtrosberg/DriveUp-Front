@@ -87,7 +87,7 @@ export default function LoginPage({ navigation }) {
           handleLoginLocal(data.access_token);
           setEmail("");
           setPassword("");
-          navigation.navigate("Main");
+          navigation.navigate("Home");
         }
       })
       .catch((error) => {

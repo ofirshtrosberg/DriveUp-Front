@@ -25,7 +25,7 @@ export default function ProfilePage({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [carColor, setCarColor] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState("");
   const [imageProfile, setImageProfile] = useState("");
   const fetchUser = async () => {
@@ -39,6 +39,7 @@ export default function ProfilePage({ navigation }) {
           navigation,
           logout
         );
+        setImageProfile(fetchedUser.imageUrl);
         setEmail(value);
         setUser(fetchedUser);
         setFullName(fetchedUser.fullName);
@@ -47,8 +48,6 @@ export default function ProfilePage({ navigation }) {
         setPhoneNumber(fetchedUser.phoneNumber);
         setPassword(fetchedUser.password);
         setCarColor(fetchedUser.carColor);
-        setImageProfile(fetchedUser.imageUrl);
-        setIsLoading(false);
       }
     } catch (error) {
       console.log("Error fetching user");
@@ -61,40 +60,34 @@ export default function ProfilePage({ navigation }) {
       return () => {};
     }, [])
   );
-    useEffect(()=>{
-      console.log("in profile",imageProfile)
-    }, [imageProfile])
+
   return (
     <View>
-      {isLoading ? (
-        <View></View>
-      ) : (
-        <View style={styles.container}>
-          {plateNumber === "" ||
-          plateNumber === null ||
-          plateNumber === undefined ? (
-            <PassengerProfile
-              email={email}
-              fullName={fullName}
-              phoneNumber={phoneNumber}
-              password={password}
-              imageProfile={imageProfile}
-            />
-          ) : (
-            <DriverProfile
-              email={email}
-              fullName={fullName}
-              plateNumber={plateNumber}
-              phoneNumber={phoneNumber}
-              carModel={carModel}
-              password={password}
-              carColor={carColor}
-              forOrder="false"
-              imageProfile={imageProfile}
-            />
-          )}
-        </View>
-      )}
+      <View style={styles.container}>
+        {plateNumber === "" ||
+        plateNumber === null ||
+        plateNumber === undefined ? (
+          <PassengerProfile
+            email={email}
+            fullName={fullName}
+            phoneNumber={phoneNumber}
+            password={password}
+            imageProfile={imageProfile}
+          />
+        ) : (
+          <DriverProfile
+            email={email}
+            fullName={fullName}
+            plateNumber={plateNumber}
+            phoneNumber={phoneNumber}
+            carModel={carModel}
+            password={password}
+            carColor={carColor}
+            forOrder="false"
+            imageProfile={imageProfile}
+          />
+        )}
+      </View>
     </View>
   );
 }

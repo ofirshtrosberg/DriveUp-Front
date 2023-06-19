@@ -30,6 +30,7 @@ export default function PassengerProfilePage(props) {
   const [imageUri, setImageUri] = useState(null);
   useFocusEffect(
     React.useCallback(() => {
+      console.log("(((", imageProfile);
       setIsLoading(true);
       if (imageProfile !== "" && imageProfile !== null)
         downloadImage(imageProfile, setImageUri);
@@ -41,9 +42,11 @@ export default function PassengerProfilePage(props) {
   );
 
   useEffect(() => {
-    console.log("image uri");
+    console.log("aaaaaa ", imageUri);
   }, [imageUri]);
-
+  useEffect(() => {
+    console.log("in profile", imageProfile);
+  }, [imageProfile]);
   const getOrderHistory = async (page = 1, size = 20) => {
     try {
       const response = await fetch(
@@ -107,9 +110,14 @@ export default function PassengerProfilePage(props) {
       <ImageBackground
         source={require("../assets/profilePage.png")}
         resizeMode="cover"
-        style={{ width: "100%", height: "100%",justifyContent: "center", alignItems: "center" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <Text style={{ color:"white" , fontSize:20}}>Loading...</Text>
+        <Text style={{ color: "white", fontSize: 20 }}>Loading...</Text>
       </ImageBackground>
     );
   }
@@ -131,7 +139,9 @@ export default function PassengerProfilePage(props) {
           <View style={styles.container}>
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity>
-                {imageUri ? (
+                {imageUri !== null &&
+                imageUri !== "" &&
+                imageUri !== undefined ? (
                   <Image source={{ uri: imageUri }} style={styles.avatar} />
                 ) : (
                   <UserAvatar
