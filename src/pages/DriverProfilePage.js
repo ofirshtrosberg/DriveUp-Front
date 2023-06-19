@@ -63,6 +63,8 @@ export default function DriverProfilePage(props) {
   }, [imageUri]);
   useEffect(() => {
     console.log("in profile", imageProfile);
+    if (imageProfile !== "" && imageProfile !== null)
+      downloadImage(imageProfile, setImageUri);
   }, [imageProfile]);
 
   const getRating = (email) => {

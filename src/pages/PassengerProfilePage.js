@@ -46,6 +46,8 @@ export default function PassengerProfilePage(props) {
   }, [imageUri]);
   useEffect(() => {
     console.log("in profile", imageProfile);
+    if (imageProfile !== "" && imageProfile !== null)
+      downloadImage(imageProfile, setImageUri);
   }, [imageProfile]);
   const getOrderHistory = async (page = 1, size = 20) => {
     try {

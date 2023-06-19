@@ -182,10 +182,12 @@ export default function EditProfilePage({ navigation, route }) {
         setUpdateImageSuccess(true);
       } else {
         console.log("Failed to upload image.");
+        setErrorMessage("Failed to upload image");
         setUpdateImageSuccess(false);
       }
     } catch (error) {
       console.log("Error occurred during image upload");
+      setErrorMessage("Failed to upload image");
       setUpdateImageSuccess(false);
     }
   };
@@ -217,6 +219,7 @@ export default function EditProfilePage({ navigation, route }) {
       })
       .catch((error) => {
         setErrorMessage("Update failed!");
+        setErrorMessage("Failed to delete image");
         setUpdateImageSuccess(false);
       });
   };
@@ -430,7 +433,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     justifyContent: "center",
   },
-  user_icon: { marginLeft: 10, color: "white", marginBottom:30 },
+  user_icon: { marginLeft: 10, color: "white", marginBottom: 30 },
   bottomSheet: {
     backgroundColor: "rgba(118, 166, 237, 0.9)",
     height: 320,
